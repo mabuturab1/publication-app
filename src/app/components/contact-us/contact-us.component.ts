@@ -1,3 +1,4 @@
+import { GetServerDataService } from './../../services/getServerData.service';
 import { Location } from '@angular/common';
 import { PublicationDataService } from 'src/app/services/publication-data.service';
 import { Component, OnInit } from '@angular/core';
@@ -22,10 +23,21 @@ export class ContactUsComponent implements OnInit {
   constructor(
     private router: Router,
     private publicationService: PublicationDataService,
-    private location: Location
+    private location: Location,
+    private getServerDataService: GetServerDataService
   ) {}
-
+  selectionChanged(event: string) {
+    this.buttonLabel = event;
+  }
   ngOnInit(): void {
+    this.getServerDataService.isLoggedIn.subscribe((el) => {
+      if (!el) {
+        this.getServerDataService.setSnackbarMessage(
+          'Kindly login to your account'
+        );
+        this.closeClicked();
+      }
+    });
     let publication = this.publicationService.getCurrentNeededPublication();
     if (publication != null) {
       this.message =
@@ -37,5 +49,17 @@ export class ContactUsComponent implements OnInit {
   closeClicked() {
     // this.location.back();
     this.router.navigate(['']);
+  }
+  sendMessage() {
+    console.log('sending message');
+    this.getServerDataService.setUserResponse(
+      { subject: this.buttonLabel, message: this.message },
+      (data) => {
+        this.getServerDataService.setSnackbarMessage(
+          'Thanks for contacting us. We will getback to you'
+        );
+        this.closeClicked();
+      }
+    );
   }
 }

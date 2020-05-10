@@ -1,3 +1,4 @@
+import { PublicationDataService } from 'src/app/services/publication-data.service';
 import { Subscription } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { GetServerDataService } from './services/getServerData.service';
@@ -14,18 +15,25 @@ export class AppComponent implements OnInit, OnDestroy {
 
   constructor(
     private getServerDataService: GetServerDataService,
-    private _snackBar: MatSnackBar
+    private _snackBar: MatSnackBar,
+    private publicationService: PublicationDataService
   ) {}
   ngOnInit() {
     this.subscriptionArr.push(
-      this.getServerDataService.errorOccurred.subscribe((el) => {
-        this.showErrorMessage('An error Occurred');
+      this.getServerDataService.showSnackbar.subscribe((el) => {
+        this.showErrorMessage(el);
         console.log('show error called');
       })
     );
     this.subscriptionArr.push(
       this.getServerDataService.isLoggedIn.subscribe((el) => {
-        this.getServerDataService.initAppData();
+        if (el)
+          this.getServerDataService.initActiveList((data) => {
+            if (data)
+              this.publicationService.setNewActiveList(
+                this.publicationService.getCurrentActiveListId()
+              );
+          });
       })
     );
   }

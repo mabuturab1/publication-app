@@ -97,7 +97,9 @@ export class PublicationDataService {
     this.currentActiveList = list;
   }
   isCurrentPublication(list_id: string) {
-    return this.currentPublicationIds.includes(list_id);
+    var list = this.getCurrentActiveList();
+    if (list == null) return false;
+    return list.publication_ids.includes(list_id);
   }
   // setCurrentPublicationIds(val: string[]) {
   //   this.currentPublicationIds = val;
@@ -143,7 +145,7 @@ export class PublicationDataService {
     if (this.listFullScreens.includes(pubScreen)) return true;
     else return false;
   }
-  fetchRecordsForCurrentlyActive(id: string) {
+  setNewActiveList(id: string) {
     console.log(' active list updated in publication service');
     this.activeListUpdated.next(id);
   }

@@ -44,6 +44,7 @@ export class MainComponent implements OnInit, OnDestroy {
   fetchingData = false;
   subscriptionArr: Subscription[] = [];
   sortType: string = 'date';
+  noData = false;
 
   constructor(
     private dataProviderService: DataProviderService,
@@ -63,19 +64,21 @@ export class MainComponent implements OnInit, OnDestroy {
     this.getDiscoveryLists();
   }
   ngOnInit(): void {
-    // this.subscriptionArr.push(
-    //   this.publicationService.activeListIdUpdated.subscribe((el: string) => {
-    //     console.log('getting discovery list');
-    //     this.getDiscoveryLists();
-    //   })
-    // );
+    this.subscriptionArr.push(
+      this.publicationService.activeListUpdated.subscribe((el: string) => {
+        console.log('getting discovery list');
+        this.getDiscoveryLists();
+      })
+    );
     this.getServerDataService.isLoggedIn.subscribe((el) => {
-      if (el) this.getDiscoveryData();
+      console.log('is logged in main');
+      if (!this.showSpinner) this.getDiscoveryData();
     });
   }
   getDiscoveryData() {
     var data = this.publicationService.getDiscoveryFeedData();
-    if (data == null) this.getActiveList();
+    console.log('get discovery data is', data);
+    if (data == null) this.getDiscoveryLists();
     else {
       setTimeout(() => {
         this.currIndex = data.currentIndex;
@@ -88,14 +91,16 @@ export class MainComponent implements OnInit, OnDestroy {
     }
   }
   getActiveList() {
-    this.getServerDataService.getActiveList((data) => {
-      if (data != null) this.publicationService.setCurrentActiveListId(data);
+    this.getServerDataService.initActiveList((data) => {
+      if (data) this.getDiscoveryLists();
     });
   }
   getDiscoveryLists() {
+    if (this.publicationService.getCurrentActiveListId() == null) return;
     this.itemsList = [];
     this.publicationRecords = [];
     this.showSpinner = true;
+
     this.getServerDataService.getDiscoveryLists(
       this.publicationService.getCurrentActiveListId(),
       this.filter,
@@ -106,6 +111,8 @@ export class MainComponent implements OnInit, OnDestroy {
         if (data == null) return;
 
         this.publicationRecords = this.publicationRecords.concat(data);
+        if (this.publicationRecords.length < 1) this.noData = true;
+        else this.noData = false;
         console.log('publication records', this.publicationRecords);
       }
     );
@@ -175,11 +182,27 @@ export class MainComponent implements OnInit, OnDestroy {
       }
     );
   }
-  thumbsUpClicked(event: boolean, item: PUBLICATION_RECORD) {}
+  thumbsUpClicked(event: boolean, item: PUBLICATION_RECORD) {
+    this.setUserReaction('thumbs up', item.id);
+  }
   thumbsDownClicked(event: boolean, item: PUBLICATION_RECORD) {
     this.contractPublication.set(item.id, event);
+    if (event) this.setUserReaction('thumbs down', item.id);
+    else this.setUserReaction('shrug', item.id);
   }
-  shrugClicked(event: boolean, item: PUBLICATION_RECORD) {}
+  shrugClicked(event: boolean, item: PUBLICATION_RECORD) {
+    this.setUserReaction('shrug', item.id);
+  }
+  setUserReaction(reaction: string, itemId: string) {
+    this.getServerDataService.setReactions(
+      this.publicationService.getCurrentActiveListId(),
+      itemId,
+      reaction,
+      (data) => {
+        console.log('reaction response is', data);
+      }
+    );
+  }
   getContractStatus(item: PUBLICATION_RECORD) {
     if (this.contractPublication.has(item.id))
       return this.contractPublication.get(item.id);

@@ -52,6 +52,7 @@
           <app-single-list-component
             [showSpinner]="false"
             [showAdd]="true"
+            [disabled]="item.mag_id == null"
             [showSeedNewList]="true"
             [showView]="true"
             [publicationData]="item"
@@ -71,6 +72,12 @@
           </div>
         </div>
       </div>
+    </div>
+    <div *ngIf="noData && !showSpinner" class="empty-message">
+      <h4>
+        "We have no results for your query. Please try some other keywords or
+        change the filter
+      </h4>
     </div>
   </div>
 </div>

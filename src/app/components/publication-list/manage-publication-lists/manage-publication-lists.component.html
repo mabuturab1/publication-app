@@ -15,10 +15,10 @@
       </a>
     </div>
   </div>
-  <div class="content-wrapper" *ngIf="fetchingData">
+  <div class="content-wrapper" *ngIf="showSpinner">
     <app-my-loader [loading]="true"></app-my-loader>
   </div>
-  <div class="content-wrapper" *ngIf="!fetchingData">
+  <div class="content-wrapper" *ngIf="!showSpinner">
     <div *ngIf="!isNewList" class="list-wrapper">
       <div class="single-list" *ngFor="let item of itemList; let i = index">
         <app-single-list
@@ -38,5 +38,8 @@
         (listData)="listDataChanged($event)"
       ></app-new-list>
     </div>
+  </div>
+  <div *ngIf="noData && !showSpinner" class="empty-message">
+    <h4>No results found for this search. Try a different one</h4>
   </div>
 </div>

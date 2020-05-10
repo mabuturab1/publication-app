@@ -21,79 +21,79 @@ export class ManagePublicationListsComponent implements OnInit {
   renamedListId = '';
   activeList = '';
   isNewList = false;
-  fetchingData = false;
-  itemList: { data: Managed_List; isActive: boolean }[] = [
-    // { data: 'List 1', isActive: false },
-    // { data: 'List 2', isActive: false },
-    // { data: 'List 3', isActive: true },
-    // { data: 'List 4', isActive: false },
-    // { data: 'List 5', isActive: false },
-    // { data: 'List 6', isActive: false },
-    // { data: 'List 7', isActive: false },
-    // { data: 'List 8', isActive: false },
-    // { data: 'List 9', isActive: false },
-  ];
+  showSpinner = false;
+  noData = false;
+  itemList: { data: Managed_List; isActive: boolean }[] = [];
   @Output() hideManageScreen = new EventEmitter<boolean>();
-  hideManage(event: Event) {
-    this.hideManageScreen.emit(true);
-  }
   constructor(
     private dataProviderService: DataProviderService,
     private publicationService: PublicationDataService,
     private getServerData: GetServerDataService
   ) {}
-  activateCurrentList(id: string) {
-    // this.activeList = this.itemList[index].data;
-    this.publicationService.setSpinnerInCurrentList(true);
-    this.getServerData.updateActiveList(id, (el: any) => {
-      let index = this.itemList.findIndex((el) => el.data.list_id == id);
-      if (index < 0) return;
-      for (let i = 0; i < this.itemList.length; i++) {
-        if (i == index) this.itemList[i].isActive = true;
-        else this.itemList[i].isActive = false;
-      }
-      this.updateActiveList(id, true);
-    });
-  }
   ngOnInit(): void {
     this.researchList = this.dataProviderService.getItemList();
     this.getAllManagedLists();
-    // if (this.itemList.length < 1) return;
-    // let index = this.itemList.findIndex((el) => el.isActive == true);
-    // if (index < 0) index = 0;
-    // this.activeList = this.itemList[index].data;
   }
+  hideManage(event: Event) {
+    this.hideManageScreen.emit(true);
+  }
+
+  activateCurrentList(id: string) {
+    this.publicationService.setSpinnerInCurrentList(true);
+    this.getServerData.updateActiveList(id, (el: any) => {
+      this.updateActiveLisLocally(id);
+      this.updateActiveList(id, true);
+    });
+  }
+  updateActiveLisLocally(id: string) {
+    let index = this.itemList.findIndex((el) => el.data.list_id == id);
+    if (index < 0) return;
+    for (let i = 0; i < this.itemList.length; i++) {
+      if (i == index) this.itemList[i].isActive = true;
+      else this.itemList[i].isActive = false;
+    }
+  }
+
   newButtonClicked() {
     this.isNewList = !this.isNewList;
   }
   getAllManagedLists() {
-    this.fetchingData = true;
+    this.showSpinner = true;
     this.publicationService.setSpinnerInCurrentList(true);
     this.getServerData.getAllPublicationList((data: Managed_List[]) => {
       this.itemList = [];
+      this.showSpinner = false;
+      if (data == null) return;
       this.publicationService.setTotalManagedLists(data.length);
       data.forEach((el) => {
         this.itemList.push({ data: el, isActive: false });
       });
+      if (data.length < 1) this.noData = true;
+      else this.noData = false;
       this.getActiveList();
     });
   }
   getActiveList() {
-    this.getServerData.getActiveList((response) => {
-      this.fetchingData = false;
-      console.log('in update active list in managed lists');
-      if (response != null) this.updateActiveList(response, false);
-    });
+    let listId = this.publicationService.getCurrentActiveListId();
+    if (listId == null) {
+      this.showSpinner = true;
+      this.getServerData.initActiveList((data) => {
+        this.showSpinner = false;
+        if (!data) return;
+        let listIdTemp = this.publicationService.getCurrentActiveListId();
+
+        this.updateActiveList(listIdTemp, false);
+      });
+    } else this.updateActiveList(listId, false);
   }
 
   updateActiveList(id: string, sendUpdated: boolean) {
+    this.updateActiveLisLocally(id);
     let index = this.itemList.findIndex((el) => el.data.list_id == id);
-    if (index < 0) return;
-    if (index >= 0) this.itemList[index].isActive = true;
-    this.activeList = this.itemList[index].data.list_name;
-    console.log('callong fetch records for current list');
+    if (index >= 0) this.activeList = this.itemList[index].data.list_name;
+
     if (sendUpdated) {
-      this.publicationService.fetchRecordsForCurrentlyActive(id);
+      this.publicationService.setNewActiveList(id);
       this.publicationService.setDiscoveryFeedData(null);
     }
   }
@@ -121,37 +121,40 @@ export class ManagePublicationListsComponent implements OnInit {
   }
   getExistingList(id: string, callback) {
     this.getServerData.getPublicationListById(id, (data) => {
-      callback(data);
+      if (data != null) callback(data);
     });
   }
-  updateList() {
-    this.getServerData.updateExistingList(
-      this.renamedListId,
-      { name: this.newListName },
-      (data) => {
-        this.fetchingData = false;
-        this.getAllManagedLists();
-      }
-    );
-  }
+
   listDataChanged(event: { name: string; subtitle: string }) {
     this.newListName = event.name;
     this.isNewList = false;
     let ids = [];
-    this.fetchingData = true;
+
     if (this.renamingList) {
       this.updateList();
       this.renamingList = false;
     } else this.createNewList(this.newListName, []);
   }
+  updateList() {
+    this.showSpinner = true;
+    this.getServerData.updateExistingList(
+      this.renamedListId,
+      { name: this.newListName },
+      (data) => {
+        this.showSpinner = false;
+        this.getAllManagedLists();
+      }
+    );
+  }
   createNewList(name: string, publicationIds: string[]) {
+    this.showSpinner = true;
     this.getServerData.createNewPublicationList(
       {
         name: name,
         publication_ids: publicationIds,
       },
       (data: any) => {
-        this.fetchingData = false;
+        this.showSpinner = false;
         this.getAllManagedLists();
       }
     );

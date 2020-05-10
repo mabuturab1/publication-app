@@ -103,7 +103,10 @@ export interface ERROR {
   error_id?: '';
   message?: '';
 }
-
+export interface USER_RESPONSE {
+  subject?: string;
+  message?: string;
+}
 @Injectable({
   providedIn: 'root',
 })
@@ -111,7 +114,8 @@ export class GetServerDataService {
   token = null;
   isLoggedIn = new BehaviorSubject<boolean>(false);
   userLoginStatus = false;
-  errorOccurred = new Subject<string>();
+  gettingActiveList = false;
+  showSnackbar = new Subject<string>();
   constructor(
     private http: HttpClient,
     private utilsService: UtilsService,
@@ -119,6 +123,9 @@ export class GetServerDataService {
   ) {}
   getHttpHeaders() {
     return new HttpHeaders().set('Authorization', `Bearer ${this.token}`);
+  }
+  setSnackbarMessage(el: string) {
+    this.showSnackbar.next(el);
   }
   login(uid: string, callback) {
     this.http.get(this.utilsService.getLoginUrl(uid)).subscribe(
@@ -134,12 +141,31 @@ export class GetServerDataService {
       },
       (error) => {
         callback(false);
-        this.errorOccurred.next('An error occurred during login');
+        this.showSnackbar.next('An error occurred during login');
       }
     );
   }
-  initAppData() {
-    this.getActiveList((data) => {});
+  initActiveList(callback) {
+    //   if (this.gettingActiveList) return;
+    //  this.gettingActiveList=true;
+    this.getActiveList((listId) => {
+      if (listId == null) {
+        callback(false);
+        // this.gettingActiveList = false;
+        return;
+      }
+      this.publicationService.setCurrentActiveListId(listId);
+      this.getPublicationListById(listId, (activeList) => {
+        if (activeList == null) {
+          // this.gettingActiveList = false;
+          callback(false);
+          return;
+        }
+        this.publicationService.setCurrentActiveList(activeList);
+        // this.gettingActiveList = false;
+        callback(true);
+      });
+    });
   }
   getUserLoginStatus() {
     return this.userLoginStatus;
@@ -173,7 +199,7 @@ export class GetServerDataService {
         (error) => {
           callback(null);
 
-          this.errorOccurred.next(
+          this.showSnackbar.next(
             'An error occurred during search.Please try again'
           );
         }
@@ -224,7 +250,7 @@ export class GetServerDataService {
         (error) => {
           callback(null);
 
-          this.errorOccurred.next(
+          this.showSnackbar.next(
             'An error occurred while updating active list'
           );
         }
@@ -242,9 +268,7 @@ export class GetServerDataService {
         },
         (error) => {
           callback(null);
-          this.errorOccurred.next(
-            'An error occurred while getting active list'
-          );
+          this.showSnackbar.next('An error occurred while getting active list');
         }
       );
   }
@@ -262,7 +286,7 @@ export class GetServerDataService {
         },
         (error) => {
           callback(null);
-          this.errorOccurred.next('An error occurred while getting pubication');
+          this.showSnackbar.next('An error occurred while getting pubication');
         }
       );
   }
@@ -278,7 +302,7 @@ export class GetServerDataService {
         },
         (error) => {
           callback(null);
-          this.errorOccurred.next(
+          this.showSnackbar.next(
             'An error occurred while getting publication list'
           );
         }
@@ -296,7 +320,7 @@ export class GetServerDataService {
         },
         (error) => {
           callback(null);
-          this.errorOccurred.next('An error occurred while creating new list');
+          this.showSnackbar.next('An error occurred while creating new list');
         }
       );
   }
@@ -312,7 +336,7 @@ export class GetServerDataService {
         },
         (error) => {
           callback(null);
-          this.errorOccurred.next(
+          this.showSnackbar.next(
             'An error occurred while getting publication list'
           );
         }
@@ -330,7 +354,7 @@ export class GetServerDataService {
         },
         (error) => {
           callback(null);
-          this.errorOccurred.next('An error occurred while deleting list');
+          this.showSnackbar.next('An error occurred while deleting list');
         }
       );
   }
@@ -346,11 +370,12 @@ export class GetServerDataService {
         },
         (error) => {
           callback(null);
-          this.errorOccurred.next('An error occurred while updating list');
+          this.showSnackbar.next('An error occurred while updating list');
         }
       );
   }
   getDiscoveryLists(listId: string, filter: any, sort: any, callback) {
+    if (this.token == null) return;
     this.http
       .post(
         this.utilsService.getDiscoveryLists(),
@@ -368,7 +393,7 @@ export class GetServerDataService {
         },
         (error) => {
           callback(null);
-          this.errorOccurred.next(
+          this.showSnackbar.next(
             'An error occurred while getting discovery feed'
           );
         }
@@ -392,12 +417,43 @@ export class GetServerDataService {
         },
         (error) => {
           callback(null);
-          this.errorOccurred.next(
+          this.showSnackbar.next(
             'An error occurred while getting publications '
           );
         }
       );
   }
-  setUserResponse() {}
-  getReactions(listId: string, publicationId: string, callback) {}
+  setUserResponse(userResponse: USER_RESPONSE, callback) {
+    console.log('sending request', userResponse);
+    this.http
+      .post(this.utilsService.setUserResponse(), userResponse, {
+        headers: this.getHttpHeaders(),
+      })
+      .subscribe(
+        (el) => {
+          console.log('result send');
+          callback(el);
+        },
+        (error) => callback(null)
+      );
+  }
+  setReactions(
+    listId: string,
+    publicationId: string,
+    reaction: string,
+    callback
+  ) {
+    this.http
+      .post(
+        this.utilsService.getReactions(listId, publicationId),
+        { reaction: reaction },
+        { headers: this.getHttpHeaders() }
+      )
+      .subscribe(
+        (el) => {
+          callback(el);
+        },
+        (error) => callback(null)
+      );
+  }
 }

@@ -16,6 +16,7 @@
           [dropdownList]="dropdownList"
           [showMaterialSelect]="true"
           [fullWidth]="true"
+          (itemSelected)="selectionChanged($event)"
         ></app-dropdown-button>
       </div>
     </div>
@@ -27,12 +28,16 @@
       <button
         mat-button
         class="mat-button-style white-text contact-button"
-        (click)="message = ''"
+        (click)="closeClicked()"
       >
         <fa-icon [icon]="faBan"></fa-icon>
         <a class="button-text">Cancel</a>
       </button>
-      <button mat-button class="mat-button-style white-text contact-button">
+      <button
+        mat-button
+        class="mat-button-style white-text contact-button"
+        (click)="sendMessage()"
+      >
         <fa-icon [icon]="faPaperPlane"></fa-icon>
         <a class="button-text">Send</a>
       </button>

@@ -60,23 +60,14 @@ export class ViewPublicationComponent implements OnInit {
     this.location.back();
   }
   addItemToList(publication_id: string) {
-    var list = this.publicationService.getCurrentActiveList();
+    let list = this.publicationService.getCurrentActiveList();
 
     if (list == null) {
       this.showSpinner = true;
-      this.getServerDataService.getActiveList((data) => {
-        this.showSpinner = false;
-        console.log(data);
-        if (data != null) {
-          this.showSpinner = true;
-          this.publicationService.setCurrentActiveListId(data);
-          this.getServerDataService.getPublicationListById(data, (data1) => {
-            this.showSpinner = false;
-            if (data1 != null) {
-              this.publicationService.setCurrentActiveList(data1);
-              this.updateExistingList(data1, publication_id);
-            }
-          });
+      this.getServerDataService.initActiveList((data) => {
+        if (data) {
+          let list = this.publicationService.getCurrentActiveList();
+          this.updateExistingList(list, publication_id);
         }
       });
     } else {
@@ -93,7 +84,11 @@ export class ViewPublicationComponent implements OnInit {
       },
       (result) => {
         this.showSpinner = false;
-        this.publicationService.activeListDataChanged();
+        this.publicationService.setCurrentPublications(null);
+        this.publicationService.setNewActiveList(
+          this.publicationService.getCurrentActiveListId()
+        );
+
         this.publicationService.setDiscoveryFeedData(null);
       }
     );

@@ -39,4 +39,9 @@
       </div>
     </div>
   </div>
+  <div *ngIf="noData && !showSpinner" class="empty-message">
+    <h4 style="color: white;">
+      No results found. Kindly add new items to your active list
+    </h4>
+  </div>
 </div>

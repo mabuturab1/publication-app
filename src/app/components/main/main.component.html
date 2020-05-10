@@ -23,7 +23,7 @@
 
   <div
     class="main-list-wrapper"
-    *ngIf="showList && showToolbar && !showSpinner"
+    *ngIf="showList && showToolbar && !showSpinner && !noData"
   >
     <div class="single-publication" *ngFor="let item of publicationRecords">
       <app-single-list-component
@@ -61,5 +61,8 @@
       If you are a researcher that would like to test our system (for free)
       please email us: info@raticle.com
     </h4>
+  </div>
+  <div *ngIf="noData && !showSpinner" class="empty-message">
+    <h4>No results found. Kindly add new items to your active list</h4>
   </div>
 </div>

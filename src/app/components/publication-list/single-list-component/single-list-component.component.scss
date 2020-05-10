@@ -28,13 +28,19 @@ $button-background-color: #039be5;
 .select-option-style:hover {
   background-color: $background-color;
 }
-::ng-deep .themed .mat-select-value {
-  color: $text-color;
+::ng-deep {
+  .themed .mat-select-value {
+    color: $text-color;
+  }
+  .mat-card-header-text {
+    width: 100%;
+  }
 }
 
 .title-wrapper {
   display: flex;
   flex-flow: column;
+  width: 100%;
 }
 .paper-title {
   margin: 0.6rem 0 0rem 0;

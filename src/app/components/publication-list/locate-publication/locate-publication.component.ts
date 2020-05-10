@@ -46,6 +46,7 @@ export class LocatePublicationComponent implements OnInit, OnDestroy {
   currIndex = 0;
   preLoadItems = 3;
   showSpinner = false;
+  noData = false;
   searchFilter: SEARCH_FILTER = {
     year_start: 1940,
     year_end: 2018,
@@ -142,30 +143,13 @@ export class LocatePublicationComponent implements OnInit, OnDestroy {
         this.allIds = data.filter((el: string) => {
           if (!this.publicationService.isCurrentPublication(el)) return el;
         });
-
+        if (this.allIds.length < 1) this.noData = true;
+        else this.noData = false;
         console.log('new ids in locate publication', this.allIds);
 
         this.updateItemList();
       }
     );
-  }
-  updateCurrentActiveList(publication_id: string) {
-    this.showSpinner = true;
-    this.getServerDataService.getActiveList((data) => {
-      this.showSpinner = false;
-      console.log(data);
-      if (data != null) {
-        this.showSpinner = true;
-        this.publicationService.setCurrentActiveListId(data);
-        this.getServerDataService.getPublicationListById(data, (data1) => {
-          this.showSpinner = false;
-          if (data1 != null) {
-            this.publicationService.setCurrentActiveList(data1);
-            this.updateExistingList(data1, publication_id);
-          }
-        });
-      }
-    });
   }
   addItemToList(publication_id: string) {
     var list = this.publicationService.getCurrentActiveList();
@@ -174,6 +158,19 @@ export class LocatePublicationComponent implements OnInit, OnDestroy {
       this.updateCurrentActiveList(publication_id);
     } else this.updateExistingList(list, publication_id);
   }
+  updateCurrentActiveList(publication_id: string) {
+    this.showSpinner = true;
+
+    this.getServerDataService.initActiveList((data) => {
+      this.showSpinner = false;
+      if (!data) return;
+      let currList = this.publicationService.getCurrentActiveList();
+      let currListId = this.publicationService.getCurrentActiveListId();
+
+      this.updateExistingList(currList, publication_id);
+    });
+  }
+
   updateExistingList(list: PUBLICATION_LIST, publication_id: string) {
     this.showSpinner = true;
     this.getServerDataService.updateExistingList(
@@ -185,6 +182,9 @@ export class LocatePublicationComponent implements OnInit, OnDestroy {
       (result) => {
         this.showSpinner = false;
         // this.publicationService.activeListDataChanged();
+        this.publicationService.setNewActiveList(
+          this.publicationService.getCurrentActiveListId()
+        );
         this.removeId(publication_id);
         let temp = this.preLoadItems;
         this.preLoadItems = 1;
@@ -201,6 +201,9 @@ export class LocatePublicationComponent implements OnInit, OnDestroy {
     );
     this.allIds = this.allIds.filter((el) => el !== publication_id);
     this.currIndex--;
+    this.publicationService.setNewActiveList(
+      this.publicationService.getCurrentActiveListId()
+    );
   }
   seedNewListClicked(publicationId: string) {
     this.showSpinner = true;
@@ -227,7 +230,7 @@ export class LocatePublicationComponent implements OnInit, OnDestroy {
     this.showSpinner = true;
     this.getServerDataService.updateActiveList(id, (data) => {
       this.showSpinner = false;
-      this.publicationService.fetchRecordsForCurrentlyActive(data);
+      this.publicationService.setNewActiveList(data);
 
       this.publicationService.setCurrentPublications(null);
       this.publicationService.setDiscoveryFeedData(null);

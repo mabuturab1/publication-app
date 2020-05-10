@@ -36,7 +36,7 @@ export class CurrentPublicationListComponent
   @Input() isMultipleSelection = false;
   allIds: string[] = [];
   currIndex = 0;
-
+  noData = false;
   preLoadItems = 3;
   itemsList: string[] = [];
   currentActiveListId = '';
@@ -92,13 +92,16 @@ export class CurrentPublicationListComponent
   }
   getActiveList() {
     this.showSpinner = true;
-    this.getServerDataService.getActiveList((data: string) => {
+    this.resetData();
+    this.getServerDataService.initActiveList((data: boolean) => {
+      if (!data) return;
+      var list = this.publicationService.getCurrentActiveList();
       this.showSpinner = false;
       if (data == null) return;
-      this.currentActiveListId = data;
-      this.resetData();
-      this.updateCurrentActiveList();
-      this.updatePublicationForList(this.currentActiveListId);
+      this.allIds = [...new Set(list.publication_ids)];
+      if (this.allIds.length < 1) this.noData = true;
+      else this.noData = false;
+      this.updateItemList();
     });
   }
   hideClicked(publicationData: PUBLICATION_RECORD) {
@@ -108,29 +111,9 @@ export class CurrentPublicationListComponent
     if (index >= 0) {
       this.publicationRecords.splice(index, 1);
       this.allIds.splice(index, 1);
+      if (this.publicationRecords.length < 1) this.noData = true;
+      else this.noData = false;
     }
-  }
-  updateCurrentActiveList() {
-    // this.publicationService.setCurrentActiveListId(this.currentActiveListId);
-    this.getServerDataService.getPublicationListById(
-      this.currentActiveListId,
-      (data: PUBLICATION_LIST) => {
-        this.publicationService.setCurrentActiveList(data);
-      }
-    );
-  }
-  updatePublicationForList(list_id: string) {
-    this.itemsList = [];
-    this.showSpinner = true;
-    this.getServerDataService.getPublicationListById(list_id, (data: LIST) => {
-      this.showSpinner = false;
-      if (data == null) return;
-      this.allIds = [...new Set(data.publication_ids)];
-
-      // this.publicationService.setCurrentPublicationIds(this.allIds.slice());
-      this.updateItemList();
-      this.showSpinner = false;
-    });
   }
 
   getNewIds() {
@@ -185,7 +168,7 @@ export class CurrentPublicationListComponent
     let tempList = this.allIds.filter((el) => el != id);
     this.showSpinner = true;
     this.getServerDataService.updateExistingList(
-      this.currentActiveListId,
+      this.publicationService.getCurrentActiveListId(),
       { name: list.name, publication_ids: tempList },
       (data) => {
         this.showSpinner = false;
@@ -198,7 +181,9 @@ export class CurrentPublicationListComponent
     this.publicationRecords = this.publicationRecords.filter(
       (el) => el.id != id
     );
-    this.currIndex--;
+    if (this.allIds.length < 1) this.noData = true;
+    else this.noData = false;
+    if (this.currIndex > 0) this.currIndex--;
     let temp = this.preLoadItems;
     this.preLoadItems = 1;
     this.onScroll();
