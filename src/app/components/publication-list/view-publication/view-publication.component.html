@@ -1,0 +1,21 @@
+<div class="wrapper">
+  <div class="icon-wrapper" (click)="closeClicked()">
+    <div class="cross-times">
+      <a class="icon-style">
+        <fa-icon [icon]="faTimes" size="lg"></fa-icon>
+      </a>
+    </div>
+  </div>
+  <div class="spinner-wrapper">
+    <app-my-loader *ngIf="showSpinner" [loading]="showSpinner"></app-my-loader>
+  </div>
+  <div class="view" *ngIf="publicationData">
+    <app-single-list-component
+      [publicationData]="publicationData"
+      [showAdd]="true"
+      [showAbstract]="true"
+      [isDetailed]="true"
+      (addClicked)="addItemToList(publicationData.id)"
+    ></app-single-list-component>
+  </div>
+</div>

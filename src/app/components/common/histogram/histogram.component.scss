@@ -1,0 +1,106 @@
+$background-tile-color: #1e2129;
+$background-active-color: #009ff2;
+.histogram-wrapper {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-flow: column;
+  align-items: flex-end;
+  position: relative;
+  .single-bar {
+    // width: 4px;
+    flex: 1;
+    cursor: pointer;
+    // padding: 0 1px;
+    height: 5px;
+    background-color: $background-tile-color;
+    border: 2px solid transparent;
+  }
+  .is-active {
+    background-color: $background-active-color;
+  }
+}
+.custom-slider {
+  position: absolute;
+  top: 0px;
+  left: 0;
+  width: 100%;
+  display: flex;
+}
+.bar-wrapper {
+  position: absolute;
+  width: 100%;
+  top: 0;
+  right: 0;
+  display: flex;
+  transform: rotateX(180deg);
+}
+.label {
+  padding: 0;
+  margin: 0;
+  font-size: 0.6rem;
+  transform: rotate(180deg);
+}
+::ng-deep {
+  .custom-slider .ng5-slider .ng5-slider-bar {
+    background: $background-tile-color;
+
+    height: 2px;
+  }
+  .custom-slider .ng5-slider .ng5-slider-selection {
+    background: #009ff2;
+  }
+
+  .custom-slider .ng5-slider .ng5-slider-pointer {
+    width: 8px;
+    height: 16px;
+    top: auto; /* to remove the default positioning */
+    bottom: 0;
+    background-color: #009ff2;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+  }
+  .custom-slider .ng5-slider.animate .ng5-slider-pointer {
+    animation: none;
+    transition: none;
+  }
+  .custom-slider .ng5-slider.animate .ng5-slider-bar-wrapper {
+    animation: none;
+    transition: none;
+  }
+  .custom-slider .ng5-slider.animate .ng5-slider-bubble {
+    animation: none;
+    transition: none;
+  }
+  .custom-slider .ng5-slider .ng5-slider-pointer:after {
+    display: none;
+  }
+
+  .custom-slider .ng5-slider .ng5-slider-bubble {
+    bottom: 14px;
+    color: white;
+  }
+
+  .custom-slider .ng5-slider .ng5-slider-bubble.ng5-slider-limit {
+    color: white;
+    opacity: 0.7;
+    display: none;
+  }
+
+  .custom-slider .ng5-slider-span {
+    top: 8px;
+  }
+
+  .custom-slider .ng5-slider .ng5-slider-tick {
+    width: 1px;
+    height: 10px;
+    margin-left: 4px;
+    border-radius: 0;
+    background: #ffe4d1;
+    top: -1px;
+  }
+
+  .custom-slider .ng5-slider .ng5-slider-tick.ng5-slider-selected {
+    background: orange;
+  }
+}

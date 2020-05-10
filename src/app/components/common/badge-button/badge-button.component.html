@@ -1,0 +1,19 @@
+<button
+  *ngIf="buttonLabel != '' && buttonAfterText == ''"
+  (click)="onButtonClicked()"
+  class="button light-blue-button"
+>
+  <a class="single-item"> {{ buttonLabel }}</a>
+</button>
+<button
+  *ngIf="buttonLabel != '' && buttonAfterText != ''"
+  (click)="onButtonClicked()"
+  class="button no-padding"
+>
+  <a class="single-item big-badge light-blue-button left-circular-radius"
+    >{{ buttonLabel }}&nbsp;</a
+  >
+  <a class="single-item big-badge light-green-button right-circular-radius">{{
+    buttonAfterText
+  }}</a>
+</button>

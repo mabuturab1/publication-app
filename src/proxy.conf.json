@@ -1,0 +1,7 @@
+{
+    "/api/*": {
+        "target": "https://inflow.live/",
+        "secure": false,
+        "logLevel": "debug"
+    }
+}

@@ -1,0 +1,35 @@
+<div class="wrapper">
+  <div class="list-wrapper" *ngIf="!isExpanded">
+    <a
+      *ngFor="let item of initialItems; let i = index"
+      class="single-link comma"
+      [style.color]="textColor"
+      ><span *ngIf="showNumberPrefix">{{ i + 1 }}&nbsp;</span>{{ item }}
+      <sup *ngIf="showAffiliations">{{ initialSuperScript[i] }}</sup> &nbsp;</a
+    >
+  </div>
+  <div *ngIf="showButton && !isExpanded" (click)="changeExpandStatus(true)">
+    <app-badge-button [buttonLabel]="buttonLabel"></app-badge-button>
+  </div>
+  <div class="list-wrapper" *ngIf="!isExpanded">
+    <a
+      *ngFor="let item of lastItems; let i = index"
+      class="single-link comma"
+      [style.color]="textColor"
+      ><span *ngIf="showNumberPrefix">{{ i + 1 }}&nbsp;</span>{{ item }}
+      <sup *ngIf="showAffiliations">{{ lastSuperScript[i] }}</sup> &nbsp;</a
+    >
+  </div>
+  <div class="list-wrapper" *ngIf="isExpanded">
+    <a
+      *ngFor="let item of list; let i = index"
+      class="single-link comma"
+      [style.color]="textColor"
+      ><span *ngIf="showNumberPrefix">{{ i + 1 }}&nbsp;</span>{{ item }}
+      <sup *ngIf="showAffiliations">{{ affiliations[i] }}</sup> &nbsp;</a
+    >
+    <div *ngIf="showButton && isExpanded" (click)="changeExpandStatus(false)">
+      <app-badge-button [buttonLabel]="'Less'"></app-badge-button>
+    </div>
+  </div>
+</div>

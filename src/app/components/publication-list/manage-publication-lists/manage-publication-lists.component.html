@@ -1,0 +1,42 @@
+<div class="manage-wrapper">
+  <div class="header-wrapper fixed-top">
+    <div class="title-wrapper">
+      <a class="back-button" (click)="hideManage($event)">
+        <fa-icon [icon]="faLongArrowAltLeft" size="lg"></fa-icon>
+      </a>
+      <div class="title">
+        <h6 class="title-value">Manage Publication Lists</h6>
+        <span class="active-list"> Active list: &nbsp;{{ activeList }} </span>
+      </div>
+    </div>
+    <div class="button-group">
+      <a class="button" (click)="newButtonClicked()">
+        <a class="button-text">New</a>
+      </a>
+    </div>
+  </div>
+  <div class="content-wrapper" *ngIf="fetchingData">
+    <app-my-loader [loading]="true"></app-my-loader>
+  </div>
+  <div class="content-wrapper" *ngIf="!fetchingData">
+    <div *ngIf="!isNewList" class="list-wrapper">
+      <div class="single-list" *ngFor="let item of itemList; let i = index">
+        <app-single-list
+          [index]="item.data.list_id"
+          (activateItem)="activateCurrentList($event)"
+          (renameClicked)="renameClicked(item.data)"
+          (removeClicked)="removeClicked(item.data)"
+          (duplicateClicked)="duplicateClicked(item.data)"
+          [isActiveList]="item.isActive"
+          [data]="item.data"
+        ></app-single-list>
+      </div>
+    </div>
+    <div *ngIf="isNewList" class="list-wrapper">
+      <app-new-list
+        [(name)]="newListName"
+        (listData)="listDataChanged($event)"
+      ></app-new-list>
+    </div>
+  </div>
+</div>

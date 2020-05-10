@@ -1,0 +1,26 @@
+$background-color: #009ff2;
+.progress-loader {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  .loading-spinner {
+    display: flex;
+    justify-content: center;
+  }
+}
+
+.loading-spinner img {
+  align-self: end;
+}
+
+.loading-message {
+  text-align: center;
+  align-self: start;
+  color: white;
+}
+::ng-deep {
+  .mat-progress-spinner circle,
+  .mat-spinner circle {
+    stroke: $background-color;
+  }
+}

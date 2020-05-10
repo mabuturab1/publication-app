@@ -1,0 +1,83 @@
+$background-color: #f2f2f2;
+$icon-color: #ffffff;
+// #18191a;
+.wrapper {
+  height: auto;
+  width: 100%;
+  background-color: $background-color;
+  display: flex;
+  overflow: hidden;
+  height: 100vh;
+
+  .content-wrapper {
+    margin-top: 4rem;
+    width: 100%;
+    height: calc(100% - 4rem);
+    display: flex;
+    justify-content: center;
+
+    overflow: auto;
+  }
+  .remove-margin {
+    margin-top: 0;
+    height: 100%;
+  }
+  .main-wrapper {
+    width: 100%;
+
+    background-color: $background-color;
+  }
+  .dark-theme {
+    background-color: #2d323e;
+  }
+}
+
+.side-nav-content {
+  overflow: auto;
+  width: 35rem;
+  height: 100vh;
+  background-color: #2d323e;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+.side-nav-style {
+  background-color: #2d323e;
+}
+.example-sidenav-content {
+  display: flex;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+}
+.full-width {
+  width: 100%;
+}
+.side-nav-bar {
+  width: 3rem;
+  height: 100%;
+}
+.icon-style {
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+  color: $icon-color;
+}
+.rotate-icon {
+  transform: rotate(45deg);
+}
+.cross-times {
+  margin: 0rem 1rem;
+}
+.arrow {
+  margin: 0rem 1rem;
+}
+.icon-wrapper {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  display: flex;
+  justify-content: flex-end;
+}
+.side-nav-wrapper {
+  margin-top: 2.5rem;
+}

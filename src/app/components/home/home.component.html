@@ -1,0 +1,72 @@
+<mat-drawer-container class="wrapper" autosize>
+  <mat-drawer
+    #listDrawer
+    [disableClose]="true"
+    class="side-nav-style"
+    [position]="'end'"
+    [class.full-width]="showFullSize"
+    mode="side"
+  >
+    <div
+      class="side-nav-content custom-scrollbar"
+      infiniteScroll
+      [infiniteScrollDistance]="2"
+      [infiniteScrollThrottle]="50"
+      [scrollWindow]="false"
+      [fromRoot]="true"
+      (scrolled)="onPublicationListScroll()"
+    >
+      <app-publication-list
+        (closeDrawerClicked)="closeListDrawer()"
+        (showListAsNewsFeed)="showPublicationListAsNewsFeed($event)"
+        (toggleDrawerClicked)="toggleDrawerWindow($event)"
+        [showFullScreenToggle]="showFullScreenToggle"
+        [showCurrentPublication]="listDrawer.opened"
+      ></app-publication-list>
+    </div>
+  </mat-drawer>
+  <mat-drawer
+    #locateDrawer
+    [disableClose]="true"
+    [position]="'start'"
+    class="side-nav-style"
+    [class.full-width]="showFullSize"
+    mode="side"
+  >
+    <div
+      class="side-nav-content custom-scrollbar"
+      infiniteScroll
+      [infiniteScrollDistance]="2"
+      [infiniteScrollThrottle]="50"
+      [scrollWindow]="false"
+      [fromRoot]="true"
+      (scrolled)="onLocateScroll()"
+    >
+      <app-publication-list
+        (closeDrawerClicked)="closeLocateDrawer()"
+        (toggleDrawerClicked)="toggleDrawerWindow($event)"
+        [showFullScreenToggle]="showFullScreenToggle"
+        [onlyLocateScreen]="true"
+      ></app-publication-list>
+    </div>
+  </mat-drawer>
+  <mat-drawer-content style="width: 100%; overflow: hidden; height: auto;">
+    <div
+      class="content-wrapper custom-scrollbar"
+      [class.remove-margin]="showPublicationList"
+    >
+      <div class="main-wrapper" [class.dark-theme]="showPublicationList">
+        <app-main
+          *ngIf="!showPublicationList"
+          [showToolbar]="isAuthenticated"
+        ></app-main>
+        <app-publication-list
+          *ngIf="showPublicationList"
+          [showManageButton]="false"
+          [themedList]="showPublicationList"
+          [fixedHeader]="true"
+        ></app-publication-list>
+      </div>
+    </div>
+  </mat-drawer-content>
+</mat-drawer-container>

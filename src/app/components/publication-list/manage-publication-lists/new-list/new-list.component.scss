@@ -1,0 +1,29 @@
+.wrapper {
+  width: 100%;
+  .input-text {
+    width: 70%;
+    height: 2rem;
+    margin-bottom: 1rem;
+    border-radius: 5px;
+  }
+}
+.button-group {
+  display: flex;
+  justify-content: flex-end;
+  padding: 1rem;
+}
+.mat-button-style {
+  box-shadow: 1px 1px 3px rgba($color: #000000, $alpha: 0.5);
+  display: flex;
+  // background-color: $button-background-color;
+  align-items: center;
+  height: 36px;
+  margin: 0 1rem;
+  color: inherit;
+}
+.button-text {
+  padding-left: 5px;
+  text-decoration: none;
+  color: inherit;
+  color: white;
+}

@@ -1,0 +1,42 @@
+<div
+  #wrapper
+  class="wrapper custom-scrollbar"
+  infiniteScroll
+  [infiniteScrollDistance]="2"
+  [infiniteScrollThrottle]="50"
+  [scrollWindow]="false"
+  [fromRoot]="true"
+  (scrolled)="onScroll()"
+>
+  <div class="list_wrapper add-margin overflow-hidden" *ngIf="showSpinner">
+    <app-my-loader [loading]="showSpinner"></app-my-loader>
+  </div>
+
+  <div class="list-wrapper" *ngIf="themedComponent && !showSpinner">
+    <div
+      class="single-publication"
+      *ngFor="let item of publicationRecords; let i = index"
+    >
+      <app-single-list-component
+        [isDetailed]="isDetailed"
+        [publicationData]="item"
+        [isMultipleSelection]="isMultipleSelection"
+        [showView]="true"
+        [showRemove]="true"
+        (hideClicked)="hideClicked(item)"
+        (viewClicked)="viewPublicationClicked(item)"
+        (removeClicked)="removeClicked(item)"
+      ></app-single-list-component>
+    </div>
+    <div class="tempWrapper" *ngIf="fetchingData">
+      <div
+        class="single-publication"
+        *ngFor="let item of itemsList; let i = index"
+      >
+        <app-single-list-component
+          [showSpinner]="fetchingData"
+        ></app-single-list-component>
+      </div>
+    </div>
+  </div>
+</div>

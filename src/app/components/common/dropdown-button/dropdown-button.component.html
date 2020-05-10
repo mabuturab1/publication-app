@@ -1,0 +1,47 @@
+<div class="compact-button" appEventBlocker *ngIf="!showMaterialSelect">
+  <a class="button" (click)="toggleDetailDialog()">
+    <a class="button-text"> {{ buttonLabel }}</a>
+    <fa-icon [icon]="faAngleDown"></fa-icon>
+  </a>
+  <div
+    class="compact-dialog"
+    [class.show-dialog]="showDialog"
+    appHideMe
+    (documentClicked)="showDialog = false"
+  >
+    <app-dropdown-list
+      (typeChanged)="viewTypeChanged($event)"
+      [list]="dropdownList"
+    ></app-dropdown-list>
+  </div>
+</div>
+
+<div class="compact-button" appEventBlocker *ngIf="showMaterialSelect">
+  <mat-form-field
+    style="height: 36px; margin: 0 1rem;"
+    class="select-width"
+    [class.small-select]="smallPadding"
+    [class.full-width]="fullWidth"
+    [class.add-padding]="!smallPadding"
+  >
+    <mat-label class="icon-style"
+      ><fa-icon *ngIf="icon != null" [icon]="icon"></fa-icon>
+      <a *ngIf="placeholderText != null" class="button-text">{{
+        placeholderText
+      }}</a>
+    </mat-label>
+    <mat-select
+      [(value)]="buttonLabel"
+      class="select-style"
+      (selectionChange)="matDropdownChanged()"
+    >
+      <mat-option
+        *ngFor="let item of dropdownList"
+        [value]="item"
+        class="select-option-style"
+      >
+        {{ item }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>

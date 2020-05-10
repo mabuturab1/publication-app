@@ -1,0 +1,51 @@
+<mat-card class="card-style" [class.activeItem]="isActiveList">
+  <mat-card-header>
+    <mat-card-title
+      ><h6 class="paper-title">
+        {{ data?.list_name }}
+      </h6></mat-card-title
+    >
+    <mat-card-subtitle
+      ><div class="subtitle-wrapper">
+        <p class="subtitle-text">This is my list</p>
+      </div>
+    </mat-card-subtitle>
+  </mat-card-header>
+
+  <mat-card-actions>
+    <div class="button-group">
+      <button
+        mat-button
+        class="mat-button-style"
+        (click)="renameButtonClicked()"
+      >
+        <a class="button-text">Rename</a>
+      </button>
+      <button
+        mat-button
+        class="mat-button-style"
+        (click)="duplicateButtonClicked()"
+      >
+        <a class="button-text">Duplicate</a>
+      </button>
+      <button
+        mat-button
+        class="mat-button-style"
+        *ngIf="!isActiveList"
+        (click)="removeButtonClicked()"
+      >
+        <fa-icon [icon]="faTrashAlt"></fa-icon>
+        <a class="button-text">Remove</a>
+      </button>
+      <button
+        mat-button
+        class="mat-button-style"
+        *ngIf="!isActiveList"
+        (click)="activateClicked()"
+      >
+        <fa-icon [icon]="faCheckSquare"></fa-icon>
+        <a class="button-text">Activate</a>
+      </button>
+    </div>
+  </mat-card-actions>
+</mat-card>

@@ -1,0 +1,76 @@
+<div class="wrapper">
+  <div class="title-wrapper fixed-top">
+    <a class="back-button" (click)="hideLocate($event)">
+      <fa-icon [icon]="faLongArrowAltLeft" size="lg"></fa-icon>
+    </a>
+    <h6 class="title">Locate a publication</h6>
+  </div>
+  <div class="content-wrapper">
+    <div class="input-wrapper">
+      <input
+        class="text-input"
+        [(ngModel)]="locatePublication"
+        (change)="locateInputChanged($event)"
+      />
+    </div>
+    <div class="search-button-wrapper">
+      <button
+        mat-button
+        class="mat-button-style white-text search-button"
+        (click)="onSearchClicked()"
+      >
+        <fa-icon [icon]="faSearch"></fa-icon>
+        <a class="button-text">Search</a>
+      </button>
+    </div>
+    <div class="result-wrapper">
+      <div class="result-header">
+        <h4 class="title">Results</h4>
+        <div class="button-group">
+          <app-filter-button
+            (filterResults)="filterResultsChanged($event)"
+            [showExlcude]="false"
+          ></app-filter-button>
+          <app-detail-button
+            (showDetailedLook)="viewTypeChanged($event)"
+            [buttonLabel]="'Detailed'"
+            [smallPadding]="true"
+          ></app-detail-button>
+          <app-sort-button
+            (sortType)="sortTypeChanged($event)"
+          ></app-sort-button>
+        </div>
+      </div>
+      <div
+        class="publication-list-wrapper add-margin overflow-hidden"
+        *ngIf="showSpinner"
+      >
+        <app-my-loader [loading]="showSpinner"></app-my-loader>
+      </div>
+      <div class="publication-list-wrapper" *ngIf="!showSpinner">
+        <div class="single-publication" *ngFor="let item of publicationRecords">
+          <app-single-list-component
+            [showSpinner]="false"
+            [showAdd]="true"
+            [showSeedNewList]="true"
+            [showView]="true"
+            [publicationData]="item"
+            [isDetailed]="showDetailedLook"
+            (viewClicked)="viewPublicationClicked(item)"
+            [showHide]="true"
+            (addClicked)="addItemToList(item.id)"
+            (seedNewListClicked)="seedNewListClicked(item.id)"
+            (hideClicked)="hideClicked(item)"
+          ></app-single-list-component>
+        </div>
+        <div class="tempDataWrapper" *ngIf="fetchingData">
+          <div class="single-publication" *ngFor="let item of itemsList">
+            <app-single-list-component
+              [showSpinner]="fetchingData"
+            ></app-single-list-component>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

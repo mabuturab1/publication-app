@@ -1,0 +1,101 @@
+$icon-color: #ffffff;
+.wrapper {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  flex-flow: column;
+  position: relative;
+  font-family: "Muli", Helvetica, Arial, sans-serif;
+}
+// .always-overflow {
+//   overflow: scroll;
+// }
+.dark-theme {
+  background-color: #2d323e;
+}
+.curr-list-wrapper {
+  width: 100%;
+}
+
+.icon-style {
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+  color: $icon-color;
+}
+.rotate-icon {
+  transform: rotate(45deg);
+}
+.cross-times {
+  margin: 0rem 1rem;
+}
+.arrow {
+  margin: 0rem 1rem;
+}
+.single-publication {
+  margin: 1px 0;
+}
+.list-wrapper {
+  padding: 1rem;
+}
+.manage-list-wrapper {
+  width: 100%;
+}
+.locate-list-wrapper {
+  width: 100%;
+}
+.publication-screen {
+  margin-top: 2.5rem;
+}
+.icon-wrapper {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  display: flex;
+  justify-content: flex-end;
+}
+.publication-options {
+  margin-top: 2.5rem;
+}
+.current-list {
+  margin-top: 10rem;
+}
+.fixed-top {
+  position: fixed;
+  z-index: 10000;
+  background-color: #2d323e;
+  width: 34rem;
+}
+.background-cover {
+  position: absolute;
+  top: 0;
+  background-color: #2d323e;
+  height: 2.5rem;
+  width: 100%;
+}
+.remove-margin {
+  margin: 0;
+}
+.fixed-header {
+  position: absolute;
+  top: 0;
+  width: 100%;
+}
+.hide-overflow {
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.content {
+  width: 100%;
+  height: calc(100% - 3.5rem);
+  margin-top: 3.5rem;
+}
+.view-publication {
+  width: 100%;
+  padding: 0 1rem;
+}

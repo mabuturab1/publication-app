@@ -1,0 +1,13 @@
+<div class="wrapper">
+  <input class="input-text" [(ngModel)]="name" placeholder="Name of list" />
+  <input
+    class="input-text"
+    [(ngModel)]="subtitle"
+    placeholder="Subtitle of list"
+  />
+  <div class="button-group">
+    <button mat-button class="mat-button-style" (click)="saveButtonClicked()">
+      <a class="button-text">Save</a>
+    </button>
+  </div>
+</div>

@@ -1,0 +1,140 @@
+$background-color: #1e2129;
+// #039be5;
+$button-color: #ffffff;
+$text-color: #ffffff;
+.publication-options-wrapper {
+  width: 100%;
+  display: flex;
+  flex-flow: column;
+  background-color: $background-color;
+  padding: 1rem 0;
+
+  align-items: center;
+  justify-content: flex-start;
+  position: relative;
+  font-family: "Muli", Helvetica, Arial, sans-serif;
+  .list-title {
+    padding-left: 1rem;
+    margin-bottom: 1rem;
+    .title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      font-family: inherit;
+      color: $button-color;
+      margin: 0;
+    }
+  }
+  .remove-margin {
+    margin-bottom: 0;
+  }
+}
+.align-as-row {
+  width: 100%;
+  display: flex;
+  flex-flow: row;
+  align-items: center;
+  justify-content: space-between;
+  background-color: $background-color;
+  padding: 5px 0;
+  font-family: "Muli", Helvetica, Arial, sans-serif;
+}
+
+.button-group {
+  display: flex;
+
+  align-items: center;
+  flex-flow: column;
+  &-1 {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+  }
+  &-2 {
+    width: 100%;
+    display: flex;
+    align-items: center;
+  }
+  .button {
+    color: $button-color;
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    text-decoration: none;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    font-family: "Muli", Helvetica, Arial, sans-serif;
+    cursor: pointer;
+    margin: 0 1rem;
+    .button-text {
+      font-size: 1rem;
+      text-decoration: none;
+      color: inherit;
+      padding: 0;
+      margin: 0;
+      padding-right: 5px;
+      font-family: inherit;
+    }
+  }
+  .blue-button {
+    background-color: #007bff;
+  }
+  .green-button {
+    background-color: #28a745;
+  }
+  .light-blue-button {
+    background-color: #009ff2;
+  }
+  .light-green-button {
+    background-color: #80bb41;
+  }
+  .light-yellow-button {
+    background-color: #ffe734;
+  }
+  .clear-button {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    margin-left: auto;
+    margin-top: 5px;
+  }
+}
+.compact-dialog {
+  display: none;
+  position: absolute;
+  // border: 1px solid #28a745;
+  top: 100%;
+  left: 50%;
+  z-index: 100;
+  transform: translateX(-50%);
+  transition: all 0.5s;
+}
+.compact-button {
+  position: relative;
+  transition: all 0.5s;
+
+  .show-dialog {
+    display: block;
+  }
+}
+.select-style {
+  // background-color: $button-background-color;
+  color: $text-color;
+}
+.select-option-style {
+  background-color: $background-color;
+  color: $text-color;
+}
+.select-option-style:hover {
+  background-color: $background-color;
+}
+::ng-deep .mat-select-value {
+  color: $text-color;
+}
+.icon-style {
+  color: $text-color;
+}
+.button-text {
+  padding-left: 5px;
+  text-decoration: none;
+  color: $text-color;
+}

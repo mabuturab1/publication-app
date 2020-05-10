@@ -1,0 +1,50 @@
+$text-color: #fff;
+.wrapper {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  .list-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    .single-link {
+      padding-right: 4px;
+      text-decoration: none;
+      color: white;
+      white-space: nowrap;
+    }
+  }
+}
+.button {
+  color: $text-color;
+  padding: 0.3rem;
+  font-size: 0.8rem;
+  text-decoration: none;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  border: none;
+  border-radius: 1rem;
+  font-family: "Muli", Helvetica, Arial, sans-serif;
+  cursor: pointer;
+  margin: 0 1rem;
+  .button-text {
+    font-size: 1rem;
+    text-decoration: none;
+    color: inherit;
+    padding: 0;
+    margin: 0;
+    padding-right: 5px;
+    font-family: inherit;
+  }
+}
+.blue-button {
+  background-color: #007bff;
+}
+.light-blue-button {
+  background-color: #009ff2;
+}
+.comma:not(:last-of-type)::after {
+  content: ",";
+}

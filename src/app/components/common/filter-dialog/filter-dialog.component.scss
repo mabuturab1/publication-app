@@ -1,0 +1,118 @@
+$background-color: #2d323e;
+// #1e2129;
+$text-color: #ffffff;
+.card-style {
+  background-color: $background-color;
+  color: $text-color;
+}
+.dialog-wrapper {
+  width: 100%;
+  height: 100%;
+  z-index: 1000;
+  background-color: $background-color;
+}
+.citation-wrapper {
+  margin-top: 2.5rem;
+}
+
+.checkbox-button-wrapper {
+  margin: 10px 0;
+  display: flex;
+  .checkbox-style {
+    margin-right: 1rem;
+  }
+  .checkbox-label {
+    font-size: 1rem;
+    cursor: pointer;
+  }
+}
+.date-wrapper {
+  display: flex;
+  justify-content: flex-start;
+  width: 340px;
+  overflow: visible;
+  .label {
+    margin-bottom: 3px;
+    font-size: 0.6rem;
+    color: $text-color;
+  }
+  .from-date {
+    margin-right: 1rem;
+  }
+}
+.exclude-keyword {
+  margin-top: 1rem;
+}
+.top-margin {
+  margin-top: 2.5rem;
+}
+.dialog-wrapper {
+  //   display: flex;
+  //   align-items: center;
+  .button {
+    color: white;
+    padding: 0.75rem 1rem;
+    font-size: 0.8rem;
+    border-radius: 5px;
+    border: none;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    font-family: "Muli", Helvetica, Arial, sans-serif;
+    cursor: pointer;
+    margin: 0 1rem;
+  }
+  .button-text {
+    font-size: 0.7rem;
+    text-decoration: none;
+    color: white;
+    padding: 0;
+    margin: 0;
+    padding: 0 5px;
+  }
+  .blue-button {
+    background-color: #007bff;
+  }
+  .green-button {
+    background-color: #28a745;
+  }
+  .light-blue-button {
+    background-color: #009ff2;
+  }
+  .light-green-button {
+    background-color: #80bb41;
+  }
+  .light-yellow-button {
+    background-color: #ffe734;
+  }
+  .dialog-button {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    margin-left: auto;
+    margin-top: 0.5rem;
+    padding: 0 0rem 0rem 1rem;
+  }
+}
+.mat-button-style {
+  box-shadow: 1px 1px 3px rgba($color: #000000, $alpha: 0.5);
+  display: flex;
+  // background-color: $button-background-color;
+  align-items: center;
+  height: 36px;
+  margin: 0 1rem;
+  color: $text-color;
+}
+.text-input {
+  height: 1.5rem;
+  width: 80%;
+  font-size: 0.8rem;
+}
+.medium-label {
+  color: $text-color;
+}
+.histogram-wrapper {
+  height: 3rem;
+  width: 100%;
+  margin: 1.5rem 0;
+}

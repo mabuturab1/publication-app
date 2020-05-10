@@ -1,0 +1,65 @@
+<div class="main-options-wrapper">
+  <app-main-options
+    (showDetailedLook)="viewTypeChanged($event)"
+    (buttonClicked)="optionButtonClicked($event)"
+    (sortTypeChanged)="sortTypeUpdated($event)"
+    (filterResults)="filterResultsChanged($event)"
+    [showOptions]="showToolbar"
+    [filter]="filter"
+    [sortLabel]="sortType"
+  ></app-main-options>
+</div>
+<div
+  class="publication-wrapper"
+  [class.overflow-hidden]="showSpinner"
+  infiniteScroll
+  [infiniteScrollDistance]="2"
+  [infiniteScrollThrottle]="50"
+  [scrollWindow]="false"
+  [fromRoot]="true"
+  (scrolled)="onScroll()"
+>
+  <app-my-loader *ngIf="showSpinner" [loading]="showSpinner"></app-my-loader>
+
+  <div
+    class="main-list-wrapper"
+    *ngIf="showList && showToolbar && !showSpinner"
+  >
+    <div class="single-publication" *ngFor="let item of publicationRecords">
+      <app-single-list-component
+        [publicationData]="item"
+        [isDetailed]="showDetailedLook"
+        [contractPublication]="getContractStatus(item)"
+        [showView]="true"
+        [showAdd]="true"
+        (viewClicked)="viewPublicationClicked(item)"
+        (hideClicked)="hideClicked(item)"
+        [applyTheme]="false"
+        [showAuthorsAndAffilis]="true"
+        [showReactions]="true"
+        (thumbsUp)="thumbsUpClicked($event, item)"
+        (thumbsDown)="thumbsDownClicked($event, item)"
+        (shrug)="shrugClicked($event, item)"
+      ></app-single-list-component>
+    </div>
+  </div>
+
+  <div *ngIf="!showList && showToolbar" class="empty-message">
+    <h4>Hey there, welcome! Your slate it currently empty.</h4>
+    <h4>
+      Get started by adding papers to your list. Then related papers will appear
+      here.
+    </h4>
+    <button mat-button class="mat-button-style" (click)="onAddClicked()">
+      <fa-icon [icon]="faPlus"></fa-icon>
+      <a class="button-text">Add</a>
+    </button>
+  </div>
+  <div *ngIf="!showToolbar" class="empty-message">
+    <h4>You need to obtain credentials from Raticle to use this system.</h4>
+    <h4>
+      If you are a researcher that would like to test our system (for free)
+      please email us: info@raticle.com
+    </h4>
+  </div>
+</div>

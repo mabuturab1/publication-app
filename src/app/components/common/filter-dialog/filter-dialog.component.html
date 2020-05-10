@@ -1,0 +1,89 @@
+<div class="dialog-wrapper mat-elevation-z24">
+  <mat-card class="card-style">
+    <mat-card-content>
+      <div class="date-wrapper">
+        <div class="from-date">
+          <p class="label">From Date</p>
+          <p-dropdown
+            [style]="{ minWidth: '100px', width: '100px', color: 'white' }"
+            [options]="dates"
+            [(ngModel)]="selectedFromDate"
+            placeholder=""
+            editable="true"
+          ></p-dropdown>
+        </div>
+        <div class="to-date">
+          <p class="label">To Date</p>
+          <p-dropdown
+            [style]="{ minWidth: '100px', width: '100px', color: 'white' }"
+            [options]="dates"
+            [(ngModel)]="selectedToDate"
+            placeholder=""
+            editable="true"
+          ></p-dropdown>
+        </div>
+      </div>
+      <div class="histogram-wrapper">
+        <app-histogram
+          [xAxisData]="xAxisData"
+          [yAxisData]="yAxisData"
+          (prevDateChanged)="updatePrevDate($event)"
+          (nextDataChanged)="updateNextDate($event)"
+          [minValue]="getMinNumber(selectedFromDate)"
+          [maxValue]="getMaxNumber(selectedToDate)"
+        ></app-histogram>
+      </div>
+      <div class="citation-wrapper" *ngIf="showExclude">
+        <p class="medium-label">
+          Citation Distance:
+        </p>
+        <div class="checkbox-button-wrapper">
+          <input
+            class="checkbox-style"
+            type="checkbox"
+            id="exclude-cited"
+            [(ngModel)]="excludeCited"
+            (change)="excludeCitedChanged($event)"
+          />
+          <label for="exclude-cited" class="checkbox-label"
+            >Exclude directly cited papers</label
+          >
+        </div>
+        <div class="checkbox-button-wrapper">
+          <input
+            class="checkbox-style"
+            type="checkbox"
+            id="exclude-citing"
+            [(ngModel)]="excludeCiting"
+            (change)="excludeCitingChanged($event)"
+          />
+          <label for="exclude-citing" class="checkbox-label"
+            >Exclude directly citing papers</label
+          >
+        </div>
+      </div>
+      <div class="exclude-keyword" [class.top-margin]="!showExclude">
+        <p class="medium-label">
+          Exclude Keywords:
+        </p>
+        <input class="text-input" type="text" [(ngModel)]="excludeKeywords" />
+      </div>
+      <mat-card-actions>
+        <div class="dialog-button">
+          <button
+            mat-button
+            class="mat-button-style"
+            (click)="excludeKeywords = ''"
+          >
+            <fa-icon [icon]="faEraser"></fa-icon>
+            <a class="button-text">Clear</a>
+          </button>
+          <button mat-button class="mat-button-style" (click)="onApplyCliked()">
+            <fa-icon [icon]="faCheck"></fa-icon>
+            <a class="button-text">Apply</a>
+          </button>
+        </div>
+      </mat-card-actions>
+    </mat-card-content>
+  </mat-card>
+</div>

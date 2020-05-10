@@ -1,0 +1,18 @@
+<div class="filter-button">
+  <a class="button" (click)="filterDialogButtonClicked($event)">
+    <a class="button-text"> Filter</a>
+    <fa-icon [icon]="faAngleDown"></fa-icon>
+  </a>
+  <div
+    appHideMe
+    class="filter-dialog"
+    [class.show-dialog]="showFilterDialog"
+    (documentClicked)="showFilterDialog = false"
+  >
+    <app-filter-dialog
+      [initFilter]="filter"
+      [showExclude]="showExlcude"
+      (filterResults)="filterResultsChanged($event)"
+    ></app-filter-dialog>
+  </div>
+</div>

@@ -1,0 +1,211 @@
+<mat-card
+  class="card-style"
+  [class.mat-elevation-z0]="removeShadow"
+  [class.no-theme-background]="!applyTheme"
+>
+  <div *ngIf="showSpinner">
+    <app-my-loader [loading]="showSpinner"></app-my-loader>
+  </div>
+  <div *ngIf="!showSpinner">
+    <input
+      *ngIf="isMultipleSelection"
+      type="checkbox"
+      class="checkbox-style"
+      (change)="selectionChanged($event)"
+    />
+    <mat-card-header>
+      <mat-card-title>
+        <div class="title-wrapper">
+          <h6 class="doc-type" [class.no-theme-color]="!applyTheme">
+            {{ publicationData.doc_type }}
+          </h6>
+          <h6 class="paper-title" [class.no-theme-color]="!applyTheme">
+            {{ publicationData.title }}
+          </h6>
+        </div>
+      </mat-card-title>
+      <mat-card-subtitle *ngIf="!contractPublication">
+        <div class="subtitle-wrapper" [class.no-theme-color]="!applyTheme">
+          <div class="seminality-wrapper">
+            <app-badge-button
+              [buttonLabel]="getSemenality(publicationData)"
+              [buttonAfterText]="'Seminality'"
+            ></app-badge-button>
+          </div>
+          <div class="general-wrapper">
+            <p class="journal-name">
+              {{ publicationData.year }}, &nbsp; {{ publicationData.journal }}
+            </p>
+            <div class="journal-rank">
+              <p class="journal-rank-value">
+                <app-badge-button
+                  [buttonLabel]="getJournalRank(publicationData)"
+                  [buttonAfterText]="'Journal Rank'"
+                ></app-badge-button>
+                &nbsp;&nbsp;&nbsp;
+              </p>
+              <!-- <p class="journal-rank-title">Journal Rank</p> -->
+            </div>
+          </div>
+          <div
+            class="publication-details-wrapper"
+            *ngIf="showAuthorsAndAffilis"
+          >
+            <div class="author-wrapper" *ngIf="publicationData.authors">
+              <app-expandable-button
+                [textColor]="getTextColorForBadge()"
+                [authors]="publicationData.authors"
+                [startItems]="2"
+                [endItems]="1"
+                [isExpanded]="expandBadges"
+                (currentExpansionStatus)="expansionStatusChanged($event)"
+              ></app-expandable-button>
+            </div>
+            <div
+              class="affiliations-wrapper"
+              *ngIf="publicationData.affiliations"
+            >
+              <app-expandable-button
+                [affiliationsList]="publicationData.affiliations"
+                [startItems]="2"
+                [endItems]="0"
+                [isExpanded]="expandBadges"
+                [textColor]="getTextColorForBadge()"
+                (currentExpansionStatus)="expansionStatusChanged($event)"
+                [showNumberPrefix]="false"
+              ></app-expandable-button>
+            </div>
+          </div>
+        </div>
+      </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content *ngIf="!contractPublication">
+      <div
+        *ngIf="isDetailed"
+        class="text-content"
+        [class.no-theme-color]="!applyTheme"
+      >
+        <p *ngIf="showAbstract">{{ publicationData.abstract }}</p>
+      </div>
+    </mat-card-content>
+    <mat-card-actions>
+      <div
+        *ngIf="!contractPublication"
+        class="button-group"
+        [class.no-theme-color]="!applyTheme"
+      >
+        <button
+          mat-button
+          class="mat-button-style"
+          *ngIf="showReactions"
+          (click)="thumbsDownClicked()"
+        >
+          <fa-icon [icon]="faThumbsDown"></fa-icon>
+        </button>
+        <button
+          mat-button
+          class="mat-button-style"
+          *ngIf="showReactions"
+          (click)="shrugClicked()"
+        >
+          <fa-icon [icon]="faMehRollingEyes"></fa-icon>
+        </button>
+        <button
+          mat-button
+          class="mat-button-style"
+          *ngIf="showReactions"
+          (click)="thumbsUpClicked()"
+        >
+          <fa-icon [icon]="faThumbsUp"></fa-icon>
+        </button>
+        <a
+          class="mat-button-style small-padding"
+          target="_blank"
+          [href]="publicationData.urls[0].url"
+          *ngIf="
+            publicationData.urls != null && publicationData.urls.length > 0
+          "
+        >
+          <fa-icon [icon]="faExternalLinkAlt"></fa-icon>
+        </a>
+        <button
+          mat-button
+          class="mat-button-style"
+          *ngIf="showRemove"
+          (click)="removeButtonClicked()"
+        >
+          <fa-icon [icon]="faTrashAlt"></fa-icon>
+          <a class="button-text">Remove</a>
+        </button>
+
+        <button
+          mat-button
+          class="mat-button-style"
+          *ngIf="showHide"
+          (click)="hideButtonClicked()"
+        >
+          <fa-icon [icon]="faEyeSlash"></fa-icon>
+          <a class="button-text">Hide</a>
+        </button>
+        <button
+          mat-button
+          class="mat-button-style"
+          *ngIf="showView && !disabled"
+          (click)="viewButtonClicked()"
+        >
+          <fa-icon [icon]="faEye"></fa-icon>
+          <a class="button-text">View</a>
+        </button>
+        <button
+          mat-button
+          class="mat-button-style"
+          *ngIf="showAdd && !disabled"
+          (click)="addButtonClicked()"
+        >
+          <fa-icon [icon]="faPlus"></fa-icon>
+          <a class="button-text">Add</a>
+        </button>
+        <button
+          mat-button
+          class="mat-button-style"
+          *ngIf="disabled"
+          (click)="needButtonClicked()"
+        >
+          <fa-icon [icon]="faEye"></fa-icon>
+          <a class="button-text">I want this</a>
+        </button>
+        <button
+          mat-button
+          class="mat-button-style"
+          *ngIf="showSeedNewList"
+          (click)="seedNewListButtonClicked()"
+        >
+          <fa-icon [icon]="faFileExport"></fa-icon>
+          <a class="button-text">Seed New List</a>
+        </button>
+      </div>
+      <div
+        *ngIf="contractPublication"
+        class="button-group"
+        [class.no-theme-color]="!applyTheme"
+      >
+        <button
+          mat-button
+          class="mat-button-style mat-button-dark"
+          *ngIf="showReactions"
+          (click)="thumbsDownClicked()"
+        >
+          <fa-icon [icon]="faThumbsDown"></fa-icon>
+        </button>
+        <button
+          mat-button
+          class="mat-button-style"
+          (click)="clearReactionClicked()"
+        >
+          <fa-icon [icon]="faBan"></fa-icon>
+          <a class="button-text">Clear Reaction</a>
+        </button>
+      </div>
+    </mat-card-actions>
+  </div>
+</mat-card>

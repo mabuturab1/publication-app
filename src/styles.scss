@@ -1,0 +1,37 @@
+/* You can add global styles to this file, and also import other style files */
+
+html,
+body {
+  height: 100%;
+  background-color: #f2f2f2;
+}
+body {
+  margin: 0;
+  font-family: "Muli", Helvetica, Arial, sans-serif;
+}
+.a,
+label {
+  user-select: none; /* supported by Chrome and Opera */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 1rem;
+  background-color: #1e2129;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #618583;
+  border-radius: 10px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  border-radius: 10px;
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  background-color: #1e2129;
+}
+.custom-scrollbar::-webkit-scrollbar-corner {
+  background-color: #1e2129;
+}

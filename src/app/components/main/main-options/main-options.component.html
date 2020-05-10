@@ -1,0 +1,32 @@
+<div class="main-options-wrapper mat-elevation-z4">
+  <h3 class="title">Info Discovery</h3>
+  <div class="button-group" *ngIf="showOptions">
+    <app-detail-button
+      (showDetailedLook)="viewTypeChanged($event)"
+      [buttonLabel]="'Detailed'"
+    ></app-detail-button>
+    <app-filter-button
+      [filter]="filter"
+      (filterResults)="filterResultsChanged($event)"
+    ></app-filter-button>
+    <app-sort-button
+      [buttonLabel]="sortLabel"
+      (sortType)="sortTypeUpdated($event)"
+    ></app-sort-button>
+    <div class="add-button">
+      <a class="button" (click)="addClicked()">
+        <a class="button-text"> Add</a>
+      </a>
+    </div>
+    <div class="list-button">
+      <a class="button" (click)="myListClicked()">
+        <a class="button-text"> My list</a>
+      </a>
+    </div>
+    <div class="contact-us" (click)="contactUs()">
+      <a class="button">
+        <a class="button-text"> Contact Us</a>
+      </a>
+    </div>
+  </div>
+</div>

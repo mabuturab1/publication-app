@@ -1,0 +1,82 @@
+<div
+  #wrapper
+  class="wrapper"
+  [class.dark-theme]="themedList"
+  [class.always-overflow]="!fixedHeader"
+>
+  <div [class.fixed-top]="!fixedHeader">
+    <div class="background-cover">
+      <div class="icon-wrapper" *ngIf="!showManageScreen && showManageButton">
+        <div class="arrow" *ngIf="showFullScreenToggle">
+          <a class="icon-style" (click)="toggleDrawer($event)">
+            <fa-icon
+              [styles]="{ transform: 'rotate(45deg)' }"
+              [icon]="faArrowsAltV"
+              size="lg"
+            ></fa-icon>
+          </a>
+        </div>
+        <div class="cross-times">
+          <a class="icon-style" (click)="closeDrawer($event)">
+            <fa-icon [icon]="faTimes" size="lg"></fa-icon>
+          </a>
+        </div>
+      </div>
+    </div>
+    <div
+      class="publication-screen publication-options"
+      *ngIf="!onlyLocateScreen && !showManageScreen && !viewPublication"
+      [class.remove-margin]="!showManageButton && !onlyLocateScreen"
+      [class.fixed-header]="fixedHeader"
+    >
+      <app-publication-list-options
+        (showLocatePublication)="locatePublication(true)"
+        (showManageScreen)="showManageWindow($event)"
+        (showDetailedLook)="viewTypeChanged($event)"
+        (selectionModeChanged)="selectionModeUpdated($event)"
+        (removeClicked)="removeButtonClicked()"
+        [alignAsRow]="!showManageButton"
+        [showManageButton]="showManageButton"
+        [isMultipleSelection]="isMultipleSelection"
+      ></app-publication-list-options>
+    </div>
+  </div>
+
+  <div
+    class="curr-list-wrapper"
+    *ngIf="!onlyLocateScreen && !showManageScreen && !viewPublication"
+    [class.hide-overflow]="fixedHeader"
+  >
+    <div
+      class="current-list"
+      *ngIf="showCurrentPublication"
+      [class.content]="fixedHeader"
+    >
+      <app-current-publication-list
+        (showManageScreen)="showManageWindow($event)"
+        [isDetailed]="showDetailedLookForPublication"
+        [isMultipleSelection]="isMultipleSelection"
+        [showSpinner]="fetchingManagedLists"
+      ></app-current-publication-list>
+    </div>
+  </div>
+  <div class="publication-screen locate-list-wrapper" *ngIf="onlyLocateScreen">
+    <app-locate-publication
+      (hideLocatePublication)="locatePublication(false)"
+    ></app-locate-publication>
+  </div>
+  <div
+    class="publication-screen manage-list-wrapper"
+    *ngIf="showManageButton && showManageScreen"
+  >
+    <app-manage-publication
+      (hideManageScreen)="hideManageWindow($event)"
+    ></app-manage-publication>
+  </div>
+  <div
+    class="publication-screen view-publication"
+    *ngIf="viewPublication && !onlyLocateScreen"
+  >
+    <app-view-publication></app-view-publication>
+  </div>
+</div>

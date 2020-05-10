@@ -1,0 +1,40 @@
+$icon-color: #ffffff;
+.wrapper {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  background-color: #2d323e;
+  justify-content: flex-start;
+  align-items: flex-start;
+  flex-flow: column;
+  position: relative;
+  font-family: "Muli", Helvetica, Arial, sans-serif;
+  padding: 1rem;
+}
+.spinner-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  position: relative;
+}
+.icon-wrapper {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  display: flex;
+  justify-content: flex-end;
+}
+.arrow {
+  margin: 0rem 1rem;
+}
+.icon-style {
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+  color: $icon-color;
+}
+
+.view {
+  margin-top: 2.5rem;
+  width: 100%;
+}

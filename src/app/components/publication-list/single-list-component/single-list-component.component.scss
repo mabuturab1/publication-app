@@ -1,0 +1,174 @@
+$background-color: #1e2129;
+// #039be5;
+$text-color: #ffffff;
+$background-color-without-theme: #ffffff;
+$text-color-without-theme: rgba(0, 0, 0, 0.87);
+$button-background-color: #039be5;
+
+.card-style {
+  background-color: $background-color;
+  color: $text-color;
+  position: relative;
+}
+.no-theme-background {
+  background-color: $background-color-without-theme !important;
+}
+.no-theme-color {
+  color: $text-color-without-theme !important;
+}
+
+.select-style {
+  // background-color: $button-background-color;
+  color: $text-color;
+}
+.select-option-style {
+  background-color: $background-color;
+  color: $text-color;
+}
+.select-option-style:hover {
+  background-color: $background-color;
+}
+::ng-deep .themed .mat-select-value {
+  color: $text-color;
+}
+
+.title-wrapper {
+  display: flex;
+  flex-flow: column;
+}
+.paper-title {
+  margin: 0.6rem 0 0rem 0;
+  font-size: 1.3rem;
+  line-height: 1.6rem;
+  color: $text-color;
+  font-weight: 400;
+}
+.doc-type {
+  margin: 1rem 0 0 0;
+  font-size: 1rem;
+  line-height: 1.2rem;
+  color: $text-color;
+  font-weight: 400;
+  font-weight: bold;
+  font-style: italic;
+}
+.subtitle-wrapper {
+  display: flex;
+  flex-flow: column;
+  color: $text-color;
+  .seminality-wrapper {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 0.8rem;
+  }
+  .general-wrapper {
+    display: flex;
+    color: inherit;
+
+    .journal-rank {
+      display: flex;
+      margin: 0 10px;
+      color: inherit;
+      &-title {
+        font-size: 0.8rem;
+        color: inherit;
+      }
+      &-value {
+        font-size: 0.8rem;
+        font-weight: bold;
+        color: inherit;
+      }
+    }
+  }
+  .publication-details-wrapper {
+    display: flex;
+    flex-flow: column;
+    .author-wrapper {
+      margin: 0;
+      margin-bottom: 1rem;
+    }
+    .affilitations-wrapper {
+      margin: 0;
+      margin-bottom: 1rem;
+    }
+  }
+}
+.text-content {
+  padding-left: 1rem;
+}
+.button-group {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  color: white;
+  .mat-button-style {
+    box-shadow: 1px 1px 3px rgba($color: #000000, $alpha: 0.5);
+    display: flex;
+    // background-color: $button-background-color;
+    align-items: center;
+    justify-content: center;
+    height: 36px;
+    margin: 0 1rem;
+    color: inherit;
+  }
+  .mat-button-dark {
+    background-color: $background-color;
+    color: white;
+  }
+  .small-padding {
+    padding: 1rem;
+  }
+  .button-text {
+    padding-left: 5px;
+    text-decoration: none;
+    color: inherit;
+  }
+  .button {
+    color: inherit;
+    padding: 0.75rem 1rem;
+    font-size: 0.8rem;
+    border-radius: 5px;
+    cursor: pointer;
+    border: none;
+    font-weight: 600;
+    font-family: "Open Sans", sans-serif;
+    margin: 0 1rem;
+  }
+  .blue-button {
+    background-color: #007bff;
+  }
+  .green-button {
+    background-color: #28a745;
+  }
+}
+.checkbox-style {
+  width: 1.3rem;
+  height: 1.3rem;
+  position: absolute;
+  top: 2.2rem;
+  left: 0.2rem;
+}
+.arrow-down {
+  overflow: hidden;
+  position: relative;
+
+  width: 1rem;
+  height: 1rem;
+}
+.arrow-down::after {
+  content: "▼";
+
+  position: absolute;
+  left: 0%;
+  top: 10%;
+  transform: translate(0%, -50%);
+  z-index: 1;
+  text-align: center;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+::ng-deep .mat-form-field-infix {
+  border-top: 0.35rem solid transparent;
+}

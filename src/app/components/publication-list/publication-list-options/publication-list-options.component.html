@@ -1,0 +1,49 @@
+<div
+  class="publication-options-wrapper mat-elevation-z4"
+  [class.align-as-row]="alignAsRow"
+>
+  <div class="list-title" [class.remove-margin]="!showManageButton">
+    <h3 class="title">{{ getPublicationName() }}</h3>
+  </div>
+  <div class="button-group">
+    <div class="button-group-2">
+      <div class="select-button">
+        <a class="button" (click)="toggleMultipleSelection()">
+          <a class="button-text">
+            {{ isMultipleSelection ? "Cancel" : "Select" }}</a
+          >
+        </a>
+      </div>
+      <div class="select-button" *ngIf="isMultipleSelection">
+        <a class="button" (click)="removeButtonClicked()">
+          <a class="button-text"> {{ "Remove" }}</a>
+        </a>
+      </div>
+      <div class="detail-button" *ngIf="!isMultipleSelection">
+        <a class="button" (click)="showLocate($event)">
+          <a class="button-text">Add</a>
+          <fa-icon [icon]="faAngleDown"></fa-icon>
+        </a>
+      </div>
+      <div class="select-option-wrapper" *ngIf="isMultipleSelection">
+        <app-dropdown-button
+          [placeholderText]="'Copy To'"
+          [icon]="faFileExport"
+          [showMaterialSelect]="true"
+          [dropdownList]="listItems"
+          [buttonLabel]="'Select a list'"
+        ></app-dropdown-button>
+      </div>
+      <app-detail-button
+        *ngIf="!isMultipleSelection"
+        (showDetailedLook)="viewTypeChanged($event)"
+        [buttonLabel]="'Compact'"
+      ></app-detail-button>
+      <div class="list-button" *ngIf="showManageButton">
+        <a class="button" (click)="showManage($event)">
+          <a class="button-text"> Manage</a>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>

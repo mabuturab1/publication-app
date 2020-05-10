@@ -1,0 +1,41 @@
+<div class="wrapper">
+  <div class="icon-wrapper" (click)="closeClicked()">
+    <div class="cross-times">
+      <a class="icon-style">
+        <fa-icon [icon]="faTimes" size="lg"></fa-icon>
+      </a>
+    </div>
+  </div>
+  <div class="contact-us">
+    <h6 class="page-title">Contact Us</h6>
+    <div class="contact-type">
+      <p class="subtitle">Subject:</p>
+      <div class="selection">
+        <app-dropdown-button
+          [buttonLabel]="buttonLabel"
+          [dropdownList]="dropdownList"
+          [showMaterialSelect]="true"
+          [fullWidth]="true"
+        ></app-dropdown-button>
+      </div>
+    </div>
+    <div class="message-area">
+      <p class="subtitle">Your message</p>
+      <textarea class="message-textarea" [(ngModel)]="message"></textarea>
+    </div>
+    <div class="button-group">
+      <button
+        mat-button
+        class="mat-button-style white-text contact-button"
+        (click)="message = ''"
+      >
+        <fa-icon [icon]="faBan"></fa-icon>
+        <a class="button-text">Cancel</a>
+      </button>
+      <button mat-button class="mat-button-style white-text contact-button">
+        <fa-icon [icon]="faPaperPlane"></fa-icon>
+        <a class="button-text">Send</a>
+      </button>
+    </div>
+  </div>
+</div>

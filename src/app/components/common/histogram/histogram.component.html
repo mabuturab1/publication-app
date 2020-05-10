@@ -1,0 +1,18 @@
+<div class="histogram-wrapper">
+  <div class="custom-slider">
+    <ng5-slider
+      [(value)]="minValue"
+      [(highValue)]="maxValue"
+      [options]="options"
+      (userChange)="datesChanged()"
+    ></ng5-slider>
+  </div>
+  <div class="bar-wrapper">
+    <div
+      class="single-bar"
+      *ngFor="let item of yData; let i = index"
+      [style.height]="getPixels(item)"
+      [class.is-active]="getActiveStatus(i)"
+    ></div>
+  </div>
+</div>
