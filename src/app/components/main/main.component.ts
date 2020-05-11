@@ -86,6 +86,7 @@ export class MainComponent implements OnInit, OnDestroy {
         this.publicationRecords = data.publicationRecords;
         this.filter = data.filter;
         this.sortType = data.sortType;
+        if (this.publicationRecords.length < 1) this.noData = true;
         console.log('obtained filter', this.filter);
       }, 10);
     }
@@ -100,7 +101,7 @@ export class MainComponent implements OnInit, OnDestroy {
     this.itemsList = [];
     this.publicationRecords = [];
     this.showSpinner = true;
-
+    this.noData = false;
     this.getServerDataService.getDiscoveryLists(
       this.publicationService.getCurrentActiveListId(),
       this.filter,
@@ -108,7 +109,10 @@ export class MainComponent implements OnInit, OnDestroy {
       (data: any[]) => {
         this.showSpinner = false;
 
-        if (data == null) return;
+        if (data == null) {
+          this.noData = true;
+          return;
+        }
 
         this.publicationRecords = this.publicationRecords.concat(data);
         if (this.publicationRecords.length < 1) this.noData = true;

@@ -10,17 +10,7 @@ import {
   PublicationDataService,
 } from './../../../services/publication-data.service';
 import { DataProviderService } from './../../../services/dataProvider.service';
-import {
-  Component,
-  OnInit,
-  EventEmitter,
-  Output,
-  Input,
-  OnChanges,
-  OnDestroy,
-  ViewChild,
-  ElementRef,
-} from '@angular/core';
+import { Component, OnInit, Input, OnChanges, OnDestroy } from '@angular/core';
 import { ResearchData } from 'src/app/services/dataProvider.service';
 import { Router } from '@angular/router';
 
@@ -55,6 +45,7 @@ export class CurrentPublicationListComponent
   ngOnInit(): void {
     this.subscriptionArr.push(
       this.publicationService.activeListUpdated.subscribe((el: string) => {
+        console.log('active list updated called in current publication');
         this.getActiveList();
       })
     );
@@ -89,6 +80,7 @@ export class CurrentPublicationListComponent
     this.currIndex = data.currentIndex;
     this.allIds = data.allIds;
     this.publicationRecords = data.publicationRecords;
+    if (this.publicationRecords.length < 1) this.noData = true;
   }
   getActiveList() {
     this.showSpinner = true;
@@ -171,6 +163,7 @@ export class CurrentPublicationListComponent
       this.publicationService.getCurrentActiveListId(),
       { name: list.name, publication_ids: tempList },
       (data) => {
+        if (data == null) return;
         this.showSpinner = false;
         this.removeLocally(id);
       }
@@ -185,10 +178,16 @@ export class CurrentPublicationListComponent
     else this.noData = false;
     if (this.currIndex > 0) this.currIndex--;
     let temp = this.preLoadItems;
+    this.publicationService.setDiscoveryFeedData(null);
     this.preLoadItems = 1;
     this.onScroll();
     this.preLoadItems = temp;
     this.storeDataLocally();
+    this.publicationService.setNewActiveList(
+      this.publicationService.getCurrentActiveListId()
+    );
+    this.getServerDataService.initActiveList((data) => {});
+    // this.getActiveList();
   }
   storeDataLocally() {
     this.publicationService.setCurrentPublications({

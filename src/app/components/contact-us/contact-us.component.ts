@@ -42,6 +42,7 @@ export class ContactUsComponent implements OnInit {
     if (publication != null) {
       this.message =
         'I would like you to include the following publication in the database' +
+        '\n' +
         JSON.stringify(publication);
     }
     this.publicationService.setCurrentNeededPublication(null);

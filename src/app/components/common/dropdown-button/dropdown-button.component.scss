@@ -63,6 +63,10 @@ $text-color: #ffffff;
 ::ng-deep .mat-select-arrow {
   color: white;
 }
+::ng-deep .compact-button .mat-form-field-infix {
+  border-top: 0.40375em solid transparent;
+}
+
 .button {
   color: $text-color;
   padding: 0.75rem 1rem;

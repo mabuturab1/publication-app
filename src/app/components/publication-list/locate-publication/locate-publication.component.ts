@@ -182,6 +182,7 @@ export class LocatePublicationComponent implements OnInit, OnDestroy {
       (result) => {
         this.showSpinner = false;
         // this.publicationService.activeListDataChanged();
+        this.getServerDataService.initActiveList((data) => {});
         this.publicationService.setNewActiveList(
           this.publicationService.getCurrentActiveListId()
         );
@@ -190,6 +191,7 @@ export class LocatePublicationComponent implements OnInit, OnDestroy {
         this.preLoadItems = 1;
         this.onScroll();
         this.preLoadItems = temp;
+
         this.publicationService.setCurrentPublications(null);
         this.publicationService.setDiscoveryFeedData(null);
       }
@@ -201,9 +203,11 @@ export class LocatePublicationComponent implements OnInit, OnDestroy {
     );
     this.allIds = this.allIds.filter((el) => el !== publication_id);
     this.currIndex--;
-    this.publicationService.setNewActiveList(
-      this.publicationService.getCurrentActiveListId()
-    );
+    this.getServerDataService.initActiveList((data) => {
+      this.publicationService.setNewActiveList(
+        this.publicationService.getCurrentActiveListId()
+      );
+    });
   }
   seedNewListClicked(publicationId: string) {
     this.showSpinner = true;
@@ -231,7 +235,7 @@ export class LocatePublicationComponent implements OnInit, OnDestroy {
     this.getServerDataService.updateActiveList(id, (data) => {
       this.showSpinner = false;
       this.publicationService.setNewActiveList(data);
-
+      this.getServerDataService.initActiveList((data) => {});
       this.publicationService.setCurrentPublications(null);
       this.publicationService.setDiscoveryFeedData(null);
       this.publicationService.setCurrentActiveListId(id);

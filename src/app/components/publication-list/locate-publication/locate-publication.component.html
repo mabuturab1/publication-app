@@ -62,6 +62,7 @@
             (addClicked)="addItemToList(item.id)"
             (seedNewListClicked)="seedNewListClicked(item.id)"
             (hideClicked)="hideClicked(item)"
+            (needClicked)="needButtonClicked(item)"
           ></app-single-list-component>
         </div>
         <div class="tempDataWrapper" *ngIf="fetchingData">

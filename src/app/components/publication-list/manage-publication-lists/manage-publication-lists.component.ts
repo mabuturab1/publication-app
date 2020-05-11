@@ -28,7 +28,7 @@ export class ManagePublicationListsComponent implements OnInit {
   constructor(
     private dataProviderService: DataProviderService,
     private publicationService: PublicationDataService,
-    private getServerData: GetServerDataService
+    private getServerDataService: GetServerDataService
   ) {}
   ngOnInit(): void {
     this.researchList = this.dataProviderService.getItemList();
@@ -40,7 +40,7 @@ export class ManagePublicationListsComponent implements OnInit {
 
   activateCurrentList(id: string) {
     this.publicationService.setSpinnerInCurrentList(true);
-    this.getServerData.updateActiveList(id, (el: any) => {
+    this.getServerDataService.updateActiveList(id, (el: any) => {
       this.updateActiveLisLocally(id);
       this.updateActiveList(id, true);
     });
@@ -60,7 +60,7 @@ export class ManagePublicationListsComponent implements OnInit {
   getAllManagedLists() {
     this.showSpinner = true;
     this.publicationService.setSpinnerInCurrentList(true);
-    this.getServerData.getAllPublicationList((data: Managed_List[]) => {
+    this.getServerDataService.getAllPublicationList((data: Managed_List[]) => {
       this.itemList = [];
       this.showSpinner = false;
       if (data == null) return;
@@ -77,7 +77,7 @@ export class ManagePublicationListsComponent implements OnInit {
     let listId = this.publicationService.getCurrentActiveListId();
     if (listId == null) {
       this.showSpinner = true;
-      this.getServerData.initActiveList((data) => {
+      this.getServerDataService.initActiveList((data) => {
         this.showSpinner = false;
         if (!data) return;
         let listIdTemp = this.publicationService.getCurrentActiveListId();
@@ -94,11 +94,12 @@ export class ManagePublicationListsComponent implements OnInit {
 
     if (sendUpdated) {
       this.publicationService.setNewActiveList(id);
+      this.getServerDataService.initActiveList((data) => {});
       this.publicationService.setDiscoveryFeedData(null);
     }
   }
   removeClicked(list: Managed_List) {
-    this.getServerData.deletePublicationList(list.list_id, (data) => {
+    this.getServerDataService.deletePublicationList(list.list_id, (data) => {
       console.log(data);
       if (data != null) this.getAllManagedLists();
     });
@@ -120,7 +121,7 @@ export class ManagePublicationListsComponent implements OnInit {
     });
   }
   getExistingList(id: string, callback) {
-    this.getServerData.getPublicationListById(id, (data) => {
+    this.getServerDataService.getPublicationListById(id, (data) => {
       if (data != null) callback(data);
     });
   }
@@ -137,18 +138,22 @@ export class ManagePublicationListsComponent implements OnInit {
   }
   updateList() {
     this.showSpinner = true;
-    this.getServerData.updateExistingList(
+    this.getServerDataService.updateExistingList(
       this.renamedListId,
       { name: this.newListName },
       (data) => {
         this.showSpinner = false;
+        if (
+          this.renamedListId == this.publicationService.getCurrentActiveListId()
+        )
+          this.getServerDataService.initActiveList((data) => {});
         this.getAllManagedLists();
       }
     );
   }
   createNewList(name: string, publicationIds: string[]) {
     this.showSpinner = true;
-    this.getServerData.createNewPublicationList(
+    this.getServerDataService.createNewPublicationList(
       {
         name: name,
         publication_ids: publicationIds,

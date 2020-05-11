@@ -177,7 +177,7 @@
         <button
           mat-button
           class="mat-button-style"
-          *ngIf="showSeedNewList"
+          *ngIf="showSeedNewList && !disabled"
           (click)="seedNewListButtonClicked()"
         >
           <fa-icon [icon]="faFileExport"></fa-icon>

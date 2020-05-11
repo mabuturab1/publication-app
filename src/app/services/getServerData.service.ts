@@ -375,7 +375,9 @@ export class GetServerDataService {
       );
   }
   getDiscoveryLists(listId: string, filter: any, sort: any, callback) {
-    if (this.token == null) return;
+    if (this.token == null) {
+      return;
+    }
     this.http
       .post(
         this.utilsService.getDiscoveryLists(),
