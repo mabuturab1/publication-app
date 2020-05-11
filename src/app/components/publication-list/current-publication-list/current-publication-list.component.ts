@@ -25,9 +25,11 @@ export class CurrentPublicationListComponent
   @Input() isDetailed = false;
   @Input() isMultipleSelection = false;
   allIds: string[] = [];
-  currIndex = 0;
+  // currIndex = 0;
+  prevActiveListId = '';
   noData = false;
   preLoadItems = 3;
+  loadedItems = 0;
   itemsList: string[] = [];
   currentActiveListId = '';
   @Input() showSpinner = false;
@@ -45,7 +47,12 @@ export class CurrentPublicationListComponent
   ngOnInit(): void {
     this.subscriptionArr.push(
       this.publicationService.activeListUpdated.subscribe((el: string) => {
-        console.log('active list updated called in current publication');
+        console.log(
+          'active list updated called in current publication',
+          this.prevActiveListId,
+          this.publicationService.getCurrentActiveListId()
+        );
+
         this.getActiveList();
       })
     );
@@ -58,11 +65,7 @@ export class CurrentPublicationListComponent
         }
       })
     );
-    // this.subscriptionArr.push(
-    //   this.publicationService.updateActiveListData.subscribe((el: boolean) => {
-    //     if (el) this.updatePublicationForList(this.currentActiveListId);
-    //   })
-    // );
+
     this.subscriptionArr.push(
       this.publicationService.onPublicationListScrollDown.subscribe((el) => {
         this.onScroll();
@@ -73,11 +76,12 @@ export class CurrentPublicationListComponent
   resetData() {
     this.publicationRecords = [];
     this.allIds = [];
-    this.currIndex = 0;
+    // this.currIndex = 0;
   }
   updateLocalData() {
     var data = this.publicationService.getCurrentPublicationsData();
-    this.currIndex = data.currentIndex;
+    // this.currIndex = data.currentIndex;
+    this.loadedItems = data.currentIndex;
     this.allIds = data.allIds;
     this.publicationRecords = data.publicationRecords;
     if (this.publicationRecords.length < 1) this.noData = true;
@@ -88,6 +92,13 @@ export class CurrentPublicationListComponent
     this.getServerDataService.initActiveList((data: boolean) => {
       if (!data) return;
       var list = this.publicationService.getCurrentActiveList();
+      if (
+        this.prevActiveListId !=
+        this.publicationService.getCurrentActiveListId()
+      ) {
+        this.loadedItems = 0;
+      }
+      this.prevActiveListId = this.publicationService.getCurrentActiveListId();
       this.showSpinner = false;
       if (data == null) return;
       this.allIds = [...new Set(list.publication_ids)];
@@ -110,9 +121,11 @@ export class CurrentPublicationListComponent
 
   getNewIds() {
     this.itemsList = [];
-    let maxRange = this.currIndex + this.preLoadItems;
-    if (maxRange > this.allIds.length) maxRange = this.allIds.length;
-    for (let i = this.currIndex; i < maxRange; i++) {
+    let currIndex = this.publicationRecords.length;
+    this.loadedItems = this.loadedItems + this.preLoadItems;
+    if (this.loadedItems > this.allIds.length)
+      this.loadedItems = this.allIds.length;
+    for (let i = currIndex; i < this.loadedItems; i++) {
       this.itemsList.push(this.allIds[i]);
     }
   }
@@ -131,8 +144,8 @@ export class CurrentPublicationListComponent
           this.publicationRecords.push(data[key]);
         });
 
-        this.currIndex += objectKeys.length;
-        console.log('new curr index is ', this.currIndex, objectKeys.length);
+        // this.currIndex += objectKeys.length;
+        // console.log('new curr index is ', this.currIndex, objectKeys.length);
       }
     );
   }
@@ -146,8 +159,8 @@ export class CurrentPublicationListComponent
     this.router.navigate(['view', publicationData.id]);
   }
   onScroll() {
-    console.log(this.currIndex);
-    if (this.currIndex >= this.allIds.length || this.fetchingData) return;
+    // console.log(this.currIndex);
+    if (this.loadedItems >= this.allIds.length || this.fetchingData) return;
     this.updateItemList();
   }
   removeClicked(item: PUBLICATION_RECORD) {
@@ -176,13 +189,14 @@ export class CurrentPublicationListComponent
     );
     if (this.allIds.length < 1) this.noData = true;
     else this.noData = false;
-    if (this.currIndex > 0) this.currIndex--;
+    // if (this.currIndex > 0) this.currIndex--;
     let temp = this.preLoadItems;
     this.publicationService.setDiscoveryFeedData(null);
     this.preLoadItems = 1;
     this.onScroll();
     this.preLoadItems = temp;
     this.storeDataLocally();
+    this.loadedItems = this.loadedItems - this.preLoadItems;
     this.publicationService.setNewActiveList(
       this.publicationService.getCurrentActiveListId()
     );
@@ -191,7 +205,8 @@ export class CurrentPublicationListComponent
   }
   storeDataLocally() {
     this.publicationService.setCurrentPublications({
-      currentIndex: this.currIndex,
+      // currentIndex: this.currIndex,
+      currentIndex: this.loadedItems,
       allIds: this.allIds,
       publicationRecords: this.publicationRecords,
     });
