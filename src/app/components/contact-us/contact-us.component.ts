@@ -7,6 +7,7 @@ import {
   faTimes,
   faPaperPlane,
   faBan,
+  faCheckSquare,
 } from '@fortawesome/free-solid-svg-icons';
 @Component({
   selector: 'app-contact-us',
@@ -19,7 +20,13 @@ export class ContactUsComponent implements OnInit {
   faTimes = faTimes;
   faPaperPlane = faPaperPlane;
   faBan = faBan;
+  faCheckSquare = faCheckSquare;
   message = '';
+  messageId = '';
+  userEmail = 'user@example.org';
+  supportEmail = 'user@example.org';
+  messageSent = false;
+  errorOccurred = false;
   constructor(
     private router: Router,
     private publicationService: PublicationDataService,
@@ -55,11 +62,15 @@ export class ContactUsComponent implements OnInit {
     console.log('sending message');
     this.getServerDataService.setUserResponse(
       { subject: this.buttonLabel, message: this.message },
-      (data) => {
-        this.getServerDataService.setSnackbarMessage(
-          'Thanks for contacting us. We will getback to you'
-        );
-        this.closeClicked();
+      (data: any) => {
+        if (data == null) {
+          this.errorOccurred = true;
+          return;
+        }
+
+        this.messageSent = true;
+        this.messageId = data.message_id;
+        // this.closeClicked();
       }
     );
   }

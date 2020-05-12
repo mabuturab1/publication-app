@@ -90,12 +90,13 @@ export class FilterDialogComponent implements OnInit, OnChanges {
     let filter: any = {
       year_start: Number(this.selectedFromDate),
       year_end: Number(this.selectedToDate),
-      exclude_keywords: this.excludeKeywords,
+
       // cutOff: 200,
     };
     if (this.showExclude) {
       filter = {
         ...filter,
+        exclude_keywords: this.excludeKeywords,
         exclude_in_refs: this.excludeCited,
         exclude_out_refs: this.excludeCiting,
       };

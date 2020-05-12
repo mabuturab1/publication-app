@@ -2,6 +2,7 @@ import {
   PUBLICATION_LIST,
   PUBLICATION_RECORD,
   DISCOVERY_FILTER,
+  SEARCH_FILTER,
 } from './getServerData.service';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Subject } from 'rxjs';
@@ -16,7 +17,9 @@ export interface ComponentData {
   currentIndex: number;
   publicationRecords: PUBLICATION_RECORD[];
   filter?: DISCOVERY_FILTER;
+  searchFilter?: SEARCH_FILTER;
   sortType?: string;
+  query?: string;
 }
 
 export interface Author {
@@ -41,6 +44,7 @@ export class PublicationDataService {
   currentNeededPublication: PUBLICATION_RECORD;
   currentDiscoveryFeedData: ComponentData;
   currentPublicationsData: ComponentData;
+  currentLocatePublicationsData: ComponentData;
   currentlySelectedPublication: PUBLICATION_RECORD;
   activeListUpdated = new Subject<string>();
   // updateActiveListData = new Subject<boolean>();
@@ -70,6 +74,12 @@ export class PublicationDataService {
   }
   getCurrentPublicationsData() {
     return this.currentPublicationsData;
+  }
+  setCurrentLocatePublications(pubData: ComponentData) {
+    this.currentLocatePublicationsData = pubData;
+  }
+  getCurrentLocatePublicationsData() {
+    return this.currentLocatePublicationsData;
   }
   getCurrentNeededPublication() {
     return this.currentNeededPublication;

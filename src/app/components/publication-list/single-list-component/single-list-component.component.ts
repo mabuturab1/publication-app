@@ -31,6 +31,8 @@ export class SingleListComponentComponent implements OnInit {
   faMehRollingEyes = faMehRollingEyes;
   faExternalLinkAlt = faExternalLinkAlt;
   faBan = faBan;
+
+  testText = 'test';
   @Input() isMultipleSelection = false;
   @Input() showSpinner = false;
   @Input() fetchingPublication = false;
@@ -46,6 +48,7 @@ export class SingleListComponentComponent implements OnInit {
   @Input() showReactions = false;
   @Input() showHide = false;
   @Input() disabled = false;
+  @Input() userReaction: string = null;
   @Input() contractPublication = false;
   @Output() addClicked = new EventEmitter<boolean>();
   @Output() removeClicked = new EventEmitter<boolean>();
@@ -57,6 +60,7 @@ export class SingleListComponentComponent implements OnInit {
   @Output() thumbsUp = new EventEmitter<boolean>();
   @Output() shrug = new EventEmitter<boolean>();
   @Output() thumbsDown = new EventEmitter<boolean>();
+  @Output() clearReaction = new EventEmitter<boolean>();
   expandBadges = false;
   constructor(
     private dataProviderService: DataProviderService,
@@ -93,25 +97,12 @@ export class SingleListComponentComponent implements OnInit {
   }
 
   thumbsUpClicked() {
-    this._snackBar.open('Thank you for your feedback', 'Okay', {
-      duration: 4000,
-    });
     this.thumbsUp.emit(true);
   }
   shrugClicked() {
-    this._snackBar.open('Thank you for your feedback', 'Okay', {
-      duration: 4000,
-    });
     this.shrug.emit(true);
   }
   thumbsDownClicked() {
-    this._snackBar.open(
-      'Thank you for your feedback. This irrelevant result will now be hidden',
-      'Okay',
-      {
-        duration: 4000,
-      }
-    );
     this.thumbsDown.emit(true);
   }
 
@@ -119,20 +110,39 @@ export class SingleListComponentComponent implements OnInit {
     this.needClicked.emit(true);
   }
   clearReactionClicked() {
-    this.thumbsDown.emit(false);
+    this.clearReaction.emit(true);
   }
-  getJournalRank(publicationRecord: PUBLICATION_RECORD) {
-    let item = publicationRecord.metrics.find(
-      (el) => el.display_name == 'Journal Rank'
+  getRelatesToJournal(publicationRecord: PUBLICATION_RECORD) {
+    let items = publicationRecord.metrics.filter(
+      (el) => el.relates_to == 'journal'
     );
-    if (item == null) return 'N/A';
-    return item.value;
+    if (items == null) return [];
+    return items;
   }
-  getSemenality(publicationRecord: PUBLICATION_RECORD) {
-    let item = publicationRecord.metrics.find(
-      (el) => el.display_name == 'Seminality'
+  getRetracted(publicationRecord: PUBLICATION_RECORD) {
+    if (publicationRecord.tags == null) return null;
+    if (publicationRecord.tags.length < 1) return null;
+    let item = publicationRecord.tags.find((el) => el.type == 'retracted');
+    return item;
+  }
+  getRelatesToPublication(publicationRecord: PUBLICATION_RECORD) {
+    let items = publicationRecord.metrics.filter(
+      (el) => el.relates_to == 'publication'
     );
-    if (item == null) return 'N/A';
-    return item.value;
+    if (items == null || items.length < 1) return [];
+    return items;
+  }
+  getIconForContractPublication(publicaionData: PUBLICATION_RECORD) {
+    if (
+      publicaionData.user_data == null ||
+      publicaionData.user_data.reaction == null
+    )
+      return null;
+    if (publicaionData.user_data.reaction == 'thumbs up') return faThumbsUp;
+    if (publicaionData.user_data.reaction == 'thumbs down') return faThumbsDown;
+    if (publicaionData.user_data.reaction == 'shrug') return faMehRollingEyes;
+  }
+  isThumbsDown(publicationData: PUBLICATION_RECORD) {
+    return this.getIconForContractPublication(publicationData) == faThumbsDown;
   }
 }

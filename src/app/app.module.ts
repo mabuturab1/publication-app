@@ -47,6 +47,7 @@ import { MyLoaderComponent } from './components/my-loader/my-loader.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { NewListComponent } from './components/publication-list/manage-publication-lists/new-list/new-list.component';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
+import { BadgeTooltipComponent } from './components/common/badge-tooltip/badge-tooltip.component';
 
 @NgModule({
   declarations: [
@@ -82,6 +83,8 @@ import { InfiniteScrollModule } from 'ngx-infinite-scroll';
     MyLoaderComponent,
 
     NewListComponent,
+
+    BadgeTooltipComponent,
   ],
   imports: [
     BrowserModule,

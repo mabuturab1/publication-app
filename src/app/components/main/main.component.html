@@ -29,9 +29,10 @@
       <app-single-list-component
         [publicationData]="item"
         [isDetailed]="showDetailedLook"
-        [contractPublication]="getContractStatus(item)"
+        [contractPublication]="getReactionForPublication(item) != null"
         [showView]="true"
         [showAdd]="true"
+        (addClicked)="addItemToList(item.id)"
         (viewClicked)="viewPublicationClicked(item)"
         (hideClicked)="hideClicked(item)"
         [applyTheme]="false"
@@ -40,6 +41,8 @@
         (thumbsUp)="thumbsUpClicked($event, item)"
         (thumbsDown)="thumbsDownClicked($event, item)"
         (shrug)="shrugClicked($event, item)"
+        (clearReaction)="clearReaction($event, item)"
+        [userReaction]="getReactionForPublication(item)"
       ></app-single-list-component>
     </div>
   </div>

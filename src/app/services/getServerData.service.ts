@@ -34,8 +34,12 @@ export interface PUBLICATION_RECORD {
     {
       type?: string;
       tooltip?: string;
+      display_name?: string;
     }
   ];
+  user_data?: {
+    reaction: string;
+  };
   title?: string;
 
   urls?: { url: string }[];
@@ -436,7 +440,10 @@ export class GetServerDataService {
           console.log('result send');
           callback(el);
         },
-        (error) => callback(null)
+        (error) => {
+          callback(null);
+          this.showSnackbar.next('An error occurred while sending message ');
+        }
       );
   }
   setReactions(
@@ -446,7 +453,7 @@ export class GetServerDataService {
     callback
   ) {
     this.http
-      .post(
+      .put(
         this.utilsService.getReactions(listId, publicationId),
         { reaction: reaction },
         { headers: this.getHttpHeaders() }
@@ -455,7 +462,31 @@ export class GetServerDataService {
         (el) => {
           callback(el);
         },
-        (error) => callback(null)
+        (error) => {
+          callback(null);
+          this.showSnackbar.next('An error occurred while setting reactions ');
+        }
+      );
+  }
+  deleteReactions(
+    listId: string,
+    publicationId: string,
+
+    callback
+  ) {
+    this.http
+      .delete(this.utilsService.getReactions(listId, publicationId), {
+        headers: this.getHttpHeaders(),
+      })
+      .subscribe(
+        (el) => {
+          callback(el);
+        },
+        (error) => {
+          callback(null);
+
+          this.showSnackbar.next('An error occurred while clearing reactions ');
+        }
       );
   }
 }

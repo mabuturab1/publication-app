@@ -37,6 +37,7 @@
             [smallPadding]="true"
           ></app-detail-button>
           <app-sort-button
+            [list]="['Relevance', 'Date']"
             (sortType)="sortTypeChanged($event)"
           ></app-sort-button>
         </div>

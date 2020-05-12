@@ -62,10 +62,19 @@ $button-background-color: #039be5;
   display: flex;
   flex-flow: column;
   color: $text-color;
-  .seminality-wrapper {
+  .top-badge-wrapper {
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
     margin-bottom: 0.8rem;
+  }
+  .align-end {
+    justify-content: flex-end;
+  }
+  .single-badge {
+    margin: 0;
+  }
+  .right-wrapper {
+    display: flex;
   }
   .general-wrapper {
     display: flex;
@@ -103,7 +112,6 @@ $button-background-color: #039be5;
   padding-left: 1rem;
 }
 .button-group {
-  width: 100%;
   display: flex;
   align-items: center;
   justify-content: flex-end;
@@ -174,6 +182,12 @@ $button-background-color: #039be5;
   width: 100%;
   height: 100%;
   pointer-events: none;
+}
+.actions-wrapper {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
 }
 ::ng-deep .mat-form-field-infix {
   border-top: 0.35rem solid transparent;

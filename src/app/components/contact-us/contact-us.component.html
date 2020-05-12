@@ -6,7 +6,7 @@
       </a>
     </div>
   </div>
-  <div class="contact-us">
+  <div class="contact-us" *ngIf="!messageSent && !errorOccurred">
     <h6 class="page-title">Contact Us</h6>
     <div class="contact-type">
       <p class="subtitle">Subject:</p>
@@ -40,6 +40,52 @@
       >
         <fa-icon [icon]="faPaperPlane"></fa-icon>
         <a class="button-text">Send</a>
+      </button>
+    </div>
+  </div>
+  <div class="contact-us" *ngIf="messageSent">
+    <h6 class="page-title">Contact Us</h6>
+    <div class="message-content">
+      <fa-icon style="color: white;" [icon]="faPaperPlane" size="6x"></fa-icon>
+      <div class="text-content">
+        <h6 class="subtitle">Your message was sent</h6>
+        <h6 class="subtitle">
+          You should receive a message at &nbsp;{{ userEmail }}
+        </h6>
+        <h6 class="subtitle">Your reference number: &nbsp;{{ messageId }}</h6>
+      </div>
+    </div>
+    <div class="okay-button">
+      <button
+        mat-button
+        class="mat-button-style white-text contact-button"
+        (click)="closeClicked()"
+      >
+        <fa-icon [icon]="faCheckSquare"></fa-icon>
+        <a class="button-text">Okay</a>
+      </button>
+    </div>
+  </div>
+  <div class="contact-us" *ngIf="errorOccurred">
+    <h6 class="page-title">Contact Us</h6>
+    <div class="message-content">
+      <fa-icon style="color: white;" [icon]="faBan" size="6x"></fa-icon>
+      <div class="text-content">
+        <h6 class="subtitle">There was a problem delivering your message</h6>
+        <h6 class="subtitle">
+          Please write us an email at &nbsp;{{ supportEmail }}
+        </h6>
+        <h6 class="subtitle">Sorry about that</h6>
+      </div>
+    </div>
+    <div class="okay-button">
+      <button
+        mat-button
+        class="mat-button-style white-text contact-button"
+        (click)="closeClicked()"
+      >
+        <fa-icon [icon]="faCheckSquare"></fa-icon>
+        <a class="button-text">Okay</a>
       </button>
     </div>
   </div>

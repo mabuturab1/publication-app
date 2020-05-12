@@ -73,6 +73,8 @@ export class LocatePublicationComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+    if (this.publicationService.getCurrentLocatePublicationsData() != null)
+      this.updateLocalData();
     this.subscriptionArr.push(
       this.publicationService.updateLeftSidebar.subscribe((el) => {
         if (!el) this.resetItems();
@@ -101,6 +103,19 @@ export class LocatePublicationComponent implements OnInit, OnDestroy {
     this.publicationRecords = [];
     this.fetchingData = false;
     this.locatePublication = '';
+    this.currIndex = 0;
+    this.publicationService.setCurrentLocatePublications(null);
+  }
+  updateLocalData() {
+    let data = this.publicationService.getCurrentLocatePublicationsData();
+
+    this.currIndex = data.currentIndex;
+    this.allIds = data.allIds;
+    this.publicationRecords = data.publicationRecords;
+    this.locatePublication = data.query;
+    this.searchFilter = data.searchFilter;
+    this.sortType = data.sortType;
+    if (this.publicationRecords.length < 1) this.noData = true;
   }
   toggleDetailDialog() {
     this.showViewTypeDialog = !this.showViewTypeDialog;
@@ -129,6 +144,7 @@ export class LocatePublicationComponent implements OnInit, OnDestroy {
   onSearchClicked() {
     this.publicationRecords = [];
     this.allIds = [];
+    this.currIndex = 0;
     this.showSpinner = true;
     this.getServerDataService.searchForLists(
       this.locatePublication,
@@ -234,8 +250,11 @@ export class LocatePublicationComponent implements OnInit, OnDestroy {
     this.showSpinner = true;
     this.getServerDataService.updateActiveList(id, (data) => {
       this.showSpinner = false;
-      this.publicationService.setNewActiveList(data);
-      this.getServerDataService.initActiveList((data) => {});
+      if (data != null)
+        this.getServerDataService.initActiveList((data) => {
+          this.publicationService.setNewActiveList(data);
+        });
+
       this.publicationService.setCurrentPublications(null);
       this.publicationService.setDiscoveryFeedData(null);
       this.publicationService.setCurrentActiveListId(id);
@@ -286,5 +305,13 @@ export class LocatePublicationComponent implements OnInit, OnDestroy {
   }
   ngOnDestroy() {
     this.subscriptionArr.forEach((el) => el.unsubscribe());
+    this.publicationService.setCurrentLocatePublications({
+      publicationRecords: this.publicationRecords,
+      query: this.locatePublication,
+      allIds: this.allIds,
+      currentIndex: this.currIndex,
+      searchFilter: this.searchFilter,
+      sortType: this.sortType,
+    });
   }
 }

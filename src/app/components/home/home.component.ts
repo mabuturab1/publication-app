@@ -6,6 +6,7 @@ import {
   OnInit,
   OnDestroy,
   AfterViewInit,
+  ChangeDetectorRef,
 } from '@angular/core';
 
 import { PublicationDataService } from '../../services/publication-data.service';
@@ -26,7 +27,8 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   showPublicationList = false;
   showFullSize = false;
   initDone = false;
-
+  initCdr1 = false;
+  initCdr2 = false;
   showFullScreenToggle = true;
   isAuthenticated = false;
   subscriptionArr: Subscription[] = [];
@@ -37,7 +39,8 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     private publicationService: PublicationDataService,
     private route: ActivatedRoute,
     private getServerDataService: GetServerDataService,
-    private router: Router
+    private router: Router,
+    private cdr: ChangeDetectorRef
   ) {}
   showPublicationListAsNewsFeed(event) {
     this.showPublicationList = event;
@@ -76,7 +79,9 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
         this.showFullScreenToggle = true;
         this.showFullSize = false;
 
-        if (this.locateDrawer.opened != el) this.locateDrawer.toggle();
+        if (this.locateDrawer.opened != el) {
+          this.locateDrawer.toggle();
+        }
       })
     );
     this.subscriptionArr.push(
@@ -84,7 +89,9 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
         this.showFullScreenToggle = true;
         this.showFullSize = false;
 
-        if (this.listDrawer.opened != el) this.listDrawer.toggle();
+        if (this.listDrawer.opened != el) {
+          this.listDrawer.toggle();
+        }
         if (this.listDrawer.opened)
           this.publicationService.initActiveListInPublication();
       })
@@ -97,6 +104,8 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     if (this.listDrawer.opened != status.listDrawer) this.listDrawer.toggle();
     if (this.locateDrawer.opened != status.locateDrawer)
       this.locateDrawer.toggle();
+    if (!this.initCdr1) this.cdr.detectChanges();
+    this.initCdr1 = true;
   }
 
   ngOnDestroy() {

@@ -4,6 +4,7 @@ import {
   GetServerDataService,
   LIST,
   DISCOVERY_FILTER,
+  PUBLICATION_LIST,
 } from './../../services/getServerData.service';
 import {
   PublicationDetails,
@@ -121,6 +122,53 @@ export class MainComponent implements OnInit, OnDestroy {
       }
     );
   }
+
+  addItemToList(publication_id: string) {
+    var list = this.publicationService.getCurrentActiveList();
+
+    if (list == null) {
+      this.updateCurrentActiveList(publication_id);
+    } else this.updateExistingList(list, publication_id);
+  }
+  updateCurrentActiveList(publication_id: string) {
+    this.showSpinner = true;
+
+    this.getServerDataService.initActiveList((data) => {
+      this.showSpinner = false;
+      if (!data) return;
+      let currList = this.publicationService.getCurrentActiveList();
+      let currListId = this.publicationService.getCurrentActiveListId();
+
+      this.updateExistingList(currList, publication_id);
+    });
+  }
+
+  updateExistingList(list: PUBLICATION_LIST, publication_id: string) {
+    this.showSpinner = true;
+    this.getServerDataService.updateExistingList(
+      this.publicationService.getCurrentActiveListId(),
+      {
+        name: list.name,
+        publication_ids: list.publication_ids.concat(publication_id),
+      },
+      (result) => {
+        this.showSpinner = false;
+        // this.publicationService.activeListDataChanged();
+        this.getServerDataService.initActiveList((data) => {});
+        this.publicationService.setNewActiveList(
+          this.publicationService.getCurrentActiveListId()
+        );
+        // this.removeId(publication_id);
+        // let temp = this.preLoadItems;
+        // this.preLoadItems = 1;
+        // this.onScroll();
+        // this.preLoadItems = temp;
+
+        this.publicationService.setCurrentPublications(null);
+        // this.publicationService.setDiscoveryFeedData(null);
+      }
+    );
+  }
   filterResultsChanged(event: any) {
     this.filter = event;
     console.log('new filter is', this.filter);
@@ -142,6 +190,11 @@ export class MainComponent implements OnInit, OnDestroy {
   }
   onAddClicked() {
     this.publicationService.setListSidebar(true);
+  }
+  getReactionForPublication(publicationData: PUBLICATION_RECORD) {
+    if (publicationData.user_data == null) return null;
+    if (publicationData.user_data.reaction == null) return null;
+    return publicationData.user_data.reaction;
   }
   onScroll() {}
   updatePublicationForList(list_id: string) {
@@ -187,23 +240,72 @@ export class MainComponent implements OnInit, OnDestroy {
     );
   }
   thumbsUpClicked(event: boolean, item: PUBLICATION_RECORD) {
-    this.setUserReaction('thumbs up', item.id);
+    this.setUserReaction('thumbs up', item.id, (data) => {
+      if (data) {
+        this.getServerDataService.setSnackbarMessage(
+          'Thank you for your feedback'
+        );
+        this.updateUserReactionOfPublication('thumbs up', item.id);
+        this.contractPublication.set(item.id, true);
+      }
+    });
   }
   thumbsDownClicked(event: boolean, item: PUBLICATION_RECORD) {
-    this.contractPublication.set(item.id, event);
-    if (event) this.setUserReaction('thumbs down', item.id);
-    else this.setUserReaction('shrug', item.id);
+    this.setUserReaction('thumbs down', item.id, (data) => {
+      if (data) {
+        this.contractPublication.set(item.id, true);
+        console.log(data);
+        this.getServerDataService.setSnackbarMessage(
+          'Thank you for your feedback. This irrelevant result will now be hidden'
+        );
+        this.updateUserReactionOfPublication('thumbs down', item.id);
+      }
+    });
   }
   shrugClicked(event: boolean, item: PUBLICATION_RECORD) {
-    this.setUserReaction('shrug', item.id);
+    this.setUserReaction('shrug', item.id, (data) => {
+      if (data) {
+        this.getServerDataService.setSnackbarMessage(
+          'Thank you for your feedback'
+        );
+        this.updateUserReactionOfPublication('shrug', item.id);
+        this.contractPublication.set(item.id, true);
+      }
+    });
   }
-  setUserReaction(reaction: string, itemId: string) {
+  updateUserReactionOfPublication(reaction: string, publication_id: string) {
+    let index = this.publicationRecords.findIndex(
+      (el) => el.id == publication_id
+    );
+    if (index < 0) return;
+    this.publicationRecords[index] = {
+      ...this.publicationRecords[index],
+      user_data: {
+        reaction: reaction,
+      },
+    };
+  }
+  clearReaction(event: boolean, item: PUBLICATION_RECORD) {
+    this.getServerDataService.deleteReactions(
+      this.publicationService.getCurrentActiveListId(),
+      item.id,
+      (data) => {
+        if (data) {
+          this.contractPublication.set(item.id, false);
+          this.updateUserReactionOfPublication(null, item.id);
+        }
+      }
+    );
+  }
+
+  setUserReaction(reaction: string, itemId: string, callback) {
     this.getServerDataService.setReactions(
       this.publicationService.getCurrentActiveListId(),
       itemId,
       reaction,
       (data) => {
         console.log('reaction response is', data);
+        callback(data);
       }
     );
   }

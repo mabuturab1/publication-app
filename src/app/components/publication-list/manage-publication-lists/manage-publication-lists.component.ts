@@ -94,8 +94,9 @@ export class ManagePublicationListsComponent implements OnInit {
 
     if (sendUpdated) {
       this.publicationService.setNewActiveList(id);
-      this.getServerDataService.initActiveList((data) => {});
-      this.publicationService.setDiscoveryFeedData(null);
+      this.getServerDataService.initActiveList((data) => {
+        if (data) this.publicationService.setDiscoveryFeedData(null);
+      });
     }
   }
   removeClicked(list: Managed_List) {

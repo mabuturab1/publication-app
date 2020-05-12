@@ -7,7 +7,7 @@ import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 })
 export class SortButtonComponent implements OnInit {
   @Input() buttonLabel = 'Sort';
-  list = ['Closeness', 'Date'];
+  @Input() list = ['Closeness', 'Date'];
   @Output() sortType = new EventEmitter<string>();
   constructor() {}
 

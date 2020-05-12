@@ -1,0 +1,52 @@
+$text-color: white;
+.button {
+  color: $text-color;
+
+  font-size: 0.8rem;
+  text-decoration: none;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  border: none;
+  padding: 0.2rem 1rem;
+  border-radius: 1rem;
+  font-family: "Muli", Helvetica, Arial, sans-serif;
+  display: flex;
+  cursor: pointer;
+  margin: 0 5px;
+
+  .button-text {
+    font-size: 1rem;
+    text-decoration: none;
+
+    color: inherit;
+    padding: 0;
+    margin: 0;
+    padding-right: 5px;
+    font-family: inherit;
+  }
+  .single-item {
+    text-decoration: none;
+    color: inherit;
+  }
+}
+.light-green-button {
+  background-color: #80bb41;
+}
+.tooltip-wrapper {
+  display: flex;
+  position: relative;
+}
+.tooltip-text {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  min-width: 15rem;
+}
+.tooltip-wrapper:hover .tooltip-text {
+  display: block;
+}
+.content {
+  color: $text-color;
+}

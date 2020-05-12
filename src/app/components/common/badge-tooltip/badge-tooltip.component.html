@@ -1,0 +1,10 @@
+<div class="tooltip-wrapper">
+  <button *ngIf="buttonLabel !== ''" class="button light-green-button">
+    <a class="single-item"> {{ buttonLabel }}</a>
+  </button>
+  <mat-card class="tooltip-text light-green-button">
+    <mat-card-content>
+      <div class="content" [innerHTML]="tooltipText"></div>
+    </mat-card-content>
+  </mat-card>
+</div>

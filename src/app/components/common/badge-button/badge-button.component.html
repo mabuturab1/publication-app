@@ -1,12 +1,12 @@
 <button
-  *ngIf="buttonLabel != '' && buttonAfterText == ''"
+  *ngIf="buttonLabel !== '' && buttonAfterText === ''"
   (click)="onButtonClicked()"
   class="button light-blue-button"
 >
   <a class="single-item"> {{ buttonLabel }}</a>
 </button>
 <button
-  *ngIf="buttonLabel != '' && buttonAfterText != ''"
+  *ngIf="buttonLabel !== '' && buttonAfterText !== ''"
   (click)="onButtonClicked()"
   class="button no-padding"
 >
