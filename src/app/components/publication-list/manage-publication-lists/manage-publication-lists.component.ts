@@ -65,6 +65,7 @@ export class ManagePublicationListsComponent implements OnInit {
       this.showSpinner = false;
       if (data == null) return;
       this.publicationService.setTotalManagedLists(data.length);
+      this.publicationService.setAllManagedLists(data);
       data.forEach((el) => {
         this.itemList.push({ data: el, isActive: false });
       });

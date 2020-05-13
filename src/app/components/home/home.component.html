@@ -1,11 +1,11 @@
-<mat-drawer-container class="wrapper" autosize>
+<mat-drawer-container [hasBackdrop]="false" class="wrapper" autosize>
   <mat-drawer
     #listDrawer
     [disableClose]="true"
     class="side-nav-style"
     [position]="'end'"
     [class.full-width]="showFullSize"
-    mode="side"
+    mode="over"
   >
     <div
       class="side-nav-content custom-scrollbar"
@@ -31,7 +31,7 @@
     [position]="'start'"
     class="side-nav-style"
     [class.full-width]="showFullSize"
-    mode="side"
+    mode="over"
   >
     <div
       class="side-nav-content custom-scrollbar"

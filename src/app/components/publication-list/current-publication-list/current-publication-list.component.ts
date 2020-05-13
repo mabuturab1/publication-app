@@ -1,17 +1,22 @@
 import { Subscription } from 'rxjs';
 import {
   PUBLICATION_RECORD,
-  PUBLICATION_LIST,
   GetServerDataService,
   LIST,
 } from './../../../services/getServerData.service';
-import {
-  PublicationDetails,
-  PublicationDataService,
-} from './../../../services/publication-data.service';
+import { PublicationDataService } from './../../../services/publication-data.service';
 import { DataProviderService } from './../../../services/dataProvider.service';
-import { Component, OnInit, Input, OnChanges, OnDestroy } from '@angular/core';
-import { ResearchData } from 'src/app/services/dataProvider.service';
+import {
+  Component,
+  OnInit,
+  Input,
+  OnChanges,
+  OnDestroy,
+  Output,
+  EventEmitter,
+  SimpleChanges,
+} from '@angular/core';
+
 import { Router } from '@angular/router';
 
 @Component({
@@ -24,15 +29,18 @@ export class CurrentPublicationListComponent
   @Input() themedComponent = true;
   @Input() isDetailed = false;
   @Input() isMultipleSelection = false;
+  @Input() showSpinner = false;
+
+  @Output() multipleSelectedItems = new EventEmitter<string[]>();
   allIds: string[] = [];
-  // currIndex = 0;
   prevActiveListId = '';
   noData = false;
   preLoadItems = 3;
   loadedItems = 0;
   itemsList: string[] = [];
   currentActiveListId = '';
-  @Input() showSpinner = false;
+  multiSelectionArray: string[] = [];
+
   subscriptionArr: Subscription[] = [];
   fetchingData = false;
   publicationRecords: PUBLICATION_RECORD[] = [];
@@ -71,25 +79,61 @@ export class CurrentPublicationListComponent
         this.onScroll();
       })
     );
-    console.log('initializing data in current list', this.itemsList);
+    this.subscriptionArr.push(
+      this.publicationService.removeMultiplePublicationItems.subscribe(
+        (publicationRecords: string[]) => {
+          this.removeMultipleItems(publicationRecords);
+        }
+      )
+    );
   }
+  removeMultipleItems(removeList: string[]) {
+    let publicationIds = this.allIds.map((el) => el);
+    publicationIds = publicationIds.filter((el) => !removeList.includes(el));
+    this.showSpinner = true;
+    this.getServerDataService.updateExistingList(
+      this.publicationService.getCurrentActiveListId(),
+      {
+        name: this.publicationService.getCurrentActiveList().name,
+        publication_ids: publicationIds,
+      },
+      (data) => {
+        this.showSpinner = false;
+        this.loadedItems = this.loadedItems - removeList.length;
+        if (data) {
+          this.showSpinner = true;
+
+          this.getServerDataService.initActiveList((data1) => {
+            this.showSpinner = false;
+            if (data1) {
+              this.publicationService.setNewActiveList(
+                this.publicationService.getCurrentActiveListId()
+              );
+            }
+          });
+        }
+      }
+    );
+  }
+
   resetData() {
     this.publicationRecords = [];
     this.allIds = [];
-    // this.currIndex = 0;
   }
   updateLocalData() {
     var data = this.publicationService.getCurrentPublicationsData();
-    // this.currIndex = data.currentIndex;
+
     this.loadedItems = data.currentIndex;
     this.allIds = data.allIds;
     this.publicationRecords = data.publicationRecords;
     if (this.publicationRecords.length < 1) this.noData = true;
   }
   getActiveList() {
+    console.log('get active list called');
     this.showSpinner = true;
     this.resetData();
     this.getServerDataService.initActiveList((data: boolean) => {
+      this.showSpinner = false;
       if (!data) return;
       var list = this.publicationService.getCurrentActiveList();
       if (
@@ -99,7 +143,7 @@ export class CurrentPublicationListComponent
         this.loadedItems = 0;
       }
       this.prevActiveListId = this.publicationService.getCurrentActiveListId();
-      this.showSpinner = false;
+
       if (data == null) return;
       this.allIds = [...new Set(list.publication_ids)];
       if (this.allIds.length < 1) this.noData = true;
@@ -143,13 +187,20 @@ export class CurrentPublicationListComponent
         objectKeys.forEach((key) => {
           this.publicationRecords.push(data[key]);
         });
-
-        // this.currIndex += objectKeys.length;
-        // console.log('new curr index is ', this.currIndex, objectKeys.length);
       }
     );
   }
-  ngOnChanges() {
+  ngOnChanges(changes: SimpleChanges) {
+    for (const propName in changes) {
+      if (changes.hasOwnProperty(propName)) {
+        switch (propName) {
+          case 'showSpin': {
+            // this.doSomething(change.currentValue)
+          }
+        }
+      }
+    }
+
     if (this.itemsList != null && this.itemsList.length > 0)
       this.updateItemList();
   }
@@ -176,8 +227,8 @@ export class CurrentPublicationListComponent
       this.publicationService.getCurrentActiveListId(),
       { name: list.name, publication_ids: tempList },
       (data) => {
-        if (data == null) return;
         this.showSpinner = false;
+        if (data == null) return;
         this.removeLocally(id);
       }
     );
@@ -189,7 +240,7 @@ export class CurrentPublicationListComponent
     );
     if (this.allIds.length < 1) this.noData = true;
     else this.noData = false;
-    // if (this.currIndex > 0) this.currIndex--;
+
     let temp = this.preLoadItems;
     this.publicationService.setDiscoveryFeedData(null);
     this.preLoadItems = 1;
@@ -201,15 +252,21 @@ export class CurrentPublicationListComponent
       this.publicationService.getCurrentActiveListId()
     );
     this.getServerDataService.initActiveList((data) => {});
-    // this.getActiveList();
   }
   storeDataLocally() {
     this.publicationService.setCurrentPublications({
-      // currentIndex: this.currIndex,
       currentIndex: this.loadedItems,
       allIds: this.allIds,
       publicationRecords: this.publicationRecords,
     });
+  }
+  selectionStatusChanged(checked: boolean, item: PUBLICATION_RECORD) {
+    console.log('item status', item.title, checked);
+    let index = this.multiSelectionArray.findIndex((el) => el === item.id);
+    if (checked && index < 0) this.multiSelectionArray.push(item.id);
+    else if (!checked && index >= 0) this.multiSelectionArray.splice(index, 1);
+
+    this.multipleSelectedItems.emit(this.multiSelectionArray);
   }
   ngOnDestroy() {
     this.storeDataLocally();

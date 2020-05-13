@@ -1,3 +1,4 @@
+import { Managed_List } from './../../../services/getServerData.service';
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { faAngleDown, faFileExport } from '@fortawesome/free-solid-svg-icons';
 @Component({
@@ -7,8 +8,10 @@ import { faAngleDown, faFileExport } from '@fortawesome/free-solid-svg-icons';
 })
 export class DropdownButton implements OnInit {
   @Output() itemSelected = new EventEmitter<string>();
+
   @Input() buttonLabel = '';
   @Input() dropdownList: string[] = [];
+  @Input() values: string[];
   @Input() showMaterialSelect = false;
   @Input() icon: any;
   @Input() fullWidth = false;

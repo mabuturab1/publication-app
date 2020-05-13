@@ -33,7 +33,7 @@ export class ViewPublicationComponent implements OnInit {
     this.id = this.activatedRoute.snapshot.params['id'];
     this.activatedRoute.params.subscribe((data) => {
       this.id = data['id'];
-      this.getPublication();
+      if (this.getServerDataService.getUserLoginStatus()) this.getPublication();
     });
     this.getServerDataService.isLoggedIn.subscribe((el) => {
       if (el) {
@@ -50,11 +50,23 @@ export class ViewPublicationComponent implements OnInit {
     this.getServerDataService.login(uid, (val: boolean) => {});
   }
   getPublication() {
-    this.showSpinner = true;
-    this.getServerDataService.getPublicationById(this.id, false, (data) => {
-      this.showSpinner = false;
-      if (data != null) this.publicationData = data[this.id];
-    });
+    let item = this.publicationService.findPublicationDataLocally(this.id);
+    if (item != null) this.publicationData = item;
+    if (item == null) this.showSpinner = true;
+    this.getServerDataService.getPublicationById(
+      this.id,
+      item != null,
+      (data) => {
+        this.showSpinner = false;
+        if (data != null) {
+          if (this.publicationData == null) this.publicationData = {};
+          this.publicationData = {
+            ...this.publicationData,
+            ...data[this.id],
+          };
+        }
+      }
+    );
   }
   closeClicked() {
     this.location.back();

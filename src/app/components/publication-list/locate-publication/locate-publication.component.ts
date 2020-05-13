@@ -47,6 +47,7 @@ export class LocatePublicationComponent implements OnInit, OnDestroy {
   preLoadItems = 3;
   showSpinner = false;
   noData = false;
+  hasDataToStore = false;
   searchFilter: SEARCH_FILTER = {
     year_start: 1940,
     year_end: 2018,
@@ -80,17 +81,7 @@ export class LocatePublicationComponent implements OnInit, OnDestroy {
         if (!el) this.resetItems();
       })
     );
-    // this.subscriptionArr.push(
-    //   this.publicationService.activeListDataUpdated.subscribe((el) => {
-    //     console.log('active list updated called');
-    //     this.allIds = this.allIds.filter((el: string) => {
-    //       if (!this.publicationService.isCurrentPublication(el)) return el;
-    //     });
-    //     this.publicationRecords = this.publicationRecords.filter((el) => {
-    //       if (!this.publicationService.isCurrentPublication(el.id)) return el;
-    //     });
-    //   })
-    // );
+
     this.subscriptionArr.push(
       this.publicationService.onLocateScrollDown.subscribe((el) => {
         console.log('curr index is', this.currIndex, this.allIds.length);
@@ -152,6 +143,7 @@ export class LocatePublicationComponent implements OnInit, OnDestroy {
       this.sortType,
       (data: any) => {
         this.showSpinner = false;
+        this.hasDataToStore = true;
         console.log('data in locate publication is');
         console.log(data);
         this.allIds = [];
@@ -305,13 +297,14 @@ export class LocatePublicationComponent implements OnInit, OnDestroy {
   }
   ngOnDestroy() {
     this.subscriptionArr.forEach((el) => el.unsubscribe());
-    this.publicationService.setCurrentLocatePublications({
-      publicationRecords: this.publicationRecords,
-      query: this.locatePublication,
-      allIds: this.allIds,
-      currentIndex: this.currIndex,
-      searchFilter: this.searchFilter,
-      sortType: this.sortType,
-    });
+    if (this.hasDataToStore)
+      this.publicationService.setCurrentLocatePublications({
+        publicationRecords: this.publicationRecords,
+        query: this.locatePublication,
+        allIds: this.allIds,
+        currentIndex: this.currIndex,
+        searchFilter: this.searchFilter,
+        sortType: this.sortType,
+      });
   }
 }

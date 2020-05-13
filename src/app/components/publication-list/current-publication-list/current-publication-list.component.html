@@ -26,6 +26,7 @@
         (hideClicked)="hideClicked(item)"
         (viewClicked)="viewPublicationClicked(item)"
         (removeClicked)="removeClicked(item)"
+        (iAmSelected)="selectionStatusChanged($event, item)"
       ></app-single-list-component>
     </div>
     <div class="tempWrapper" *ngIf="fetchingData">

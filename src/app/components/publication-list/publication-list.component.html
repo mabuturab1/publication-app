@@ -36,8 +36,11 @@
         (selectionModeChanged)="selectionModeUpdated($event)"
         (removeClicked)="removeButtonClicked()"
         [alignAsRow]="!showManageButton"
-        [showManageButton]="showManageButton"
+        [showManageButton]="showManageButton && !isMultipleSelection"
         [isMultipleSelection]="isMultipleSelection"
+        [copyToListItems]="managedList"
+        [copyToListItemValues]="maangedListIds"
+        (copyToItemsSelected)="managedListItemSelected($event)"
       ></app-publication-list-options>
     </div>
   </div>
@@ -56,7 +59,8 @@
         (showManageScreen)="showManageWindow($event)"
         [isDetailed]="showDetailedLookForPublication"
         [isMultipleSelection]="isMultipleSelection"
-        [showSpinner]="fetchingManagedLists"
+        [showSpinner]="showSpinner"
+        (multipleSelectedItems)="multipleSelectedItemsChanged($event)"
       ></app-current-publication-list>
     </div>
   </div>

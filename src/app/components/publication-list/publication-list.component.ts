@@ -1,7 +1,9 @@
+import { Managed_List } from 'src/app/services/getServerData.service';
 import {
   GetServerDataService,
   LIST,
   PUBLICATION_RECORD,
+  PUBLICATION_LIST,
 } from './../../services/getServerData.service';
 import { DataProviderService } from './../../services/dataProvider.service';
 import { Publication_Data } from './../../services/publication-data.service';
@@ -32,6 +34,7 @@ export class PublicationListComponent implements OnInit, OnDestroy {
   faArrowsAltV = faArrowsAltV;
   @Output() closeDrawerClicked = new EventEmitter<boolean>();
   @Output() toggleDrawerClicked = new EventEmitter<boolean>();
+
   @Input() showManageButton = true;
   @Input() themedList = false;
   @Input() fixedHeader = false;
@@ -47,7 +50,10 @@ export class PublicationListComponent implements OnInit, OnDestroy {
   viewPublication = false;
   isMultipleSelection = false;
   screenInit = false;
-  fetchingManagedLists = false;
+  showSpinner = false;
+  managedList: string[] = [];
+  maangedListIds: string[] = [];
+
   @Output() showListAsNewsFeed = new EventEmitter<boolean>();
   closeDrawer(event: Event) {
     this.closeDrawerClicked.emit(true);
@@ -61,7 +67,44 @@ export class PublicationListComponent implements OnInit, OnDestroy {
     private getServerDataService: GetServerDataService
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.subscriptionArr.push(
+      this.getServerDataService.isLoggedIn.subscribe((el) => {
+        if (el) {
+          if (this.publicationService.getAllManagedLists() == null) {
+            this.getServerDataService.initAllPublicationLists((data) => {
+              if (data != null) this.updateManagedList();
+            });
+          } else this.updateManagedList();
+        }
+      })
+    );
+    this.subscriptionArr.push(
+      this.publicationService.updateManagedLists.subscribe((data) => {
+        this.updateManagedList();
+      })
+    );
+  }
+  updateManagedList() {
+    console.log('update managed list called');
+    this.managedList = this.publicationService
+      .getAllManagedLists()
+      .map((el) => {
+        return el.list_name;
+      });
+    this.maangedListIds = this.publicationService
+      .getAllManagedLists()
+      .map((el) => {
+        return el.list_id;
+      });
+    let index = this.maangedListIds.findIndex(
+      (el) => el === this.publicationService.getCurrentActiveListId()
+    );
+    if (index < 0) return;
+    this.managedList.splice(index, 1);
+    this.maangedListIds.splice(index, 1);
+    console.log('managed list', this.managedList);
+  }
 
   resetAllItems() {
     this.showLocatePublication = false;
@@ -90,10 +133,67 @@ export class PublicationListComponent implements OnInit, OnDestroy {
     this.isMultipleSelection = event == 'multiple';
   }
   removeButtonClicked() {
-    this.dataProviderService.removeItems();
+    this.publicationService.removeMultipleItemsFromActiveList(
+      this.publicationRecordsListId
+    );
     this.isMultipleSelection = false;
   }
+
   locatePublication(show: boolean) {
     this.publicationService.toggleLocateSidebar();
+  }
+  multipleSelectedItemsChanged(event: string[]) {
+    this.publicationRecordsListId = event;
+  }
+  managedListItemSelected(listId: string) {
+    var item = this.publicationService
+      .getAllManagedLists()
+      .find((el) => el.list_id === listId);
+    if (item == null) return;
+    this.showSpinner = true;
+    this.getExistingList(item, (data) => {
+      this.showSpinner = false;
+      this.publicationRecordsListId = this.publicationRecordsListId.concat(
+        data.publication_ids
+      );
+      this.updateExistingList(
+        item.list_id,
+        item.list_name,
+        this.publicationRecordsListId,
+        (data) => {
+          if (data != null) {
+            this.isMultipleSelection = false;
+            this.getServerDataService.setSnackbarMessage(
+              'items copied successfully'
+            );
+          }
+        }
+      );
+    });
+  }
+  getExistingList(item: Managed_List, callback) {
+    this.getServerDataService.getPublicationListById(
+      item.list_id,
+      (data: PUBLICATION_LIST) => {
+        if (data == null) return;
+        callback(data);
+      }
+    );
+  }
+  updateExistingList(
+    listId: string,
+    name: string,
+    updatedPublicationIds: string[],
+    callback
+  ) {
+    this.showSpinner = true;
+    this.getServerDataService.updateExistingList(
+      listId,
+      { name: name, publication_ids: updatedPublicationIds },
+      (data) => {
+        this.showSpinner = false;
+        callback(data);
+      }
+    );
   }
 }

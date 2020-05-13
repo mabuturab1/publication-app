@@ -28,10 +28,12 @@
       <div class="select-option-wrapper" *ngIf="isMultipleSelection">
         <app-dropdown-button
           [placeholderText]="'Copy To'"
+          [dropdownList]="copyToListItems"
+          [values]="copyToListItemValues"
           [icon]="faFileExport"
           [showMaterialSelect]="true"
-          [dropdownList]="listItems"
           [buttonLabel]="'Select a list'"
+          (itemSelected)="listItemSelected($event)"
         ></app-dropdown-button>
       </div>
       <app-detail-button

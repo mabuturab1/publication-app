@@ -1,3 +1,7 @@
+import {
+  GetServerDataService,
+  PUBLICATION_LIST,
+} from './../../../services/getServerData.service';
 import { PublicationDataService } from 'src/app/services/publication-data.service';
 import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
 import { faAngleDown, faFileExport } from '@fortawesome/free-solid-svg-icons';
@@ -16,25 +20,18 @@ export class PublicationListOptionsComponent implements OnInit {
   @Input() alignAsRow = false;
   @Input() isMultipleSelection = false;
   @Output() selectionModeChanged = new EventEmitter<string>();
+  @Input() copyToListItems: string[];
+  @Input() copyToListItemValues: string[];
+  @Output() copyToItemsSelected = new EventEmitter<string>();
   faFileExport = faFileExport;
-
-  listItems = [
-    'List 1',
-    'List 2',
-    'List 3',
-    'List 4',
-    'List 5',
-    'List 6',
-    'List 7',
-    'List 8',
-    'List 9',
-    'List 10',
-  ];
   viewTypeChanged(event: boolean) {
     this.showDetailedLook.emit(event);
   }
   faAngleDown = faAngleDown;
-  constructor(private publicationService: PublicationDataService) {}
+  constructor(
+    private publicationService: PublicationDataService,
+    private getServerDataService: GetServerDataService
+  ) {}
 
   ngOnInit(): void {}
 
@@ -55,5 +52,8 @@ export class PublicationListOptionsComponent implements OnInit {
   }
   removeButtonClicked() {
     this.removeClicked.emit(true);
+  }
+  listItemSelected(listId: string) {
+    this.copyToItemsSelected.emit(listId);
   }
 }

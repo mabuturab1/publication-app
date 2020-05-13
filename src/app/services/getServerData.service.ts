@@ -171,6 +171,12 @@ export class GetServerDataService {
       });
     });
   }
+  initAllPublicationLists(callback) {
+    this.getAllPublicationList((data) => {
+      if (data != null) this.publicationService.setAllManagedLists(data);
+      callback(data);
+    });
+  }
   getUserLoginStatus() {
     return this.userLoginStatus;
   }

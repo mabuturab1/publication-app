@@ -61,6 +61,7 @@ export class SingleListComponentComponent implements OnInit {
   @Output() shrug = new EventEmitter<boolean>();
   @Output() thumbsDown = new EventEmitter<boolean>();
   @Output() clearReaction = new EventEmitter<boolean>();
+  @Output() iAmSelected = new EventEmitter<boolean>();
   expandBadges = false;
   constructor(
     private dataProviderService: DataProviderService,
@@ -68,11 +69,8 @@ export class SingleListComponentComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {}
-  selectionChanged(event) {
-    // this.dataProviderService.setIndexToRemove(
-    //   this.publicationData.id,
-    //   event.target.checked
-    // );
+  selectionChanged(event: any) {
+    this.iAmSelected.emit(event.target.checked);
   }
   addButtonClicked() {
     this.addClicked.emit(true);

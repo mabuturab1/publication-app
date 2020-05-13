@@ -36,8 +36,8 @@
       (selectionChange)="matDropdownChanged()"
     >
       <mat-option
-        *ngFor="let item of dropdownList"
-        [value]="item"
+        *ngFor="let item of dropdownList; let i = index"
+        [value]="values != null && values[i] != null ? values[i] : item"
         class="select-option-style"
       >
         {{ item }}

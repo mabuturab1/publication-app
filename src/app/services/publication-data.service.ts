@@ -1,3 +1,4 @@
+import { Managed_List } from 'src/app/services/getServerData.service';
 import {
   PUBLICATION_LIST,
   PUBLICATION_RECORD,
@@ -46,10 +47,10 @@ export class PublicationDataService {
   currentPublicationsData: ComponentData;
   currentLocatePublicationsData: ComponentData;
   currentlySelectedPublication: PUBLICATION_RECORD;
+  updateManagedLists = new Subject<Managed_List[]>();
+  removeMultiplePublicationItems = new Subject<string[]>();
   activeListUpdated = new Subject<string>();
-  // updateActiveListData = new Subject<boolean>();
-  // activeListIdUpdated = new Subject<string>();
-  // activeListDataUpdated = new Subject<boolean>();
+  currentManagedList: Managed_List[];
   initActiveList = new Subject<boolean>();
   onLocateScrollDown = new Subject<boolean>();
   onPublicationListScrollDown = new Subject<boolean>();
@@ -62,7 +63,27 @@ export class PublicationDataService {
   setCurrentNeededPublication(publication: PUBLICATION_RECORD) {
     this.currentNeededPublication = publication;
   }
-
+  findPublicationDataLocally(publicationId: string) {
+    if (this.currentDiscoveryFeedData != null) {
+      let item = this.currentDiscoveryFeedData.publicationRecords.find(
+        (el) => el.id == publicationId
+      );
+      if (item != null) return item;
+    }
+    if (this.currentPublicationsData != null) {
+      let item = this.currentPublicationsData.publicationRecords.find(
+        (el) => el.id == publicationId
+      );
+      if (item != null) return item;
+    }
+    if (this.currentLocatePublicationsData != null) {
+      let item = this.currentLocatePublicationsData.publicationRecords.find(
+        (el) => el.id == publicationId
+      );
+      if (item != null) return item;
+    }
+    return null;
+  }
   setDiscoveryFeedData(discoveryFeedData: ComponentData) {
     this.currentDiscoveryFeedData = discoveryFeedData;
   }
@@ -77,6 +98,16 @@ export class PublicationDataService {
   }
   setCurrentLocatePublications(pubData: ComponentData) {
     this.currentLocatePublicationsData = pubData;
+  }
+  setAllManagedLists(data: Managed_List[]) {
+    this.currentManagedList = data;
+    this.updateManagedLists.next(data);
+  }
+  removeMultipleItemsFromActiveList(publicationRecordsList: string[]) {
+    this.removeMultiplePublicationItems.next(publicationRecordsList);
+  }
+  getAllManagedLists() {
+    return this.currentManagedList;
   }
   getCurrentLocatePublicationsData() {
     return this.currentLocatePublicationsData;
