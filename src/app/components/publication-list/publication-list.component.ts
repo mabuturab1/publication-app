@@ -6,7 +6,6 @@ import {
   PUBLICATION_LIST,
 } from './../../services/getServerData.service';
 import { DataProviderService } from './../../services/dataProvider.service';
-import { Publication_Data } from './../../services/publication-data.service';
 
 import {
   Component,
@@ -15,9 +14,6 @@ import {
   Output,
   Input,
   OnDestroy,
-  ViewChild,
-  ElementRef,
-  AfterViewInit,
 } from '@angular/core';
 import { faTimes, faArrowsAltV } from '@fortawesome/free-solid-svg-icons';
 import { Subscription } from 'rxjs';
@@ -86,7 +82,6 @@ export class PublicationListComponent implements OnInit, OnDestroy {
     );
   }
   updateManagedList() {
-    console.log('update managed list called');
     this.managedList = this.publicationService
       .getAllManagedLists()
       .map((el) => {
@@ -103,7 +98,6 @@ export class PublicationListComponent implements OnInit, OnDestroy {
     if (index < 0) return;
     this.managedList.splice(index, 1);
     this.maangedListIds.splice(index, 1);
-    console.log('managed list', this.managedList);
   }
 
   resetAllItems() {
@@ -124,7 +118,6 @@ export class PublicationListComponent implements OnInit, OnDestroy {
   }
   viewTypeChanged(event: boolean) {
     this.showDetailedLookForPublication = event;
-    console.log('Detailed look', this.showDetailedLookForPublication);
   }
   ngOnDestroy() {
     this.subscriptionArr.forEach((el) => el.unsubscribe());

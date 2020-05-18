@@ -10,7 +10,5 @@ export class BadgeTooltipComponent implements OnInit {
   @Input() tooltipText: string;
   constructor() {}
 
-  ngOnInit(): void {
-    console.log('button label is', this.buttonLabel);
-  }
+  ngOnInit(): void {}
 }

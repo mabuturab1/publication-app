@@ -11,9 +11,7 @@ export class NewListComponent implements OnInit {
   @Output() listData = new EventEmitter<any>();
   constructor() {}
 
-  ngOnInit(): void {
-    console.log('name is ', this.name);
-  }
+  ngOnInit(): void {}
   saveButtonClicked() {
     this.listData.emit({ name: this.name, subtitle: this.subtitle });
   }

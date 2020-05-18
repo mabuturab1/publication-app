@@ -50,7 +50,7 @@ export class FilterDialogComponent implements OnInit, OnChanges {
     this.initFilterValues();
   }
   initFilterValues() {
-    console.log('init filter is', this.initFilter);
+    if (this.initFilter == null) return;
     if (this.initFilter.year_end != null)
       this.selectedToDate = this.initFilter.year_end.toString();
     if (this.initFilter.year_start != null)

@@ -102,7 +102,6 @@ export class ManagePublicationListsComponent implements OnInit {
   }
   removeClicked(list: Managed_List) {
     this.getServerDataService.deletePublicationList(list.list_id, (data) => {
-      console.log(data);
       if (data != null) this.getAllManagedLists();
     });
   }
@@ -111,7 +110,6 @@ export class ManagePublicationListsComponent implements OnInit {
     this.renamingList = true;
     this.renamedListId = list.list_id;
     this.isNewList = true;
-    console.log('rename clicked', this.newListName, list);
   }
   duplicateClicked(list: Managed_List) {
     this.newListName = list.list_name;

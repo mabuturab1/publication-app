@@ -84,7 +84,6 @@ export class LocatePublicationComponent implements OnInit, OnDestroy {
 
     this.subscriptionArr.push(
       this.publicationService.onLocateScrollDown.subscribe((el) => {
-        console.log('curr index is', this.currIndex, this.allIds.length);
         if (this.currIndex >= this.allIds.length - 1) return;
         if (el) this.onScroll();
       })
@@ -124,13 +123,10 @@ export class LocatePublicationComponent implements OnInit, OnDestroy {
   }
   locateInputChanged($event) {}
   filterResultsChanged(event: any) {
-    console.log('seearch filter is ', this.searchFilter);
-
     this.searchFilter = event;
   }
   sortTypeChanged(event: string) {
     this.sortType = event.toLowerCase();
-    console.log('sort type is', this.sortType);
   }
   onSearchClicked() {
     this.publicationRecords = [];
@@ -144,8 +140,7 @@ export class LocatePublicationComponent implements OnInit, OnDestroy {
       (data: any) => {
         this.showSpinner = false;
         this.hasDataToStore = true;
-        console.log('data in locate publication is');
-        console.log(data);
+
         this.allIds = [];
         if (data == null) return;
         this.allIds = data.filter((el: string) => {
@@ -153,7 +148,6 @@ export class LocatePublicationComponent implements OnInit, OnDestroy {
         });
         if (this.allIds.length < 1) this.noData = true;
         else this.noData = false;
-        console.log('new ids in locate publication', this.allIds);
 
         this.updateItemList();
       }
@@ -263,7 +257,7 @@ export class LocatePublicationComponent implements OnInit, OnDestroy {
   }
   getNewIds() {
     this.itemsList = [];
-    console.log('curr index at start is', this.currIndex);
+
     let maxRange = this.currIndex + this.preLoadItems;
     if (maxRange > this.allIds.length - 1) maxRange = this.allIds.length - 1;
     for (let i = this.currIndex; i < maxRange; i++) {
@@ -275,7 +269,7 @@ export class LocatePublicationComponent implements OnInit, OnDestroy {
     this.fetchingData = true;
     this.getServerDataService.getMultiplePublicationByIds(
       this.itemsList,
-      false,
+      'publication_list_item',
       (data: Object) => {
         this.fetchingData = false;
         if (data == null) return;
@@ -287,12 +281,10 @@ export class LocatePublicationComponent implements OnInit, OnDestroy {
 
         this.fetchingData = false;
         this.currIndex += objectKeys.length;
-        console.log('new curr index is ', this.currIndex, objectKeys.length);
       }
     );
   }
   onScroll() {
-    console.log('scolled down n locate');
     if (!this.fetchingData) this.updateItemList();
   }
   ngOnDestroy() {

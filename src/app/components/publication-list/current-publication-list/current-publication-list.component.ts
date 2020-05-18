@@ -55,12 +55,6 @@ export class CurrentPublicationListComponent
   ngOnInit(): void {
     this.subscriptionArr.push(
       this.publicationService.activeListUpdated.subscribe((el: string) => {
-        console.log(
-          'active list updated called in current publication',
-          this.prevActiveListId,
-          this.publicationService.getCurrentActiveListId()
-        );
-
         this.getActiveList();
       })
     );
@@ -129,7 +123,6 @@ export class CurrentPublicationListComponent
     if (this.publicationRecords.length < 1) this.noData = true;
   }
   getActiveList() {
-    console.log('get active list called');
     this.showSpinner = true;
     this.resetData();
     this.getServerDataService.initActiveList((data: boolean) => {
@@ -178,7 +171,7 @@ export class CurrentPublicationListComponent
     this.fetchingData = true;
     this.getServerDataService.getMultiplePublicationByIds(
       this.itemsList,
-      false,
+      'publication_list_item',
       (data: Object) => {
         this.fetchingData = false;
         if (data == null) return;
@@ -261,7 +254,6 @@ export class CurrentPublicationListComponent
     });
   }
   selectionStatusChanged(checked: boolean, item: PUBLICATION_RECORD) {
-    console.log('item status', item.title, checked);
     let index = this.multiSelectionArray.findIndex((el) => el === item.id);
     if (checked && index < 0) this.multiSelectionArray.push(item.id);
     else if (!checked && index >= 0) this.multiSelectionArray.splice(index, 1);

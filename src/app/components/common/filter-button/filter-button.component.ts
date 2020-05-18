@@ -17,12 +17,10 @@ export class FilterButtonComponent implements OnInit {
     this.showFilterDialog = !this.showFilterDialog;
     event.stopPropagation();
   }
-  ngOnInit(): void {
-    console.log('init filter in button is', this.filter);
-  }
+  ngOnInit(): void {}
   filterResultsChanged(event) {
     this.showFilterDialog = false;
-    console.log('filter results are', event);
+
     this.filterResults.emit(event);
   }
 }

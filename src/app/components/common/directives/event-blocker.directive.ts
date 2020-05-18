@@ -6,7 +6,6 @@ import { Directive, ElementRef, HostListener } from '@angular/core';
 export class EventBlockerDirective {
   constructor() {}
   @HostListener('click', ['$event']) onMouseClick($event: Event) {
-    console.log('Click occurred');
     $event.stopPropagation();
   }
 }

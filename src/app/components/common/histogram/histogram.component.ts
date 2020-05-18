@@ -41,7 +41,6 @@ export class HistogramComponent implements OnInit {
   };
   startSending(data: boolean) {
     this.udpateData = data;
-    console.log('new start sending is', data);
   }
   datesChanged() {
     this.prevDateChanged.emit(this.minValue);

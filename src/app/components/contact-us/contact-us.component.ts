@@ -59,7 +59,6 @@ export class ContactUsComponent implements OnInit {
     this.router.navigate(['']);
   }
   sendMessage() {
-    console.log('sending message');
     this.getServerDataService.setUserResponse(
       { subject: this.buttonLabel, message: this.message },
       (data: any) => {

@@ -15,7 +15,6 @@ export class HideMeDirective {
   constructor(private el: ElementRef) {}
   @HostListener('click')
   clickInside() {
-    console.log('clicked insider');
     this.wasInside = true;
   }
   @HostListener('document:click', ['$event']) onMouseClick($event: Event) {

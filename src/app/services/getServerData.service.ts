@@ -4,9 +4,14 @@ import { Injectable } from '@angular/core';
 import { UtilsService } from './utils.service';
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { Subject } from 'rxjs';
+
 export interface PUBLICATION_LIST {
   name?: string;
   publication_ids?: string[];
+  user_data?: {
+    filter: DISCOVERY_FILTER;
+    sort: string;
+  };
 }
 export interface Managed_List {
   list_id: string;
@@ -67,7 +72,7 @@ export interface AUTHOR {
 }
 
 export interface DISCOVERY_SORT {
-  type?: string;
+  value: 'date' | 'closeness';
 }
 
 export interface DISCOVERY_FILTER {
@@ -139,7 +144,7 @@ export class GetServerDataService {
           this.userLoginStatus = true;
           localStorage.setItem('infoDiscoveryToken', this.token);
           this.isLoggedIn.next(true);
-          console.log('token is', this.token);
+
           callback(true);
         }
       },
@@ -159,13 +164,20 @@ export class GetServerDataService {
         return;
       }
       this.publicationService.setCurrentActiveListId(listId);
-      this.getPublicationListById(listId, (activeList) => {
+      this.getPublicationListById(listId, (activeList: PUBLICATION_LIST) => {
         if (activeList == null) {
           // this.gettingActiveList = false;
           callback(false);
           return;
         }
+
         this.publicationService.setCurrentActiveList(activeList);
+        console.log(activeList && activeList.user_data, activeList);
+        if (activeList && activeList.user_data)
+          this.publicationService.setCurrentDiscoveryFilterPair({
+            filter: activeList.user_data.filter,
+            sort: activeList.user_data.sort,
+          });
         // this.gettingActiveList = false;
         callback(true);
       });
@@ -203,7 +215,6 @@ export class GetServerDataService {
       )
       .subscribe(
         (response: any) => {
-          console.log(response);
           callback(response.publication_ids);
         },
         (error) => {
@@ -254,7 +265,6 @@ export class GetServerDataService {
       )
       .subscribe(
         (el) => {
-          console.log('updated list');
           callback(el);
         },
         (error) => {
@@ -273,7 +283,6 @@ export class GetServerDataService {
       })
       .subscribe(
         (el: any) => {
-          console.log('Active list is', el);
           callback(el.list_id);
         },
         (error) => {
@@ -284,14 +293,17 @@ export class GetServerDataService {
   }
   importReadingList() {}
 
-  getPublicationById(id: string, onlyExtra: boolean, callback) {
+  getPublicationById(
+    id: string,
+    publicationView: 'publication_list_item' | 'publication_detail',
+    callback
+  ) {
     this.http
-      .get(this.utilsService.getPublication(id, onlyExtra), {
+      .get(this.utilsService.getPublication(id, publicationView), {
         headers: this.getHttpHeaders(),
       })
       .subscribe(
         (el: any) => {
-          console.log('got active list', el);
           callback(el.publications);
         },
         (error) => {
@@ -307,7 +319,6 @@ export class GetServerDataService {
       })
       .subscribe(
         (el: any) => {
-          console.log('got active list', el);
           callback(el.list);
         },
         (error) => {
@@ -325,7 +336,6 @@ export class GetServerDataService {
       })
       .subscribe(
         (el: any) => {
-          console.log('create new publication list', el);
           callback(el.id);
         },
         (error) => {
@@ -341,7 +351,6 @@ export class GetServerDataService {
       })
       .subscribe(
         (el: any) => {
-          console.log('get publication list', el);
           callback(el.lists);
         },
         (error) => {
@@ -359,7 +368,6 @@ export class GetServerDataService {
       })
       .subscribe(
         (el) => {
-          console.log('delete publication list', el);
           callback(el);
         },
         (error) => {
@@ -375,7 +383,6 @@ export class GetServerDataService {
       })
       .subscribe(
         (el) => {
-          console.log('update existing list', el);
           callback(el);
         },
         (error) => {
@@ -400,7 +407,6 @@ export class GetServerDataService {
       )
       .subscribe(
         (el: any) => {
-          console.log('el is', el);
           callback(el.results);
         },
         (error) => {
@@ -412,19 +418,22 @@ export class GetServerDataService {
       );
   }
 
-  getMultiplePublicationByIds(list: string[], onlyExtra: boolean, callback) {
+  getMultiplePublicationByIds(
+    list: string[],
+    publicationView: 'publication_list_item' | 'publication_detail',
+    callback
+  ) {
     this.http
       .post(
         this.utilsService.getMultiplePublicationsByIds(),
         {
           ids: list,
-          only_extra: onlyExtra,
+          view: publicationView,
         },
         { headers: this.getHttpHeaders() }
       )
       .subscribe(
         (el: any) => {
-          console.log('multiple list are', el.publications);
           callback(el.publications);
         },
         (error) => {
@@ -436,14 +445,12 @@ export class GetServerDataService {
       );
   }
   setUserResponse(userResponse: USER_RESPONSE, callback) {
-    console.log('sending request', userResponse);
     this.http
       .post(this.utilsService.setUserResponse(), userResponse, {
         headers: this.getHttpHeaders(),
       })
       .subscribe(
         (el) => {
-          console.log('result send');
           callback(el);
         },
         (error) => {

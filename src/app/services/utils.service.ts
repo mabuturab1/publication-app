@@ -16,8 +16,8 @@ export class UtilsService {
     return `/api/import`;
   }
 
-  getPublication(id: string, onlyExtra: boolean) {
-    return `/api/publications/${id}?only_extra=${onlyExtra}`;
+  getPublication(id: string, publicationView: string) {
+    return `/api/publications/${id}?view=${publicationView}`;
   }
   createNewPublicationList() {
     return `/api/publication_lists`;
@@ -53,7 +53,7 @@ export class UtilsService {
   getQueryParam(obj: Object) {
     let query = '';
     query = query + encodeURIComponent('{');
-    console.log('query at start is', query);
+
     for (let key in obj) {
       query =
         query +
@@ -65,8 +65,7 @@ export class UtilsService {
         encodeURIComponent(',');
     }
     query = query + encodeURIComponent('}');
-    console.log(query);
-    console.log(decodeURIComponent(query));
+
     return query;
   }
 }

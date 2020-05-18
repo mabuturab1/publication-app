@@ -6,10 +6,7 @@ import {
   DISCOVERY_FILTER,
   PUBLICATION_LIST,
 } from './../../services/getServerData.service';
-import {
-  PublicationDetails,
-  PublicationDataService,
-} from './../../services/publication-data.service';
+import { PublicationDataService } from './../../services/publication-data.service';
 import { DataProviderService } from './../../services/dataProvider.service';
 import {
   Component,
@@ -58,38 +55,36 @@ export class MainComponent implements OnInit, OnDestroy {
   }
   viewTypeChanged(event: boolean) {
     this.showDetailedLook = event;
-    console.log('show detailed look changed', this.showDetailedLook);
   }
   sortTypeUpdated(event: string) {
     this.sortType = event.toLowerCase();
+    this.setFilterPair();
     this.getDiscoveryLists();
   }
   ngOnInit(): void {
     this.subscriptionArr.push(
       this.publicationService.activeListUpdated.subscribe((el: string) => {
-        console.log('getting discovery list');
         this.getDiscoveryLists();
       })
     );
     this.getServerDataService.isLoggedIn.subscribe((el) => {
-      console.log('is logged in main');
       if (!this.showSpinner) this.getDiscoveryData();
     });
   }
   getDiscoveryData() {
     var data = this.publicationService.getDiscoveryFeedData();
-    console.log('get discovery data is', data);
+
     if (data == null) this.getDiscoveryLists();
     else {
       setTimeout(() => {
         this.currIndex = data.currentIndex;
         this.allIds = data.allIds;
         this.publicationRecords = data.publicationRecords;
-        this.filter = data.filter;
-        this.sortType = data.sortType;
+        // this.filter = data.filter;
+        // this.sortType = data.sortType;
         if (this.publicationRecords.length < 1) this.noData = true;
-        console.log('obtained filter', this.filter);
       }, 10);
+      this.updateFilterPair();
     }
   }
   getActiveList() {
@@ -99,6 +94,7 @@ export class MainComponent implements OnInit, OnDestroy {
   }
   getDiscoveryLists() {
     if (this.publicationService.getCurrentActiveListId() == null) return;
+    this.updateFilterPair();
     this.itemsList = [];
     this.publicationRecords = [];
     this.showSpinner = true;
@@ -109,16 +105,13 @@ export class MainComponent implements OnInit, OnDestroy {
       this.sortType,
       (data: any[]) => {
         this.showSpinner = false;
-
         if (data == null) {
           this.noData = true;
           return;
         }
-
         this.publicationRecords = this.publicationRecords.concat(data);
         if (this.publicationRecords.length < 1) this.noData = true;
         else this.noData = false;
-        console.log('publication records', this.publicationRecords);
       }
     );
   }
@@ -163,10 +156,25 @@ export class MainComponent implements OnInit, OnDestroy {
       }
     );
   }
+  setFilterPair() {
+    this.publicationService.setCurrentDiscoveryFilterPair({
+      filter: this.filter,
+      sort: this.sortType,
+    });
+  }
   filterResultsChanged(event: any) {
     this.filter = event;
-    console.log('new filter is', this.filter);
+
+    this.setFilterPair();
     this.getDiscoveryLists();
+  }
+  updateFilterPair() {
+    var filterPair = this.publicationService.getCurrentDiscoveryFilterPair();
+    if (filterPair != null) {
+      this.filter = filterPair.filter;
+      this.sortType = filterPair.sort;
+    }
+    console.log(filterPair);
   }
   hideClicked(publicationData: PUBLICATION_RECORD) {
     var index = this.publicationRecords.findIndex(
@@ -217,7 +225,7 @@ export class MainComponent implements OnInit, OnDestroy {
     this.fetchingData = true;
     this.getServerDataService.getMultiplePublicationByIds(
       this.itemsList,
-      false,
+      'publication_list_item',
       (data: Object) => {
         this.fetchingData = false;
         if (data == null) return;
@@ -229,7 +237,6 @@ export class MainComponent implements OnInit, OnDestroy {
         });
 
         this.currIndex += objectKeys.length;
-        console.log('new curr index is ', this.currIndex, objectKeys.length);
       }
     );
   }
@@ -248,7 +255,7 @@ export class MainComponent implements OnInit, OnDestroy {
     this.setUserReaction('thumbs down', item.id, (data) => {
       if (data) {
         this.contractPublication.set(item.id, true);
-        console.log(data);
+
         this.getServerDataService.setSnackbarMessage(
           'Thank you for your feedback. This irrelevant result will now be hidden'
         );
@@ -298,7 +305,6 @@ export class MainComponent implements OnInit, OnDestroy {
       itemId,
       reaction,
       (data) => {
-        console.log('reaction response is', data);
         callback(data);
       }
     );
@@ -317,6 +323,5 @@ export class MainComponent implements OnInit, OnDestroy {
       filter: this.filter,
       sortType: this.sortType,
     });
-    console.log('stored filter is', this.filter);
   }
 }

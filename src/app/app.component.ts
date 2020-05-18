@@ -22,7 +22,6 @@ export class AppComponent implements OnInit, OnDestroy {
     this.subscriptionArr.push(
       this.getServerDataService.showSnackbar.subscribe((el) => {
         this.showErrorMessage(el);
-        console.log('show error called');
       })
     );
     this.subscriptionArr.push(

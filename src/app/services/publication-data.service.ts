@@ -22,7 +22,10 @@ export interface ComponentData {
   sortType?: string;
   query?: string;
 }
-
+export interface DiscoveryFilterPair {
+  filter: DISCOVERY_FILTER;
+  sort: string;
+}
 export interface Author {
   name: string;
   affiliations: string[];
@@ -47,6 +50,7 @@ export class PublicationDataService {
   currentPublicationsData: ComponentData;
   currentLocatePublicationsData: ComponentData;
   currentlySelectedPublication: PUBLICATION_RECORD;
+  currentDiscoveryFilterPair: DiscoveryFilterPair;
   updateManagedLists = new Subject<Managed_List[]>();
   removeMultiplePublicationItems = new Subject<string[]>();
   activeListUpdated = new Subject<string>();
@@ -62,6 +66,12 @@ export class PublicationDataService {
   currentActiveListId = '';
   setCurrentNeededPublication(publication: PUBLICATION_RECORD) {
     this.currentNeededPublication = publication;
+  }
+  setCurrentDiscoveryFilterPair(dicoveryFiltersPair: DiscoveryFilterPair) {
+    this.currentDiscoveryFilterPair = dicoveryFiltersPair;
+  }
+  getCurrentDiscoveryFilterPair() {
+    return this.currentDiscoveryFilterPair;
   }
   findPublicationDataLocally(publicationId: string) {
     if (this.currentDiscoveryFeedData != null) {
@@ -187,7 +197,6 @@ export class PublicationDataService {
     else return false;
   }
   setNewActiveList(id: string) {
-    console.log(' active list updated in publication service');
     this.activeListUpdated.next(id);
   }
   setSpinnerInCurrentList(val: boolean) {

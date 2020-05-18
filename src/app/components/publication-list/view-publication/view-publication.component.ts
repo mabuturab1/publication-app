@@ -55,7 +55,7 @@ export class ViewPublicationComponent implements OnInit {
     if (item == null) this.showSpinner = true;
     this.getServerDataService.getPublicationById(
       this.id,
-      item != null,
+      'publication_detail',
       (data) => {
         this.showSpinner = false;
         if (data != null) {

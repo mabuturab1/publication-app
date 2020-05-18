@@ -53,9 +53,7 @@ export class MainOptionsComponent implements OnInit {
     private publicationService: PublicationDataService,
     private router: Router
   ) {}
-  ngOnInit(): void {
-    console.log('init filter in main options is', this.filter);
-  }
+  ngOnInit(): void {}
   contactUs() {
     this.router.navigate(['contact-us']);
   }
