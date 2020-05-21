@@ -170,16 +170,19 @@ export class GetServerDataService {
           callback(false);
           return;
         }
-
-        this.publicationService.setCurrentActiveList(activeList);
-        console.log(activeList && activeList.user_data, activeList);
-        if (activeList && activeList.user_data)
-          this.publicationService.setCurrentDiscoveryFilterPair({
-            filter: activeList.user_data.filter,
-            sort: activeList.user_data.sort,
-          });
+        try {
+          this.publicationService.setCurrentActiveList(activeList);
+          console.log(activeList && activeList.user_data, activeList);
+          if (activeList && activeList.user_data)
+            this.publicationService.setCurrentDiscoveryFilterPair({
+              filter: activeList.user_data.filter,
+              sort: activeList.user_data.sort,
+            });
+          callback(true);
+        } catch (error) {
+          callback(false);
+        }
         // this.gettingActiveList = false;
-        callback(true);
       });
     });
   }

@@ -3,6 +3,7 @@ import {
   PUBLICATION_RECORD,
   GetServerDataService,
   LIST,
+  PUBLICATION_LIST,
 } from './../../../services/getServerData.service';
 import { PublicationDataService } from './../../../services/publication-data.service';
 import { DataProviderService } from './../../../services/dataProvider.service';
@@ -55,7 +56,14 @@ export class CurrentPublicationListComponent
   ngOnInit(): void {
     this.subscriptionArr.push(
       this.publicationService.activeListUpdated.subscribe((el: string) => {
-        this.getActiveList();
+        if (this.publicationService.getCurrentActiveList() == null)
+          this.getActiveList();
+        else {
+          this.updateDataWithCurrentList(
+            this.publicationService.getCurrentActiveList(),
+            true
+          );
+        }
       })
     );
     this.subscriptionArr.push(
@@ -122,6 +130,36 @@ export class CurrentPublicationListComponent
     this.publicationRecords = data.publicationRecords;
     if (this.publicationRecords.length < 1) this.noData = true;
   }
+  updateDataWithCurrentList(list: PUBLICATION_LIST, compareData: boolean) {
+    if (
+      this.prevActiveListId != this.publicationService.getCurrentActiveListId()
+    ) {
+      this.loadedItems = 0;
+    }
+    this.prevActiveListId = this.publicationService.getCurrentActiveListId();
+
+    if (compareData)
+      this.allIds = this.changeIndexOfNewItem(
+        this.allIds,
+        list.publication_ids
+      );
+    else this.allIds = [...new Set(list.publication_ids)];
+    console.log('loaded items check is', this.loadedItems);
+    if (this.allIds.length < 1) this.noData = true;
+    else this.noData = false;
+    this.updateItemList();
+  }
+  changeIndexOfNewItem(originalList: string[], compareList: string[]) {
+    var list = [...new Set(compareList)];
+    var sameList = list.filter((el) => originalList.includes(el));
+    var exclusiveItems = list.filter((el) => !originalList.includes(el));
+    if (this.loadedItems > sameList.length) this.loadedItems = sameList.length;
+    var startIndex = this.loadedItems;
+    exclusiveItems.forEach((el, index) => {
+      sameList.splice(startIndex + index, 0, el);
+    });
+    return sameList.slice();
+  }
   getActiveList() {
     this.showSpinner = true;
     this.resetData();
@@ -129,21 +167,11 @@ export class CurrentPublicationListComponent
       this.showSpinner = false;
       if (!data) return;
       var list = this.publicationService.getCurrentActiveList();
-      if (
-        this.prevActiveListId !=
-        this.publicationService.getCurrentActiveListId()
-      ) {
-        this.loadedItems = 0;
-      }
-      this.prevActiveListId = this.publicationService.getCurrentActiveListId();
-
-      if (data == null) return;
-      this.allIds = [...new Set(list.publication_ids)];
-      if (this.allIds.length < 1) this.noData = true;
-      else this.noData = false;
-      this.updateItemList();
+      this.updateDataWithCurrentList(list, false);
+      // this.updateItemList();
     });
   }
+
   hideClicked(publicationData: PUBLICATION_RECORD) {
     var index = this.publicationRecords.findIndex(
       (el) => el.id === publicationData.id
@@ -160,6 +188,7 @@ export class CurrentPublicationListComponent
     this.itemsList = [];
     let currIndex = this.publicationRecords.length;
     this.loadedItems = this.loadedItems + this.preLoadItems;
+    console.log('items loading in current list', this.loadedItems);
     if (this.loadedItems > this.allIds.length)
       this.loadedItems = this.allIds.length;
     for (let i = currIndex; i < this.loadedItems; i++) {
@@ -220,8 +249,10 @@ export class CurrentPublicationListComponent
       this.publicationService.getCurrentActiveListId(),
       { name: list.name, publication_ids: tempList },
       (data) => {
-        this.showSpinner = false;
-        if (data == null) return;
+        if (data == null) {
+          this.showSpinner = false;
+          return;
+        }
         this.removeLocally(id);
       }
     );
@@ -241,10 +272,13 @@ export class CurrentPublicationListComponent
     this.preLoadItems = temp;
     this.storeDataLocally();
     this.loadedItems = this.loadedItems - this.preLoadItems;
-    this.publicationService.setNewActiveList(
-      this.publicationService.getCurrentActiveListId()
-    );
-    this.getServerDataService.initActiveList((data) => {});
+
+    this.getServerDataService.initActiveList((data) => {
+      this.showSpinner = false;
+      this.publicationService.setNewActiveList(
+        this.publicationService.getCurrentActiveListId()
+      );
+    });
   }
   storeDataLocally() {
     this.publicationService.setCurrentPublications({

@@ -114,11 +114,7 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy {
 
     if (this.publicationRecords.length < 1) this.noData = true;
   }
-  getActiveList() {
-    this.getServerDataService.initActiveList((data) => {
-      if (data) this.getDiscoveryLists();
-    });
-  }
+
   getDiscoveryLists() {
     if (this.publicationService.getCurrentActiveListId() == null) return;
     this.updateFilterPair();
@@ -172,12 +168,13 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy {
         publication_ids: list.publication_ids.concat(publication_id),
       },
       (result) => {
-        this.showSpinner = false;
-
-        this.getServerDataService.initActiveList((data) => {});
-        this.publicationService.setNewActiveList(
-          this.publicationService.getCurrentActiveListId()
-        );
+        this.getServerDataService.initActiveList((data) => {
+          if (!data) this.showSpinner = false;
+          if (data)
+            this.publicationService.setNewActiveList(
+              this.publicationService.getCurrentActiveListId()
+            );
+        });
 
         this.publicationService.setCurrentPublications(null);
       }
