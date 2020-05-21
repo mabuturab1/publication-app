@@ -7,7 +7,7 @@
   <div [class.fixed-top]="!fixedHeader">
     <div class="background-cover">
       <div class="icon-wrapper" *ngIf="!showManageScreen && showManageButton">
-        <div class="arrow" *ngIf="showFullScreenToggle">
+        <!-- <div class="arrow" *ngIf="showFullScreenToggle">
           <a class="icon-style" (click)="toggleDrawer($event)">
             <fa-icon
               [styles]="{ transform: 'rotate(45deg)' }"
@@ -15,7 +15,7 @@
               size="lg"
             ></fa-icon>
           </a>
-        </div>
+        </div> -->
         <div class="cross-times">
           <a class="icon-style" (click)="closeDrawer($event)">
             <fa-icon [icon]="faTimes" size="lg"></fa-icon>

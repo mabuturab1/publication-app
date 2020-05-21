@@ -64,6 +64,10 @@ export class PublicationDataService {
   currentPublicationIds: string[] = [];
   currentActiveList: PUBLICATION_LIST = null;
   currentActiveListId = '';
+  customContactUsText = '';
+  setCustomContactUsText(text: string) {
+    this.customContactUsText = text;
+  }
   setCurrentNeededPublication(publication: PUBLICATION_RECORD) {
     this.currentNeededPublication = publication;
   }
@@ -124,6 +128,9 @@ export class PublicationDataService {
   }
   getCurrentNeededPublication() {
     return this.currentNeededPublication;
+  }
+  getCustomContactUsText() {
+    return this.customContactUsText;
   }
   // activeListDataChanged() {
   //   this.updateActiveListData.next(true);

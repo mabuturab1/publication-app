@@ -60,6 +60,11 @@ $text-color: #ffffff;
       padding-right: 5px;
       font-family: inherit;
     }
+    .highlight {
+      color: #009ff2;
+      transform: scale(1.2);
+      text-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.5);
+    }
   }
   .blue-button {
     background-color: #007bff;

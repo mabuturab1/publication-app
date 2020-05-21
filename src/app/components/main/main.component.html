@@ -7,6 +7,8 @@
     [showOptions]="showToolbar"
     [filter]="filter"
     [sortLabel]="sortType"
+    [highlightAdd]="addSidebarOpened"
+    [highlightMyList]="myListSidebarOpened"
   ></app-main-options>
 </div>
 <div
@@ -19,7 +21,9 @@
   [fromRoot]="true"
   (scrolled)="onScroll()"
 >
-  <app-my-loader *ngIf="showSpinner" [loading]="showSpinner"></app-my-loader>
+<div *ngIf="showSpinner" class="loader-wrapper">
+  <app-my-loader  [loading]="showSpinner"></app-my-loader>
+</div>
 
   <div
     class="main-list-wrapper"

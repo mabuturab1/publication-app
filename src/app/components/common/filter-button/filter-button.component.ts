@@ -23,4 +23,10 @@ export class FilterButtonComponent implements OnInit {
 
     this.filterResults.emit(event);
   }
+  closeDialog(event: boolean) {
+    console.log('hiding dialog filter', event);
+    if (event) {
+      this.showFilterDialog = false;
+    }
+  }
 }

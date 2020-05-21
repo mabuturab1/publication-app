@@ -119,6 +119,10 @@ export class LocatePublicationComponent implements OnInit, OnDestroy {
   }
   needButtonClicked(item: PUBLICATION_RECORD) {
     this.publicationService.setCurrentNeededPublication(item);
+    this.publicationService.setCustomContactUsText(
+      'I would like you to include the following publication in the database' +
+        '\n'
+    );
     this.router.navigate(['contact-us']);
   }
   locateInputChanged($event) {}

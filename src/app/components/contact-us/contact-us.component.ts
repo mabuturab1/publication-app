@@ -1,7 +1,8 @@
+import { Subscription } from 'rxjs';
 import { GetServerDataService } from './../../services/getServerData.service';
 import { Location } from '@angular/common';
 import { PublicationDataService } from 'src/app/services/publication-data.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import {
   faTimes,
@@ -14,7 +15,7 @@ import {
   templateUrl: './contact-us.component.html',
   styleUrls: ['./contact-us.component.scss'],
 })
-export class ContactUsComponent implements OnInit {
+export class ContactUsComponent implements OnInit, OnDestroy {
   dropdownList = ['Feedback', 'Query'];
   buttonLabel = 'Feedback';
   faTimes = faTimes;
@@ -27,6 +28,7 @@ export class ContactUsComponent implements OnInit {
   supportEmail = 'user@example.org';
   messageSent = false;
   errorOccurred = false;
+  subscriptionArr: Subscription[] = [];
   constructor(
     private router: Router,
     private publicationService: PublicationDataService,
@@ -37,19 +39,20 @@ export class ContactUsComponent implements OnInit {
     this.buttonLabel = event;
   }
   ngOnInit(): void {
-    this.getServerDataService.isLoggedIn.subscribe((el) => {
-      if (!el) {
-        this.getServerDataService.setSnackbarMessage(
-          'Kindly login to your account'
-        );
-        this.closeClicked();
-      }
-    });
+    this.subscriptionArr.push(
+      this.getServerDataService.isLoggedIn.subscribe((el) => {
+        if (!el) {
+          this.getServerDataService.setSnackbarMessage(
+            'Kindly login to your account'
+          );
+          this.closeClicked();
+        }
+      })
+    );
     let publication = this.publicationService.getCurrentNeededPublication();
     if (publication != null) {
       this.message =
-        'I would like you to include the following publication in the database' +
-        '\n' +
+        this.publicationService.getCustomContactUsText() +
         JSON.stringify(publication);
     }
     this.publicationService.setCurrentNeededPublication(null);
@@ -72,5 +75,8 @@ export class ContactUsComponent implements OnInit {
         // this.closeClicked();
       }
     );
+  }
+  ngOnDestroy() {
+    this.subscriptionArr.forEach((el) => el.unsubscribe());
   }
 }

@@ -13,11 +13,11 @@ export class HideMeDirective {
   wasInside = false;
   @Output() documentClicked = new EventEmitter<boolean>();
   constructor(private el: ElementRef) {}
-  @HostListener('click')
+  @HostListener('mousedown')
   clickInside() {
     this.wasInside = true;
   }
-  @HostListener('document:click', ['$event']) onMouseClick($event: Event) {
+  @HostListener('document:mousedown', ['$event']) onMouseClick($event: Event) {
     if (!this.wasInside) this.documentClicked.emit(true);
     this.wasInside = false;
   }

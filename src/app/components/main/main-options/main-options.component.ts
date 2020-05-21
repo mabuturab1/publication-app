@@ -27,6 +27,8 @@ export class MainOptionsComponent implements OnInit {
   @Output() filterResults = new EventEmitter<any>();
   @Input() sortLabel = '';
   @Input() showOptions = true;
+  @Input() highlightAdd = false;
+  @Input() highlightMyList = false;
 
   faAngleDown = faAngleDown;
   @Output() showDetailedLook = new EventEmitter<boolean>();

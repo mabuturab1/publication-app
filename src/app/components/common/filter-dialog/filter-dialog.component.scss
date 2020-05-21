@@ -1,9 +1,24 @@
 $background-color: #2d323e;
 // #1e2129;
 $text-color: #ffffff;
+$icon-color: #ffffff;
 .card-style {
   background-color: $background-color;
   color: $text-color;
+  position: relative;
+}
+.icon-wrapper {
+  position: absolute;
+  top: 0.5rem;
+  right: 1rem;
+  display: flex;
+  justify-content: flex-end;
+}
+.icon-style {
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+  color: $icon-color;
 }
 .dialog-wrapper {
   width: 100%;

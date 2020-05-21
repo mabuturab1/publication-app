@@ -8,13 +8,14 @@ import {
   OnChanges,
 } from '@angular/core';
 import { SelectItem } from 'primeng/api/selectitem';
-import { faEraser, faCheck } from '@fortawesome/free-solid-svg-icons';
+import { faEraser, faCheck, faTimes } from '@fortawesome/free-solid-svg-icons';
 @Component({
   selector: 'app-filter-dialog',
   templateUrl: './filter-dialog.component.html',
   styleUrls: ['./filter-dialog.component.scss'],
 })
 export class FilterDialogComponent implements OnInit, OnChanges {
+  faTimes = faTimes;
   selectedFromDate = '1940';
   selectedToDate = '2018';
   prevSelectedFrom = 1940;
@@ -30,6 +31,7 @@ export class FilterDialogComponent implements OnInit, OnChanges {
   @Output() filterResults = new EventEmitter<any>();
   @Input() showExclude = true;
   @Input() initFilter: DISCOVERY_FILTER = {};
+  @Output() close = new EventEmitter<boolean>();
   constructor() {}
   // dialogClicked(event: Event) {
   //   event.stopPropagation();
@@ -102,5 +104,9 @@ export class FilterDialogComponent implements OnInit, OnChanges {
       };
     }
     this.filterResults.emit(filter);
+  }
+  closeClicked() {
+    console.log('close clicked in filter');
+    this.close.emit(true);
   }
 }

@@ -1,3 +1,4 @@
+import { Subscription } from 'rxjs';
 import {
   PUBLICATION_RECORD,
   GetServerDataService,
@@ -7,7 +8,7 @@ import {
   PublicationDetails,
   PublicationDataService,
 } from './../../../services/publication-data.service';
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
@@ -16,11 +17,12 @@ import { Location } from '@angular/common';
   templateUrl: './view-publication.component.html',
   styleUrls: ['./view-publication.component.scss'],
 })
-export class ViewPublicationComponent implements OnInit {
+export class ViewPublicationComponent implements OnInit, OnDestroy {
   publicationData: PUBLICATION_RECORD;
   faTimes = faTimes;
   id: string;
   showSpinner = false;
+  subscriptionArr: Subscription[] = [];
   constructor(
     private publicationService: PublicationDataService,
     private router: Router,
@@ -35,11 +37,13 @@ export class ViewPublicationComponent implements OnInit {
       this.id = data['id'];
       if (this.getServerDataService.getUserLoginStatus()) this.getPublication();
     });
-    this.getServerDataService.isLoggedIn.subscribe((el) => {
-      if (el) {
-        if (this.id != null) this.getPublication();
-      } else this.checkForLogin();
-    });
+    this.subscriptionArr.push(
+      this.getServerDataService.isLoggedIn.subscribe((el) => {
+        if (el) {
+          if (this.id != null) this.getPublication();
+        } else this.checkForLogin();
+      })
+    );
   }
   checkForLogin() {
     this.getServerDataService.getToken((data) => {
@@ -104,5 +108,8 @@ export class ViewPublicationComponent implements OnInit {
         this.publicationService.setDiscoveryFeedData(null);
       }
     );
+  }
+  ngOnDestroy() {
+    this.subscriptionArr.forEach((el) => el.unsubscribe());
   }
 }

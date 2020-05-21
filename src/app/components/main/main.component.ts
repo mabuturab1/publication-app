@@ -1,3 +1,4 @@
+import { MatSnackBar, MatSnackBarRef } from '@angular/material/snack-bar';
 import { Subscription } from 'rxjs';
 import {
   PUBLICATION_RECORD,
@@ -6,7 +7,10 @@ import {
   DISCOVERY_FILTER,
   PUBLICATION_LIST,
 } from './../../services/getServerData.service';
-import { PublicationDataService } from './../../services/publication-data.service';
+import {
+  PublicationDataService,
+  ComponentData,
+} from './../../services/publication-data.service';
 import { DataProviderService } from './../../services/dataProvider.service';
 import {
   Component,
@@ -15,6 +19,7 @@ import {
   EventEmitter,
   Input,
   OnDestroy,
+  AfterViewInit,
 } from '@angular/core';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { Router } from '@angular/router';
@@ -24,7 +29,7 @@ import { Router } from '@angular/router';
   templateUrl: './main.component.html',
   styleUrls: ['./main.component.scss'],
 })
-export class MainComponent implements OnInit, OnDestroy {
+export class MainComponent implements OnInit, AfterViewInit, OnDestroy {
   publicationRecords: PUBLICATION_RECORD[] = [];
   contractPublication: Map<string, boolean> = new Map();
   showDetailedLook = true;
@@ -43,11 +48,14 @@ export class MainComponent implements OnInit, OnDestroy {
   subscriptionArr: Subscription[] = [];
   sortType: string = 'date';
   noData = false;
+  addSidebarOpened = false;
+  myListSidebarOpened = false;
 
   constructor(
     private dataProviderService: DataProviderService,
     private publicationService: PublicationDataService,
     private getServerDataService: GetServerDataService,
+    private _snackBar: MatSnackBar,
     private router: Router
   ) {}
   optionButtonClicked(event) {
@@ -67,25 +75,44 @@ export class MainComponent implements OnInit, OnDestroy {
         this.getDiscoveryLists();
       })
     );
-    this.getServerDataService.isLoggedIn.subscribe((el) => {
-      if (!this.showSpinner) this.getDiscoveryData();
-    });
+    this.subscriptionArr.push(
+      this.getServerDataService.isLoggedIn.subscribe((el) => {
+        if (!this.showSpinner) this.getDiscoveryData();
+      })
+    );
+  }
+  ngAfterViewInit() {
+    this.subscriptionArr.push(
+      this.publicationService.updateLeftSidebar.subscribe((el) => {
+        this.addSidebarOpened = el;
+      })
+    );
+    this.subscriptionArr.push(
+      this.publicationService.updateRightSidebar.subscribe((el) => {
+        this.myListSidebarOpened = el;
+      })
+    );
   }
   getDiscoveryData() {
     var data = this.publicationService.getDiscoveryFeedData();
 
     if (data == null) this.getDiscoveryLists();
     else {
-      setTimeout(() => {
-        this.currIndex = data.currentIndex;
-        this.allIds = data.allIds;
+      if (data.publicationRecords.length < 10)
         this.publicationRecords = data.publicationRecords;
-        // this.filter = data.filter;
-        // this.sortType = data.sortType;
-        if (this.publicationRecords.length < 1) this.noData = true;
+      else this.publicationRecords = data.publicationRecords.slice(0, 9);
+      setTimeout(() => {
+        this.getLocallyStoredData(data);
       }, 10);
       this.updateFilterPair();
     }
+  }
+  getLocallyStoredData(data: ComponentData) {
+    this.currIndex = data.currentIndex;
+    this.allIds = data.allIds;
+    this.publicationRecords = data.publicationRecords;
+
+    if (this.publicationRecords.length < 1) this.noData = true;
   }
   getActiveList() {
     this.getServerDataService.initActiveList((data) => {
@@ -243,36 +270,67 @@ export class MainComponent implements OnInit, OnDestroy {
   thumbsUpClicked(event: boolean, item: PUBLICATION_RECORD) {
     this.setUserReaction('thumbs up', item.id, (data) => {
       if (data) {
-        this.getServerDataService.setSnackbarMessage(
-          'Thank you for your feedback'
+        let snackbarRef = this._snackBar.open(
+          'Thank you for your feedback',
+          'Contact Us',
+          {
+            duration: 4000,
+          }
         );
+        this.onSnackbarAction(snackbarRef, 'thumbs up', item);
         this.updateUserReactionOfPublication('thumbs up', item.id);
         this.contractPublication.set(item.id, true);
       }
     });
   }
+
   thumbsDownClicked(event: boolean, item: PUBLICATION_RECORD) {
     this.setUserReaction('thumbs down', item.id, (data) => {
       if (data) {
         this.contractPublication.set(item.id, true);
 
-        this.getServerDataService.setSnackbarMessage(
-          'Thank you for your feedback. This irrelevant result will now be hidden'
+        let snackbarRef = this._snackBar.open(
+          'Thank you for your feedback. This irrelevant result will now be hidden',
+          'Contact Us',
+          {
+            duration: 4000,
+          }
         );
         this.updateUserReactionOfPublication('thumbs down', item.id);
+        this.onSnackbarAction(snackbarRef, 'thumbs down', item);
       }
     });
   }
   shrugClicked(event: boolean, item: PUBLICATION_RECORD) {
     this.setUserReaction('shrug', item.id, (data) => {
       if (data) {
-        this.getServerDataService.setSnackbarMessage(
-          'Thank you for your feedback'
+        let snackbarRef = this._snackBar.open(
+          'Thank you for your feedback',
+          'Contact Us',
+          {
+            duration: 4000,
+          }
         );
         this.updateUserReactionOfPublication('shrug', item.id);
         this.contractPublication.set(item.id, true);
+        this.onSnackbarAction(snackbarRef, 'thumbs up', item);
       }
     });
+  }
+  onSnackbarAction(
+    snackbarRef: MatSnackBarRef<any>,
+    reaction: string,
+    item: PUBLICATION_RECORD
+  ) {
+    this.subscriptionArr.push(
+      snackbarRef.onAction().subscribe((el) => {
+        this.publicationService.setCustomContactUsText(
+          'I reacted ' + reaction + 'to the publication' + '\n'
+        );
+        this.publicationService.setCurrentNeededPublication(item);
+        this.router.navigate(['contact-us']);
+      })
+    );
   }
   updateUserReactionOfPublication(reaction: string, publication_id: string) {
     let index = this.publicationRecords.findIndex(

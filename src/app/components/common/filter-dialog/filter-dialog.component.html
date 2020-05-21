@@ -1,5 +1,12 @@
 <div class="dialog-wrapper mat-elevation-z24">
   <mat-card class="card-style">
+    <div class="icon-wrapper" (click)="closeClicked()">
+      <div class="cross-times">
+        <a class="icon-style">
+          <fa-icon [icon]="faTimes" ></fa-icon>
+        </a>
+      </div>
+    </div>
     <mat-card-content>
       <div class="date-wrapper">
         <div class="from-date">
