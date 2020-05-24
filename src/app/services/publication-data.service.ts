@@ -65,6 +65,13 @@ export class PublicationDataService {
   currentActiveList: PUBLICATION_LIST = null;
   currentActiveListId = '';
   customContactUsText = '';
+  errorInDiscovery = false;
+  setErrorInDiscovery(val: boolean) {
+    this.errorInDiscovery = val;
+  }
+  getErrorInDiscovery() {
+    return this.errorInDiscovery;
+  }
   setCustomContactUsText(text: string) {
     this.customContactUsText = text;
   }
@@ -153,6 +160,14 @@ export class PublicationDataService {
   }
   setCurrentActiveList(list: PUBLICATION_LIST) {
     this.currentActiveList = list;
+  }
+  updateCurrentActiveListIds(list: string[]) {
+    let currentList = { ...this.currentActiveList };
+    currentList = {
+      ...currentList,
+      publication_ids: list,
+    };
+    this.setCurrentActiveList(currentList);
   }
   isCurrentPublication(list_id: string) {
     var list = this.getCurrentActiveList();

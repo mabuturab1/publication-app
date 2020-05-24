@@ -1,3 +1,4 @@
+import { Managed_List } from 'src/app/services/getServerData.service';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import {
@@ -25,6 +26,7 @@ import {
   PublicationDetails,
   PublicationDataService,
 } from 'src/app/services/publication-data.service';
+import { ViewportScroller } from '@angular/common';
 
 @Component({
   selector: 'app-locate-publication',
@@ -53,6 +55,8 @@ export class LocatePublicationComponent implements OnInit, OnDestroy {
     year_end: 2018,
   };
   sortType = 'date';
+
+  @Output() updateScrollPosition = new EventEmitter<string>();
 
   @Output() hideLocatePublication = new EventEmitter<boolean>();
   fetchingData = false;
@@ -158,8 +162,8 @@ export class LocatePublicationComponent implements OnInit, OnDestroy {
     );
   }
   addItemToList(publication_id: string) {
+    this.updateScrollPosition.emit('store');
     var list = this.publicationService.getCurrentActiveList();
-
     if (list == null) {
       this.updateCurrentActiveList(publication_id);
     } else this.updateExistingList(list, publication_id);
@@ -188,18 +192,23 @@ export class LocatePublicationComponent implements OnInit, OnDestroy {
       (result) => {
         this.showSpinner = false;
         // this.publicationService.activeListDataChanged();
-        this.getServerDataService.initActiveList((data) => {});
+
+        this.publicationService.setCurrentPublications(null);
+        this.publicationService.setDiscoveryFeedData(null);
+        this.publicationService.updateCurrentActiveListIds(
+          list.publication_ids.concat(publication_id)
+        );
+        this.updateScrollPosition.emit('update');
         this.publicationService.setNewActiveList(
           this.publicationService.getCurrentActiveListId()
         );
+        // this.getServerDataService.initActiveList((data) => {});
+
         this.removeId(publication_id);
         let temp = this.preLoadItems;
         this.preLoadItems = 1;
         this.onScroll();
         this.preLoadItems = temp;
-
-        this.publicationService.setCurrentPublications(null);
-        this.publicationService.setDiscoveryFeedData(null);
       }
     );
   }
@@ -209,25 +218,51 @@ export class LocatePublicationComponent implements OnInit, OnDestroy {
     );
     this.allIds = this.allIds.filter((el) => el !== publication_id);
     this.currIndex--;
-    this.getServerDataService.initActiveList((data) => {
-      this.publicationService.setNewActiveList(
-        this.publicationService.getCurrentActiveListId()
-      );
-    });
+    // this.getServerDataService.initActiveList((data) => {
+    //   this.publicationService.setNewActiveList(
+    //     this.publicationService.getCurrentActiveListId()
+    //   );
+    // });
   }
   seedNewListClicked(publicationId: string) {
     this.showSpinner = true;
+    this.updateScrollPosition.emit('store');
     this.getServerDataService.getAllPublicationList((data: any) => {
       this.showSpinner = false;
+      this.getMinimumNumber(data);
       if (data != null)
-        this.createNewPublicationList(data.length + 1, publicationId);
+        this.createNewPublicationList(
+          this.getMinimumNumber(data),
+          publicationId
+        );
     });
+  }
+  getMinimumNumber(data: Managed_List[]) {
+    let availableList: number[] = [];
+    data.forEach((el, index) => {
+      if (el.list_name.toLowerCase().includes('list')) {
+        var name = el.list_name.toLowerCase();
+        name = name.replace('list', '');
+        name = name.replace(' ', '');
+        if (!isNaN(Number(name))) availableList.push(Number(name));
+      }
+    });
+    let number = 1;
+
+    if (availableList.length < 1) return 1;
+    if (Math.min(...availableList) != 1) return 1;
+    let candiatesElement = availableList.filter(
+      (el) => !availableList.includes(el + 1)
+    );
+    if (candiatesElement.length < 1) return data.length + 1;
+    let minAvailableElement = Math.min(...candiatesElement);
+    return minAvailableElement + 1;
   }
   createNewPublicationList(listnumber: number, publicationId: string) {
     this.showSpinner = true;
     this.getServerDataService.createNewPublicationList(
       {
-        name: 'LIST ' + listnumber,
+        name: 'List ' + listnumber,
         publication_ids: [publicationId],
       },
       (data) => {
@@ -241,13 +276,18 @@ export class LocatePublicationComponent implements OnInit, OnDestroy {
     this.getServerDataService.updateActiveList(id, (data) => {
       this.showSpinner = false;
       if (data != null)
-        this.getServerDataService.initActiveList((data) => {
-          this.publicationService.setNewActiveList(data);
+        this.getServerDataService.initActiveList((data1) => {
+          if (data1) {
+            this.publicationService.setCurrentPublications(null);
+            this.publicationService.setDiscoveryFeedData(null);
+            this.publicationService.setNewActiveList(
+              this.publicationService.getCurrentActiveListId()
+            );
+          }
         });
 
-      this.publicationService.setCurrentPublications(null);
-      this.publicationService.setDiscoveryFeedData(null);
-      this.publicationService.setCurrentActiveListId(id);
+      // this.publicationService.setCurrentActiveListId(id);
+      this.updateScrollPosition.emit('update');
     });
   }
   hideClicked(publicationData: PUBLICATION_RECORD) {
@@ -290,6 +330,9 @@ export class LocatePublicationComponent implements OnInit, OnDestroy {
   }
   onScroll() {
     if (!this.fetchingData) this.updateItemList();
+  }
+  listenForEnter(event: KeyboardEvent) {
+    if (event.keyCode == 13) this.onSearchClicked();
   }
   ngOnDestroy() {
     this.subscriptionArr.forEach((el) => el.unsubscribe());

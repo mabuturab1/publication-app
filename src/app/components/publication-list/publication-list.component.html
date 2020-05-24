@@ -6,18 +6,16 @@
 >
   <div [class.fixed-top]="!fixedHeader">
     <div class="background-cover">
-      <div class="icon-wrapper" *ngIf="!showManageScreen && showManageButton">
-        <!-- <div class="arrow" *ngIf="showFullScreenToggle">
-          <a class="icon-style" (click)="toggleDrawer($event)">
-            <fa-icon
-              [styles]="{ transform: 'rotate(45deg)' }"
-              [icon]="faArrowsAltV"
-              size="lg"
-            ></fa-icon>
-          </a>
-        </div> -->
+      <div class="icon-wrapper">
         <div class="cross-times">
-          <a class="icon-style" (click)="closeDrawer($event)">
+          <a
+            class="icon-style"
+            (click)="
+              !showManageScreen && showManageButton
+                ? closeDrawer($event)
+                : hideManageWindow($event)
+            "
+          >
             <fa-icon [icon]="faTimes" size="lg"></fa-icon>
           </a>
         </div>
@@ -60,6 +58,7 @@
         [isDetailed]="showDetailedLookForPublication"
         [isMultipleSelection]="isMultipleSelection"
         [showSpinner]="showSpinner"
+        (updateScrollPosition)="updateScrollPosition($event)"
         (multipleSelectedItems)="multipleSelectedItemsChanged($event)"
       ></app-current-publication-list>
     </div>
@@ -67,6 +66,7 @@
   <div class="publication-screen locate-list-wrapper" *ngIf="onlyLocateScreen">
     <app-locate-publication
       (hideLocatePublication)="locatePublication(false)"
+      (updateScrollPosition)="updateScrollPosition($event)"
     ></app-locate-publication>
   </div>
   <div

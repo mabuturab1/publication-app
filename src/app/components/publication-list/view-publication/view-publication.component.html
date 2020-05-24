@@ -1,4 +1,4 @@
-<div class="wrapper">
+<div class="wrapper"  appHideMe (documentClicked)="closeClicked()">
   <div class="icon-wrapper" (click)="closeClicked()">
     <div class="cross-times">
       <a class="icon-style">
@@ -6,7 +6,7 @@
       </a>
     </div>
   </div>
-  <div class="spinner-wrapper">
+  <div *ngIf="showSpinner" class="spinner-wrapper">
     <app-my-loader *ngIf="showSpinner" [loading]="showSpinner"></app-my-loader>
   </div>
   <div class="view" *ngIf="publicationData">
@@ -16,6 +16,13 @@
       [showAbstract]="true"
       [isDetailed]="true"
       (addClicked)="addItemToList(publicationData.id)"
+      [viewMode]="true"
     ></app-single-list-component>
   </div>
+  <div style="flex:1"></div>
+  <div *ngIf="publicationData" class="footer">
+    <app-footer></app-footer>  
+  </div>
+ 
 </div>
+

@@ -16,6 +16,13 @@ $text-color: #ffffff;
     height: 100%;
     color: $text-color;
     margin: 0;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .logo {
+    height: 1.5rem;
+    margin-right: 0.5rem;
   }
 }
 .filter-dialog {
@@ -61,11 +68,11 @@ $text-color: #ffffff;
       font-family: inherit;
     }
     .highlight {
-      color: #009ff2;
-      transform: scale(1.2);
-      text-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.5);
+      background-color: white;
+      color: $background-color;
     }
   }
+
   .blue-button {
     background-color: #007bff;
   }

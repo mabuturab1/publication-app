@@ -3,6 +3,9 @@
   [class.align-as-row]="alignAsRow"
 >
   <div class="list-title" [class.remove-margin]="!showManageButton">
+    <h6 *ngIf="showManageButton" class="publication-list-title">
+      Publication List
+     </h6>
     <h3 class="title">{{ getPublicationName() }}</h3>
   </div>
   <div class="button-group">
@@ -22,7 +25,7 @@
       <div class="detail-button" *ngIf="!isMultipleSelection">
         <a class="button" (click)="showLocate($event)">
           <a class="button-text">Add</a>
-          <fa-icon [icon]="faAngleDown"></fa-icon>
+        
         </a>
       </div>
       <div class="select-option-wrapper" *ngIf="isMultipleSelection">

@@ -21,9 +21,9 @@
   [fromRoot]="true"
   (scrolled)="onScroll()"
 >
-<div *ngIf="showSpinner" class="loader-wrapper">
-  <app-my-loader  [loading]="showSpinner"></app-my-loader>
-</div>
+  <div *ngIf="showSpinner" class="loader-wrapper">
+    <app-my-loader [loading]="showSpinner"></app-my-loader>
+  </div>
 
   <div
     class="main-list-wrapper"
@@ -33,7 +33,7 @@
       <app-single-list-component
         [publicationData]="item"
         [isDetailed]="showDetailedLook"
-        [contractPublication]="getReactionForPublication(item) != null"
+        [contractPublication]="getReactionForPublication(item) == 'thumbs down'"
         [showView]="true"
         [showAdd]="true"
         (addClicked)="addItemToList(item.id)"
@@ -70,6 +70,14 @@
     </h4>
   </div>
   <div *ngIf="noData && !showSpinner" class="empty-message">
-    <h4>No results found. Kindly add new items to your active list</h4>
+    <h4 *ngIf="!error" >{{noDataText}}</h4>
+    <h4 *ngIf="error">We are having problems creating a Discovery Feed for the 
+      chosen publications. This might be due to a problem we are
+       having with a specific publication in the your publication list.</h4>
+       <h4>You can <span class="contact-us" (click)="contactUsClicked()">contact us</span> if the problem persists</h4>
+  </div>
+ 
+  <div *ngIf="!showSpinner" class="footer">
+    <app-footer></app-footer>  
   </div>
 </div>

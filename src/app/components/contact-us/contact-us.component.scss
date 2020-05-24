@@ -51,16 +51,20 @@ $icon-color: #ffffff;
   width: 100%;
   height: 100%;
   display: flex;
+  flex-flow: column;
   justify-content: center;
   background-color: #2d323e;
   align-items: center;
   position: relative;
   font-family: "Muli", Helvetica, Arial, sans-serif;
-  padding: 1rem;
+
   .contact-us {
     width: 50%;
     min-width: 10rem;
     max-width: 35rem;
+  }
+  .loader-wrapper {
+    margin: 0 auto;
   }
   .contact-type {
     display: flex;
@@ -111,5 +115,10 @@ $icon-color: #ffffff;
     width: 100%;
     justify-content: flex-end;
     margin-top: 1rem;
+  }
+  .footer {
+    margin-top: 1rem;
+    width: 100%;
+    height: auto;
   }
 }

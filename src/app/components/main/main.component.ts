@@ -37,6 +37,7 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy {
   @Output() buttonClicked = new EventEmitter<boolean>();
   @Input() showList = true;
   @Input() showToolbar = true;
+  error = false;
 
   itemsList: string[] = [];
   filter: DISCOVERY_FILTER = {};
@@ -50,7 +51,7 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy {
   noData = false;
   addSidebarOpened = false;
   myListSidebarOpened = false;
-
+  noDataText = 'No results found. Kindly add new items to your active list';
   constructor(
     private dataProviderService: DataProviderService,
     private publicationService: PublicationDataService,
@@ -98,12 +99,14 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy {
 
     if (data == null) this.getDiscoveryLists();
     else {
-      if (data.publicationRecords.length < 10)
-        this.publicationRecords = data.publicationRecords;
-      else this.publicationRecords = data.publicationRecords.slice(0, 9);
+      this.showSpinner = true;
+      // if (data.publicationRecords.length < 10)
+      //   this.publicationRecords = data.publicationRecords;
+      // else this.publicationRecords = data.publicationRecords.slice(0, 9);
       setTimeout(() => {
         this.getLocallyStoredData(data);
-      }, 10);
+        this.showSpinner = false;
+      }, 1000);
       this.updateFilterPair();
     }
   }
@@ -122,19 +125,23 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy {
     this.publicationRecords = [];
     this.showSpinner = true;
     this.noData = false;
+    this.error = false;
     this.getServerDataService.getDiscoveryLists(
       this.publicationService.getCurrentActiveListId(),
       this.filter,
       this.sortType,
-      (data: any[]) => {
+      (data: any) => {
         this.showSpinner = false;
         if (data == null) {
           this.noData = true;
+          this.error = true;
           return;
         }
-        this.publicationRecords = this.publicationRecords.concat(data);
-        if (this.publicationRecords.length < 1) this.noData = true;
-        else this.noData = false;
+        this.publicationRecords = this.publicationRecords.concat(data.results);
+        if (this.publicationRecords.length < 1) {
+          this.noData = true;
+          if (data.message) this.noDataText = data.message;
+        } else this.noData = false;
       }
     );
   }
@@ -168,13 +175,19 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy {
         publication_ids: list.publication_ids.concat(publication_id),
       },
       (result) => {
-        this.getServerDataService.initActiveList((data) => {
-          if (!data) this.showSpinner = false;
-          if (data)
-            this.publicationService.setNewActiveList(
-              this.publicationService.getCurrentActiveListId()
-            );
-        });
+        this.publicationService.updateCurrentActiveListIds(
+          list.publication_ids.concat(publication_id)
+        );
+        this.publicationService.setNewActiveList(
+          this.publicationService.getCurrentActiveListId()
+        );
+        // this.getServerDataService.initActiveList((data) => {
+        //   if (!data) this.showSpinner = false;
+        //   if (data)
+        //     this.publicationService.setNewActiveList(
+        //       this.publicationService.getCurrentActiveListId()
+        //     );
+        // });
 
         this.publicationService.setCurrentPublications(null);
       }
@@ -220,6 +233,7 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy {
   getReactionForPublication(publicationData: PUBLICATION_RECORD) {
     if (publicationData.user_data == null) return null;
     if (publicationData.user_data.reaction == null) return null;
+
     return publicationData.user_data.reaction;
   }
   onScroll() {}
@@ -363,6 +377,13 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy {
         callback(data);
       }
     );
+  }
+  contactUsClicked() {
+    this.publicationService.setCustomContactUsText(
+      'I keep having problems with the Discovery Feed  \n.The publication list is:'
+    );
+    this.publicationService.setErrorInDiscovery(true);
+    this.router.navigate(['contact-us']);
   }
   getContractStatus(item: PUBLICATION_RECORD) {
     if (this.contractPublication.has(item.id))

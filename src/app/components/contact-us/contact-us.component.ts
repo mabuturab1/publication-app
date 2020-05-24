@@ -26,6 +26,7 @@ export class ContactUsComponent implements OnInit, OnDestroy {
   messageId = '';
   userEmail = 'user@example.org';
   supportEmail = 'user@example.org';
+  showSpinner = false;
   messageSent = false;
   errorOccurred = false;
   subscriptionArr: Subscription[] = [];
@@ -51,20 +52,28 @@ export class ContactUsComponent implements OnInit, OnDestroy {
     );
     let publication = this.publicationService.getCurrentNeededPublication();
     if (publication != null) {
-      this.message =
-        this.publicationService.getCustomContactUsText() +
-        JSON.stringify(publication);
+      this.updateMessage(publication);
+    } else if (this.publicationService.getErrorInDiscovery()) {
+      this.updateMessage(this.publicationService.getCurrentActiveList());
     }
+
     this.publicationService.setCurrentNeededPublication(null);
+    this.publicationService.setErrorInDiscovery(false);
+  }
+  updateMessage(data: any) {
+    this.message =
+      this.publicationService.getCustomContactUsText() + JSON.stringify(data);
   }
   closeClicked() {
     // this.location.back();
     this.router.navigate(['']);
   }
   sendMessage() {
+    this.showSpinner = true;
     this.getServerDataService.setUserResponse(
       { subject: this.buttonLabel, message: this.message },
       (data: any) => {
+        this.showSpinner = false;
         if (data == null) {
           this.errorOccurred = true;
           return;
@@ -72,6 +81,7 @@ export class ContactUsComponent implements OnInit, OnDestroy {
 
         this.messageSent = true;
         this.messageId = data.message_id;
+        if (data.email) this.userEmail = data.email;
         // this.closeClicked();
       }
     );

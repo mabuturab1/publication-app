@@ -1,4 +1,4 @@
-<div class="wrapper">
+<div class="wrapper" appHideMe (documentClicked)="closeClicked()">
   <div class="icon-wrapper" (click)="closeClicked()">
     <div class="cross-times">
       <a class="icon-style">
@@ -6,6 +6,7 @@
       </a>
     </div>
   </div>
+  <div style="flex:1"></div>
   <div class="contact-us" *ngIf="!messageSent && !errorOccurred">
     <h6 class="page-title">Contact Us</h6>
     <div class="contact-type">
@@ -68,7 +69,7 @@
   </div>
   <div class="contact-us" *ngIf="errorOccurred">
     <h6 class="page-title">Contact Us</h6>
-    <div class="message-content">
+    <div class="message-content" *ngIf="!showSpinner">
       <fa-icon style="color: white;" [icon]="faBan" size="6x"></fa-icon>
       <div class="text-content">
         <h6 class="subtitle">There was a problem delivering your message</h6>
@@ -77,6 +78,9 @@
         </h6>
         <h6 class="subtitle">Sorry about that</h6>
       </div>
+    </div>
+    <div *ngIf="showSpinner" class="loader-wrapper">
+      <app-my-loader [loading]="showSpinner"></app-my-loader>
     </div>
     <div class="okay-button">
       <button
@@ -88,5 +92,9 @@
         <a class="button-text">Okay</a>
       </button>
     </div>
+  </div>
+  <div style="flex:1"></div>
+  <div class="footer">
+    <app-footer></app-footer>  
   </div>
 </div>

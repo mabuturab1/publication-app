@@ -48,6 +48,9 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { NewListComponent } from './components/publication-list/manage-publication-lists/new-list/new-list.component';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { BadgeTooltipComponent } from './components/common/badge-tooltip/badge-tooltip.component';
+import { MatInputModule } from '@angular/material/input';
+import { FooterComponent } from './components/footer/footer.component';
+import { OverlayPanelModule } from 'primeng/overlaypanel';
 
 @NgModule({
   declarations: [
@@ -85,6 +88,8 @@ import { BadgeTooltipComponent } from './components/common/badge-tooltip/badge-t
     NewListComponent,
 
     BadgeTooltipComponent,
+
+    FooterComponent,
   ],
   imports: [
     BrowserModule,
@@ -92,10 +97,12 @@ import { BadgeTooltipComponent } from './components/common/badge-tooltip/badge-t
     BrowserAnimationsModule,
     MatCardModule,
     MatFormFieldModule,
+    MatInputModule,
     FormsModule,
     DropdownModule,
     MatButtonModule,
     FontAwesomeModule,
+    OverlayPanelModule,
     MatSidenavModule,
     MatSelectModule,
     Ng5SliderModule,

@@ -13,6 +13,7 @@ import {
   faExternalLinkAlt,
   faMehRollingEyes,
   faBan,
+  faGem,
 } from '@fortawesome/free-solid-svg-icons';
 import { MatSnackBar } from '@angular/material/snack-bar';
 @Component({
@@ -31,6 +32,7 @@ export class SingleListComponentComponent implements OnInit {
   faMehRollingEyes = faMehRollingEyes;
   faExternalLinkAlt = faExternalLinkAlt;
   faBan = faBan;
+  faGem = faGem;
 
   testText = 'test';
   @Input() isMultipleSelection = false;
@@ -50,6 +52,7 @@ export class SingleListComponentComponent implements OnInit {
   @Input() disabled = false;
   @Input() userReaction: string = null;
   @Input() contractPublication = false;
+  @Input() viewMode = false;
   @Output() addClicked = new EventEmitter<boolean>();
   @Output() removeClicked = new EventEmitter<boolean>();
   @Output() viewClicked = new EventEmitter<boolean>();

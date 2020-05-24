@@ -31,7 +31,7 @@ export class CurrentPublicationListComponent
   @Input() isDetailed = false;
   @Input() isMultipleSelection = false;
   @Input() showSpinner = false;
-
+  @Output() updateScrollPosition = new EventEmitter<boolean>();
   @Output() multipleSelectedItems = new EventEmitter<string[]>();
   allIds: string[] = [];
   prevActiveListId = '';
@@ -103,16 +103,18 @@ export class CurrentPublicationListComponent
         this.showSpinner = false;
         this.loadedItems = this.loadedItems - removeList.length;
         if (data) {
-          this.showSpinner = true;
+          // this.showSpinner = true;
 
-          this.getServerDataService.initActiveList((data1) => {
-            this.showSpinner = false;
-            if (data1) {
-              this.publicationService.setNewActiveList(
-                this.publicationService.getCurrentActiveListId()
-              );
-            }
-          });
+          this.publicationService.updateCurrentActiveListIds(publicationIds);
+          this.publicationService.setNewActiveList(
+            this.publicationService.getCurrentActiveListId()
+          );
+          // this.getServerDataService.initActiveList((data1) => {
+          //   this.showSpinner = false;
+          //   if (data1) {
+
+          //   }
+          // });
         }
       }
     );
@@ -144,17 +146,22 @@ export class CurrentPublicationListComponent
         list.publication_ids
       );
     else this.allIds = [...new Set(list.publication_ids)];
+    this.publicationRecords = this.publicationRecords.filter((el) =>
+      this.allIds.includes(el.id)
+    );
     console.log('loaded items check is', this.loadedItems);
     if (this.allIds.length < 1) this.noData = true;
     else this.noData = false;
     this.updateItemList();
   }
   changeIndexOfNewItem(originalList: string[], compareList: string[]) {
+    console.log('change index of new item');
     var list = [...new Set(compareList)];
     var sameList = list.filter((el) => originalList.includes(el));
     var exclusiveItems = list.filter((el) => !originalList.includes(el));
     if (this.loadedItems > sameList.length) this.loadedItems = sameList.length;
     var startIndex = this.loadedItems;
+
     exclusiveItems.forEach((el, index) => {
       sameList.splice(startIndex + index, 0, el);
     });
@@ -249,8 +256,8 @@ export class CurrentPublicationListComponent
       this.publicationService.getCurrentActiveListId(),
       { name: list.name, publication_ids: tempList },
       (data) => {
+        this.showSpinner = false;
         if (data == null) {
-          this.showSpinner = false;
           return;
         }
         this.removeLocally(id);
@@ -272,13 +279,16 @@ export class CurrentPublicationListComponent
     this.preLoadItems = temp;
     this.storeDataLocally();
     this.loadedItems = this.loadedItems - this.preLoadItems;
-
-    this.getServerDataService.initActiveList((data) => {
-      this.showSpinner = false;
-      this.publicationService.setNewActiveList(
-        this.publicationService.getCurrentActiveListId()
-      );
-    });
+    this.publicationService.updateCurrentActiveListIds(this.allIds);
+    this.publicationService.setNewActiveList(
+      this.publicationService.getCurrentActiveListId()
+    );
+    // this.getServerDataService.initActiveList((data) => {
+    //   this.showSpinner = false;
+    //   this.publicationService.setNewActiveList(
+    //     this.publicationService.getCurrentActiveListId()
+    //   );
+    // });
   }
   storeDataLocally() {
     this.publicationService.setCurrentPublications({

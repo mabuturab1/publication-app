@@ -7,6 +7,7 @@ import {
   OnDestroy,
   AfterViewInit,
   ChangeDetectorRef,
+  ElementRef,
 } from '@angular/core';
 
 import { PublicationDataService } from '../../services/publication-data.service';
@@ -32,8 +33,13 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   showFullScreenToggle = true;
   isAuthenticated = false;
   subscriptionArr: Subscription[] = [];
+  locateScrollPosition = 10;
+  prevLocatePosition = 0;
+  removeTransition = false;
+
   @ViewChild('listDrawer', { static: false }) listDrawer: MatDrawer;
   @ViewChild('locateDrawer', { static: false }) locateDrawer: MatDrawer;
+  @ViewChild('locateScreen', { static: false }) locateScreen: ElementRef;
 
   constructor(
     private publicationService: PublicationDataService,
@@ -44,6 +50,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   ) {}
   showPublicationListAsNewsFeed(event) {
     this.showPublicationList = event;
+    this.removeTransition = true;
   }
   toggleDrawerWindow(event: Event) {
     this.showFullSize = !this.showFullSize;
@@ -75,6 +82,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   ngAfterViewInit() {
     this.subscriptionArr.push(
       this.publicationService.updateLeftSidebar.subscribe((el) => {
+        this.removeTransition = false;
         this.showFullScreenToggle = true;
         this.showFullSize = false;
 
@@ -85,6 +93,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     );
     this.subscriptionArr.push(
       this.publicationService.updateRightSidebar.subscribe((el) => {
+        this.removeTransition = false;
         this.showFullScreenToggle = true;
         this.showFullSize = false;
 
@@ -117,10 +126,28 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   closeLocateDrawer() {
     this.publicationService.setLocateSidebar(false);
   }
-  onLocateScroll() {
+  trackLocateScroll(event: any) {
+    if (event.target != null && event.target.scrollTop != null) {
+      this.locateScrollPosition = event.target.scrollTop;
+    }
+  }
+  storeLocateScrollPosition() {
+    this.prevLocatePosition = this.locateScrollPosition;
+  }
+  onLocateScroll(event: Event) {
     this.publicationService.onLocateScrollDownCalled();
   }
   onPublicationListScroll() {
     this.publicationService.onPublicationListScrollDownCalled();
+  }
+  setLocateScreenScrollPosition(event: string) {
+    if (event == 'store') {
+      this.storeLocateScrollPosition();
+      return;
+    } else if (event == 'update') {
+      setTimeout(() => {
+        this.locateScreen.nativeElement.scrollTop = this.prevLocatePosition;
+      }, 10);
+    }
   }
 }

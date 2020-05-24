@@ -104,19 +104,39 @@
         class="text-content"
         [class.no-theme-color]="!applyTheme"
       >
-        <p *ngIf="showAbstract">{{ publicationData.abstract }}</p>
+        <p
+          class="abstract-styles"
+          *ngIf="showAbstract"
+          [class.view-mode]="viewMode"
+        >
+          {{ publicationData.abstract }}
+        </p>
+      </div>
+      <div *ngIf="disabled" class="want-this">
+<p class="text">We don't have this publication</p>
+<div class="button-group"  [class.no-theme-color]="!applyTheme">
+        <button
+            mat-button
+            class="mat-button-style"
+            *ngIf="disabled"
+            (click)="needButtonClicked()"
+          >
+            <fa-icon [icon]="faGem"></fa-icon>
+            <a class="button-text">I want this</a>
+          </button>
+        </div>
       </div>
     </mat-card-content>
     <mat-card-actions>
       <div class="actions-wrapper">
         <div
-          *ngIf="contractPublication"
+          *ngIf="userReaction"
           class="button-group"
           [class.no-theme-color]="!applyTheme"
         >
           <button
             mat-button
-            class="mat-button-style mat-button-dark"
+            class="mat-button-style mat-button-dark remove-shadow"
             *ngIf="showReactions"
           >
             <fa-icon
@@ -139,24 +159,24 @@
         >
           <button
             mat-button
-            class="mat-button-style"
-            *ngIf="showReactions && !contractPublication"
+            class="mat-button-style remove-shadow"
+            *ngIf="showReactions && !userReaction"
             (click)="thumbsDownClicked()"
           >
             <fa-icon [icon]="faThumbsDown"></fa-icon>
           </button>
           <button
             mat-button
-            class="mat-button-style"
-            *ngIf="showReactions && !contractPublication"
+            class="mat-button-style remove-shadow"
+            *ngIf="showReactions && !userReaction"
             (click)="shrugClicked()"
           >
             <fa-icon [icon]="faMehRollingEyes"></fa-icon>
           </button>
           <button
             mat-button
-            class="mat-button-style"
-            *ngIf="showReactions && !contractPublication"
+            class="mat-button-style remove-shadow"
+            *ngIf="showReactions && !userReaction"
             (click)="thumbsUpClicked()"
           >
             <fa-icon [icon]="faThumbsUp"></fa-icon>
@@ -208,15 +228,7 @@
             <fa-icon [icon]="faPlus"></fa-icon>
             <a class="button-text">Add</a>
           </button>
-          <button
-            mat-button
-            class="mat-button-style"
-            *ngIf="disabled"
-            (click)="needButtonClicked()"
-          >
-            <fa-icon [icon]="faEye"></fa-icon>
-            <a class="button-text">I want this</a>
-          </button>
+          
           <button
             mat-button
             class="mat-button-style"

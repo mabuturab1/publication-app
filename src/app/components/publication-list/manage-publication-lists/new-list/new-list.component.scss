@@ -27,3 +27,35 @@
   color: inherit;
   color: white;
 }
+.icon-style {
+  color: white;
+}
+::ng-deep {
+  /* Border */
+
+  .mat-form-field-appearance-outline .mat-form-field-outline {
+    color: white !important;
+  }
+  .mat-form-field-appearance-legacy .mat-form-field-underline {
+    background-color: white;
+  }
+  /* Font color */
+  input.mat-input-element {
+    color: white !important;
+  }
+  .mat-form-field-appearance-outline.mat-focused .mat-form-field-outline-thick {
+    color: white !important;
+  }
+  .mat-form-field-appearance-outline.mat-focused .mat-form-field-outline-thick {
+    color: white !important;
+  }
+  .mat-input-element {
+    caret-color: white !important;
+  }
+  .mat-form-field-label {
+    color: white !important;
+  }
+  .mat-form-field.mat-focused .mat-form-field-label {
+    color: white !important;
+  }
+}

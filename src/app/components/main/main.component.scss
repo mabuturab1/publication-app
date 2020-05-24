@@ -57,3 +57,14 @@
 .loader-wrapper {
   margin-top: 4rem;
 }
+.footer {
+  margin-top: 1rem;
+  width: 100%;
+  height: auto;
+}
+.contact-us {
+  cursor: pointer;
+  &:hover {
+    text-decoration: underline;
+  }
+}

@@ -1,8 +1,6 @@
-<div class="wrapper">
+<div class="wrapper" >
   <div class="title-wrapper fixed-top">
-    <a class="back-button" (click)="hideLocate($event)">
-      <fa-icon [icon]="faLongArrowAltLeft" size="lg"></fa-icon>
-    </a>
+    
     <h6 class="title">Locate a publication</h6>
   </div>
   <div class="content-wrapper">
@@ -11,6 +9,7 @@
         class="text-input"
         [(ngModel)]="locatePublication"
         (change)="locateInputChanged($event)"
+        (keydown)="listenForEnter($event)"
       />
     </div>
     <div class="search-button-wrapper">

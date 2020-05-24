@@ -26,6 +26,7 @@ import { PublicationDataService } from 'src/app/services/publication-data.servic
 export class PublicationListComponent implements OnInit, OnDestroy {
   itemsList = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
   @Input() data: any;
+  @Input() scrollPosition = 0;
   faTimes = faTimes;
   faArrowsAltV = faArrowsAltV;
   @Output() closeDrawerClicked = new EventEmitter<boolean>();
@@ -51,6 +52,7 @@ export class PublicationListComponent implements OnInit, OnDestroy {
   maangedListIds: string[] = [];
 
   @Output() showListAsNewsFeed = new EventEmitter<boolean>();
+  @Output() setScrollPosition = new EventEmitter<string>();
   closeDrawer(event: Event) {
     this.closeDrawerClicked.emit(true);
   }
@@ -188,5 +190,9 @@ export class PublicationListComponent implements OnInit, OnDestroy {
         callback(data);
       }
     );
+  }
+
+  updateScrollPosition(event: string) {
+    this.setScrollPosition.emit(event);
   }
 }

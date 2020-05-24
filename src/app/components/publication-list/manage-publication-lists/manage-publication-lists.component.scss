@@ -10,6 +10,18 @@ $background-color: #1e2129;
 .header-wrapper {
   background-color: $background-color;
   padding: 1rem 0;
+  position: relative;
+  .back-button {
+    padding: 0;
+    margin: 0;
+    margin: 0 1rem;
+    text-decoration: none;
+    cursor: pointer;
+    color: white;
+    position: absolute;
+    top: 5px;
+    right: 5px;
+  }
 }
 .fixed-top {
   position: fixed;
@@ -22,6 +34,7 @@ $background-color: #1e2129;
   display: flex;
   width: 100%;
   align-items: center;
+  padding-left: 1.5rem;
   // background-color: $background-color;
   // padding: 1rem 0;
   .title {
@@ -37,14 +50,7 @@ $background-color: #1e2129;
       color: $text-color;
     }
   }
-  .back-button {
-    padding: 0;
-    margin: 0;
-    margin: 0 1rem;
-    text-decoration: none;
-    cursor: pointer;
-    color: white;
-  }
+
   .title-value {
     margin: 1rem 0 1.2rem 0;
     font-size: 1.3rem;

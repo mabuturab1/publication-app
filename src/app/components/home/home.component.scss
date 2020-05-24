@@ -6,8 +6,10 @@ $icon-color: #ffffff;
   width: 100%;
   background-color: $background-color;
   display: flex;
+
   overflow: hidden;
   height: 100vh;
+  position: relative;
 
   .content-wrapper {
     margin-top: 4rem;
@@ -80,4 +82,15 @@ $icon-color: #ffffff;
 }
 .side-nav-wrapper {
   margin-top: 2.5rem;
+}
+.footer {
+  margin-top: 1rem;
+  width: 100%;
+  height: auto;
+}
+
+::ng-deep {
+  .mat-drawer-transition .remove-transition.mat-drawer-content {
+    transition-duration: 0s;
+  }
 }

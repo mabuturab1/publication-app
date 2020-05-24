@@ -410,7 +410,7 @@ export class GetServerDataService {
       )
       .subscribe(
         (el: any) => {
-          callback(el.results);
+          callback(el);
         },
         (error) => {
           callback(null);

@@ -1,0 +1,34 @@
+$background-color: #1e2129;
+$text-color: #ffffff;
+.wrapper {
+  background-color: $background-color;
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  .text {
+    color: $text-color;
+  }
+  .footer-list {
+    display: flex;
+    margin: 1rem 0;
+    padding: 0;
+    list-style: none;
+  }
+  .single-footer-item {
+    color: $text-color;
+    margin-right: 1rem;
+    cursor: pointer;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+  .copyright {
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: none;
+    }
+  }
+}

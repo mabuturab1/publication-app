@@ -1,9 +1,9 @@
 <div class="manage-wrapper">
+  <a class="back-button" (click)="hideManage($event)">
+    <fa-icon [icon]="faTimes" size="lg"></fa-icon>
+  </a>
   <div class="header-wrapper fixed-top">
     <div class="title-wrapper">
-      <a class="back-button" (click)="hideManage($event)">
-        <fa-icon [icon]="faLongArrowAltLeft" size="lg"></fa-icon>
-      </a>
       <div class="title">
         <h6 class="title-value">Manage Publication Lists</h6>
         <span class="active-list"> Active list: &nbsp;{{ activeList }} </span>

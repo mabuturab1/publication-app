@@ -86,14 +86,16 @@ $icon-color: #ffffff;
 .hide-overflow {
   overflow: hidden;
   width: 100%;
-  height: 100%;
+  height: calc(100% - 3.5rem);
+  margin-top: 3.5rem;
   position: relative;
 }
 
 .content {
   width: 100%;
-  height: calc(100% - 3.5rem);
-  margin-top: 3.5rem;
+  height: 100%;
+  margin: 0;
+  // margin-top: 3.5rem;
 }
 .view-publication {
   width: 100%;
