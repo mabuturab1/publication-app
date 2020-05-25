@@ -6,6 +6,7 @@ import {
   LIST,
   DISCOVERY_FILTER,
   PUBLICATION_LIST,
+  HISTOGRAM_DATA,
 } from './../../services/getServerData.service';
 import {
   PublicationDataService,
@@ -51,6 +52,7 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy {
   noData = false;
   addSidebarOpened = false;
   myListSidebarOpened = false;
+  histogram: HISTOGRAM_DATA;
   noDataText = 'No results found. Kindly add new items to your active list';
   constructor(
     private dataProviderService: DataProviderService,
@@ -78,7 +80,7 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy {
     );
     this.subscriptionArr.push(
       this.getServerDataService.isLoggedIn.subscribe((el) => {
-        if (!this.showSpinner) this.getDiscoveryData();
+        if (!this.showSpinner && el) this.getDiscoveryData();
       })
     );
   }
@@ -120,6 +122,10 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy {
 
   getDiscoveryLists() {
     if (this.publicationService.getCurrentActiveListId() == null) return;
+    console.log(
+      'active id for list is',
+      this.publicationService.getCurrentActiveListId()
+    );
     this.updateFilterPair();
     this.itemsList = [];
     this.publicationRecords = [];
@@ -137,6 +143,7 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy {
           this.error = true;
           return;
         }
+        this.histogram = data.histograms;
         this.publicationRecords = this.publicationRecords.concat(data.results);
         if (this.publicationRecords.length < 1) {
           this.noData = true;

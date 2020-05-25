@@ -120,11 +120,11 @@ export class SingleListComponentComponent implements OnInit {
     if (items == null) return [];
     return items;
   }
-  getRetracted(publicationRecord: PUBLICATION_RECORD) {
-    if (publicationRecord.tags == null) return null;
-    if (publicationRecord.tags.length < 1) return null;
-    let item = publicationRecord.tags.find((el) => el.type == 'retracted');
-    return item;
+  getTags(publicationRecord: PUBLICATION_RECORD) {
+    if (publicationRecord.tags == null) return [];
+    if (publicationRecord.tags.length < 1) return [];
+
+    return publicationRecord.tags;
   }
   getRelatesToPublication(publicationRecord: PUBLICATION_RECORD) {
     let items = publicationRecord.metrics.filter(

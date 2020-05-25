@@ -63,7 +63,7 @@ export class PublicationDataService {
   locateDrawerOpened = false;
   currentPublicationIds: string[] = [];
   currentActiveList: PUBLICATION_LIST = null;
-  currentActiveListId = '';
+  currentActiveListId: string;
   customContactUsText = '';
   errorInDiscovery = false;
   setErrorInDiscovery(val: boolean) {

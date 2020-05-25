@@ -9,6 +9,7 @@
     [sortLabel]="sortType"
     [highlightAdd]="addSidebarOpened"
     [highlightMyList]="myListSidebarOpened"
+    [histogram]="histogram"
   ></app-main-options>
 </div>
 <div
@@ -70,14 +71,20 @@
     </h4>
   </div>
   <div *ngIf="noData && !showSpinner" class="empty-message">
-    <h4 *ngIf="!error" >{{noDataText}}</h4>
-    <h4 *ngIf="error">We are having problems creating a Discovery Feed for the 
-      chosen publications. This might be due to a problem we are
-       having with a specific publication in the your publication list.</h4>
-       <h4>You can <span class="contact-us" (click)="contactUsClicked()">contact us</span> if the problem persists</h4>
+    <h4 *ngIf="!error" class="message">{{ noDataText }}</h4>
+    <h4 *ngIf="error" class="message">
+      We are having problems creating a Discovery Feed for the chosen
+      publications. This might be due to a problem we are having with a specific
+      publication in the your publication list.
+    </h4>
+    <h4 class="message">
+      You can
+      <span class="contact-us" (click)="contactUsClicked()">contact us</span> if
+      the problem persists
+    </h4>
   </div>
- 
+
   <div *ngIf="!showSpinner" class="footer">
-    <app-footer></app-footer>  
+    <app-footer></app-footer>
   </div>
 </div>

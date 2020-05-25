@@ -1,10 +1,14 @@
-<div class="tooltip-wrapper">
-  <button *ngIf="buttonLabel !== ''" class="button light-green-button">
-    <a class="single-item"> {{ buttonLabel }}</a>
-  </button>
-  <mat-card class="tooltip-text light-green-button">
-    <mat-card-content>
-      <div class="content" [innerHTML]="tooltipText"></div>
-    </mat-card-content>
-  </mat-card>
-</div>
+<button
+  *ngIf="buttonLabel !== ''"
+  class="button light-green-button"
+  (click)="op.toggle($event)"
+>
+  <a class="single-item"> {{ buttonLabel }}</a>
+</button>
+
+<div class="badge-wrapper" #badgeWrapper></div>
+<p-overlayPanel [appendTo]="badgeWrapper" [showCloseIcon]="true" #op>
+  <ng-template pTemplate>
+    <div class="content" [innerHTML]="tooltipText"></div>
+  </ng-template>
+</p-overlayPanel>

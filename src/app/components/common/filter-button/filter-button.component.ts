@@ -1,4 +1,7 @@
-import { DISCOVERY_FILTER } from './../../../services/getServerData.service';
+import {
+  DISCOVERY_FILTER,
+  HISTOGRAM_DATA,
+} from './../../../services/getServerData.service';
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { faAngleDown } from '@fortawesome/free-solid-svg-icons';
 @Component({
@@ -11,6 +14,7 @@ export class FilterButtonComponent implements OnInit {
   faAngleDown = faAngleDown;
   @Input() showExlcude = true;
   @Input() filter: DISCOVERY_FILTER = {};
+  @Input() histogram: HISTOGRAM_DATA;
   @Output() filterResults = new EventEmitter<any>();
   constructor() {}
   filterDialogButtonClicked(event: any) {

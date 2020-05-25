@@ -12,6 +12,7 @@
     <app-filter-dialog
       [initFilter]="filter"
       [showExclude]="showExlcude"
+      [histogram]="histogram"
       (filterResults)="filterResultsChanged($event)"
       (close)="closeDialog($event)"
     ></app-filter-dialog>

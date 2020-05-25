@@ -1,15 +1,17 @@
 <button
   *ngIf="buttonLabel !== '' && buttonAfterText === ''"
-  (click)="onButtonClicked()"
+  (click)="onButtonClicked($event)"
   class="button light-blue-button"
+  [class.tag-button]="isTag"
+  [ngClass]="getClass()"
 >
   <a class="single-item"> {{ buttonLabel }}</a>
 </button>
 <button
   *ngIf="buttonLabel !== '' && buttonAfterText !== ''"
-  (click)="onButtonClicked()"
-  
+  (click)="onButtonClicked($event)"
   class="button no-padding"
+  [ngClass]="getClass()"
 >
   <a class="single-item big-badge light-blue-button left-circular-radius"
     >{{ buttonLabel }}&nbsp;</a
@@ -18,3 +20,9 @@
     buttonAfterText
   }}</a>
 </button>
+<div class="button-badge-wrapper" #badgeWrapper></div>
+<p-overlayPanel [appendTo]="badgeWrapper" [showCloseIcon]="true" #panel>
+  <ng-template pTemplate>
+    <div class="content" [innerHTML]="tooltipText"></div>
+  </ng-template>
+</p-overlayPanel>

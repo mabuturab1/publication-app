@@ -5,6 +5,7 @@ import {
   HostListener,
   Output,
   EventEmitter,
+  OnChanges,
 } from '@angular/core';
 import { faSortDown } from '@fortawesome/free-solid-svg-icons';
 import { Options, LabelType } from 'ng5-slider';
@@ -13,7 +14,7 @@ import { Options, LabelType } from 'ng5-slider';
   templateUrl: './histogram.component.html',
   styleUrls: ['./histogram.component.scss'],
 })
-export class HistogramComponent implements OnInit {
+export class HistogramComponent implements OnInit, OnChanges {
   prevCursorActive = false;
   nextCursorActive = false;
   @Input() minValue: number = 0;
@@ -42,7 +43,7 @@ export class HistogramComponent implements OnInit {
   startSending(data: boolean) {
     this.udpateData = data;
   }
-  datesChanged() {
+  datesChanged($event) {
     this.prevDateChanged.emit(this.minValue);
     this.nextDataChanged.emit(this.maxValue);
   }
@@ -50,7 +51,9 @@ export class HistogramComponent implements OnInit {
 
   ngOnInit(): void {
     this.normalizeYData();
-
+    this.initOptions();
+  }
+  initOptions() {
     this.options = {
       step: 1,
       floor: this.xAxisData[0],
@@ -67,8 +70,8 @@ export class HistogramComponent implements OnInit {
       },
     };
   }
-
   normalizeYData() {
+    this.yData = [];
     let max = 0;
     this.yAxisData.forEach((el) => {
       if (el > max) max = el;
@@ -76,6 +79,10 @@ export class HistogramComponent implements OnInit {
     for (let i = 0; i < this.yAxisData.length; i++) {
       this.yData.push(Math.round((this.yAxisData[i] / max) * 20) + 1);
     }
+  }
+  ngOnChanges() {
+    this.normalizeYData();
+    this.initOptions();
   }
   getPixels(item: number) {
     return item + 'px';

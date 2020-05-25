@@ -13,6 +13,15 @@ export interface PUBLICATION_LIST {
     sort: string;
   };
 }
+export interface HISTOGRAM_DATA {
+  year?: {
+    max?: number;
+    min?: number;
+    x?: number[];
+    y?: number[];
+  };
+}
+
 export interface Managed_List {
   list_id: string;
   list_name: string;
@@ -105,6 +114,7 @@ export interface METRIC {
   display_name?: string;
   value_type?: string;
   value?: '' | 0;
+  tooltip?: string;
 }
 
 export interface ERROR {

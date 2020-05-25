@@ -1,4 +1,7 @@
-import { DISCOVERY_FILTER } from './../../../services/getServerData.service';
+import {
+  DISCOVERY_FILTER,
+  HISTOGRAM_DATA,
+} from './../../../services/getServerData.service';
 import {
   Publication_Data,
   PublicationDataService,
@@ -29,6 +32,7 @@ export class MainOptionsComponent implements OnInit {
   @Input() showOptions = true;
   @Input() highlightAdd = false;
   @Input() highlightMyList = false;
+  @Input() histogram: HISTOGRAM_DATA;
 
   faAngleDown = faAngleDown;
   @Output() showDetailedLook = new EventEmitter<boolean>();

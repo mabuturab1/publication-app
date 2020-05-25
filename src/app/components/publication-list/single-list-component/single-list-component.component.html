@@ -28,13 +28,21 @@
         <div class="subtitle-wrapper" [class.no-theme-color]="!applyTheme">
           <div
             class="top-badge-wrapper"
-            [class.align-end]="getRetracted(publicationData) == null"
+            [class.align-end]="getTags(publicationData) == null"
           >
-            <app-badge-tooltip
-              *ngIf="getRetracted(publicationData) != null"
-              [buttonLabel]="'Retracted'"
-              [tooltipText]="getRetracted(publicationData).tooltip"
-            ></app-badge-tooltip>
+            <div class="left-wrapper">
+              <div
+                class="single-tag"
+                *ngFor="let item of getTags(publicationData)"
+              >
+                <app-badge-button
+                  [buttonLabel]="item.display_name"
+                  [tooltipText]="item.tooltip"
+                  [isTag]="true"
+                  [type]="item.type"
+                ></app-badge-button>
+              </div>
+            </div>
             <div class="right-wrapper">
               <div
                 class="single-badge"
@@ -43,6 +51,8 @@
                 <app-badge-button
                   [buttonLabel]="item.value"
                   [buttonAfterText]="item.display_name"
+                  [tooltipText]="item.tooltip"
+                  [type]="item.type"
                 ></app-badge-button>
               </div>
             </div>
@@ -59,6 +69,8 @@
                 <app-badge-button
                   [buttonLabel]="item.value"
                   [buttonAfterText]="item.display_name"
+                  [tooltipText]="item.tooltip"
+                  [type]="item.type"
                 ></app-badge-button>
                 &nbsp;&nbsp;&nbsp;
 
@@ -113,9 +125,9 @@
         </p>
       </div>
       <div *ngIf="disabled" class="want-this">
-<p class="text">We don't have this publication</p>
-<div class="button-group"  [class.no-theme-color]="!applyTheme">
-        <button
+        <p class="text">We don't have this publication</p>
+        <div class="button-group" [class.no-theme-color]="!applyTheme">
+          <button
             mat-button
             class="mat-button-style"
             *ngIf="disabled"
@@ -228,7 +240,7 @@
             <fa-icon [icon]="faPlus"></fa-icon>
             <a class="button-text">Add</a>
           </button>
-          
+
           <button
             mat-button
             class="mat-button-style"

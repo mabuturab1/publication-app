@@ -3,7 +3,7 @@
     <div class="icon-wrapper" (click)="closeClicked()">
       <div class="cross-times">
         <a class="icon-style">
-          <fa-icon [icon]="faTimes" ></fa-icon>
+          <fa-icon [icon]="faTimes"></fa-icon>
         </a>
       </div>
     </div>
@@ -30,7 +30,7 @@
           ></p-dropdown>
         </div>
       </div>
-      <div class="histogram-wrapper">
+      <div class="histogram-wrapper" *ngIf="histogram">
         <app-histogram
           [xAxisData]="xAxisData"
           [yAxisData]="yAxisData"

@@ -1,4 +1,7 @@
-import { DISCOVERY_FILTER } from './../../../services/getServerData.service';
+import {
+  DISCOVERY_FILTER,
+  HISTOGRAM_DATA,
+} from './../../../services/getServerData.service';
 import {
   Component,
   OnInit,
@@ -6,6 +9,7 @@ import {
   Output,
   EventEmitter,
   OnChanges,
+  SimpleChanges,
 } from '@angular/core';
 import { SelectItem } from 'primeng/api/selectitem';
 import { faEraser, faCheck, faTimes } from '@fortawesome/free-solid-svg-icons';
@@ -31,6 +35,7 @@ export class FilterDialogComponent implements OnInit, OnChanges {
   @Output() filterResults = new EventEmitter<any>();
   @Input() showExclude = true;
   @Input() initFilter: DISCOVERY_FILTER = {};
+  @Input() histogram: HISTOGRAM_DATA;
   @Output() close = new EventEmitter<boolean>();
   constructor() {}
   // dialogClicked(event: Event) {
@@ -38,18 +43,53 @@ export class FilterDialogComponent implements OnInit, OnChanges {
   // }
   ngOnInit(): void {
     this.initFilterValues();
-    for (let i = 1940; i < 2019; i++) {
+    if (this.histogram != null) this.updateHistogramData();
+  }
+  updateHistogramData() {
+    console.log('histogram is', this.histogram);
+    if (this.histogram == null) return;
+    this.dates = [];
+    this.xAxisData = [];
+    this.yAxisData = [];
+    let minDate =
+      this.histogram && this.histogram.year && this.histogram.year.min
+        ? this.histogram.year.min
+        : 1940;
+    let maxDate =
+      this.histogram && this.histogram.year && this.histogram.year.max
+        ? this.histogram.year.max
+        : 2018;
+    this.selectedFromDate = minDate.toString();
+    this.selectedToDate = maxDate.toString();
+    this.prevSelectedFrom = minDate;
+    this.prevSelectedTo = maxDate;
+
+    for (
+      let i = this.histogram.year.min;
+      i <= Math.max(this.histogram.year.max, this.histogram.year.min + 1);
+      i++
+    ) {
       this.dates.push({
         label: i.toString(),
         value: i.toString(),
       });
-
       this.xAxisData.push(i);
-      this.yAxisData.push(Math.round(Math.random() * 20 + 1));
+      this.yAxisData.push(this.histogram.year.y[i - this.histogram.year.min]);
     }
   }
-  ngOnChanges() {
-    this.initFilterValues();
+
+  ngOnChanges(changes: SimpleChanges) {
+    for (let propName in changes) {
+      let change = changes[propName];
+      switch (propName) {
+        case 'initFilter':
+          this.initFilterValues();
+          break;
+        case 'histogram':
+          this.updateHistogramData();
+          break;
+      }
+    }
   }
   initFilterValues() {
     if (this.initFilter == null) return;

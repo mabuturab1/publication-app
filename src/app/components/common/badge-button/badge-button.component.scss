@@ -56,3 +56,24 @@ $text-color: #fff;
   text-decoration: none;
   color: inherit;
 }
+
+.tag-button {
+  background-color: #80bb41;
+  padding: 0 5px;
+  * {
+    text-transform: uppercase;
+  }
+}
+
+::ng-deep {
+  .button-badge-wrapper {
+    position: relative;
+    overflow: visible;
+  }
+  .button-badge-wrapper > div {
+    top: 0 !important;
+    left: 10px !important;
+    min-width: 300px;
+    max-width: 400px;
+  }
+}

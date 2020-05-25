@@ -51,6 +51,8 @@ import { BadgeTooltipComponent } from './components/common/badge-tooltip/badge-t
 import { MatInputModule } from '@angular/material/input';
 import { FooterComponent } from './components/footer/footer.component';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
+import { ButtonModule } from 'primeng/button';
+import { TooltipModule } from 'primeng/tooltip';
 
 @NgModule({
   declarations: [
@@ -94,6 +96,7 @@ import { OverlayPanelModule } from 'primeng/overlaypanel';
   imports: [
     BrowserModule,
     AppRoutingModule,
+    TooltipModule,
     BrowserAnimationsModule,
     MatCardModule,
     MatFormFieldModule,
@@ -101,6 +104,7 @@ import { OverlayPanelModule } from 'primeng/overlaypanel';
     FormsModule,
     DropdownModule,
     MatButtonModule,
+    ButtonModule,
     FontAwesomeModule,
     OverlayPanelModule,
     MatSidenavModule,

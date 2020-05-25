@@ -1,4 +1,19 @@
 $text-color: white;
+::ng-deep {
+  .badge-wrapper {
+    font-family: inherit;
+    position: relative;
+    overflow: visible;
+  }
+  .badge-wrapper > div {
+    top: 0px !important;
+    left: 10px !important;
+    min-width: 300px;
+    max-width: 400px;
+    background-color: #80bb41 !important;
+  }
+}
+
 .button {
   color: $text-color;
 
@@ -28,10 +43,14 @@ $text-color: white;
   .single-item {
     text-decoration: none;
     color: inherit;
+    text-transform: uppercase;
   }
 }
 .light-green-button {
   background-color: #80bb41;
+}
+.light-red-button {
+  background-color: red;
 }
 .tooltip-wrapper {
   display: flex;
