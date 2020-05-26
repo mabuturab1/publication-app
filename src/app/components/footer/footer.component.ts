@@ -11,6 +11,6 @@ export class FooterComponent implements OnInit {
 
   ngOnInit(): void {}
   onTos() {
-    this.router.navigate(['tos']);
+    this.router.navigate(['terms-of-service']);
   }
 }

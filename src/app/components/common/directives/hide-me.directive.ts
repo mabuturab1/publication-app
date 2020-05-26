@@ -12,6 +12,7 @@ import {
 export class HideMeDirective {
   wasInside = false;
   @Output() documentClicked = new EventEmitter<boolean>();
+  @Output() escapeClicked = new EventEmitter<boolean>();
   constructor(private el: ElementRef) {}
   @HostListener('mousedown')
   clickInside() {
@@ -25,5 +26,6 @@ export class HideMeDirective {
     $event: KeyboardEvent
   ) {
     this.documentClicked.emit(true);
+    this.escapeClicked.emit(true);
   }
 }

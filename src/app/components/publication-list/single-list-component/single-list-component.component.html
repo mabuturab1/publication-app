@@ -2,11 +2,12 @@
   class="card-style"
   [class.mat-elevation-z0]="removeShadow"
   [class.no-theme-background]="!applyTheme"
+  appLogEvent
 >
   <div *ngIf="showSpinner">
     <app-my-loader [loading]="showSpinner"></app-my-loader>
   </div>
-  <div *ngIf="!showSpinner">
+  <div *ngIf="!showSpinner" [id]="publicationData.id">
     <input
       *ngIf="isMultipleSelection"
       type="checkbox"

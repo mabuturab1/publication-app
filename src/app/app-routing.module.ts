@@ -1,3 +1,4 @@
+import { TermsOfServiceComponent } from './components/terms-of-service/terms-of-service.component';
 import { ContactUsComponent } from './components/contact-us/contact-us.component';
 import { HomeComponent } from './components/home/home.component';
 import { ViewPublicationComponent } from './components/publication-list/view-publication/view-publication.component';
@@ -12,6 +13,10 @@ const routes: Routes = [
   {
     path: 'contact-us',
     component: ContactUsComponent,
+  },
+  {
+    path: 'terms-of-service',
+    component: TermsOfServiceComponent,
   },
   {
     path: '',

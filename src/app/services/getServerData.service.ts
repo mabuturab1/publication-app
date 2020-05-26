@@ -4,6 +4,8 @@ import { Injectable } from '@angular/core';
 import { UtilsService } from './utils.service';
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { Subject } from 'rxjs';
+import { terms } from './termsOfService';
+import { v4 as uuidv4 } from 'uuid';
 
 export interface PUBLICATION_LIST {
   name?: string;
@@ -135,16 +137,23 @@ export class GetServerDataService {
   userLoginStatus = false;
   gettingActiveList = false;
   showSnackbar = new Subject<string>();
+  currentClientId: string;
   constructor(
     private http: HttpClient,
     private utilsService: UtilsService,
     private publicationService: PublicationDataService
   ) {}
   getHttpHeaders() {
-    return new HttpHeaders().set('Authorization', `Bearer ${this.token}`);
+    return new HttpHeaders()
+      .set('Authorization', `Bearer ${this.token}`)
+      .set('X-Client-Session', this.getClientId());
   }
   setSnackbarMessage(el: string) {
     this.showSnackbar.next(el);
+  }
+  getClientId() {
+    if (this.currentClientId == null) this.currentClientId = uuidv4();
+    return this.currentClientId;
   }
   login(uid: string, callback) {
     this.http.get(this.utilsService.getLoginUrl(uid)).subscribe(
@@ -514,5 +523,9 @@ export class GetServerDataService {
           this.showSnackbar.next('An error occurred while clearing reactions ');
         }
       );
+  }
+  getTermsOfService() {
+    let tos = terms;
+    return tos;
   }
 }

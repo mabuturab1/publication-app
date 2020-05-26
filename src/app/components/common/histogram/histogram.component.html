@@ -13,6 +13,8 @@
       *ngFor="let item of yData; let i = index"
       [style.height]="getPixels(item)"
       [class.is-active]="getActiveStatus(i)"
+      pTooltip="{{ getTooltipText(i) }}"
+      tooltipPosition="bottom"
     ></div>
   </div>
 </div>

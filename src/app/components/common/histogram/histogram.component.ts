@@ -44,8 +44,8 @@ export class HistogramComponent implements OnInit, OnChanges {
     this.udpateData = data;
   }
   datesChanged($event) {
-    this.prevDateChanged.emit(this.minValue);
-    this.nextDataChanged.emit(this.maxValue);
+    // this.prevDateChanged.emit(this.minValue);
+    // this.nextDataChanged.emit(this.maxValue);
   }
   constructor() {}
 
@@ -94,5 +94,8 @@ export class HistogramComponent implements OnInit, OnChanges {
     )
       return true;
     else return false;
+  }
+  getTooltipText(index: number) {
+    return `${this.yAxisData[index]} papers in ${this.xAxisData[index]}`;
   }
 }

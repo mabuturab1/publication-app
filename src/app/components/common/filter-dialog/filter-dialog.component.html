@@ -39,6 +39,9 @@
           [minValue]="getMinNumber(selectedFromDate)"
           [maxValue]="getMaxNumber(selectedToDate)"
         ></app-histogram>
+        <span class="histogram-note"
+          >(Hover your mouse on histogram bars for more details)</span
+        >
       </div>
       <div class="citation-wrapper" *ngIf="showExclude">
         <p class="medium-label">

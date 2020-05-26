@@ -41,6 +41,9 @@ export class AppComponent implements OnInit, OnDestroy {
       duration: 4000,
     });
   }
+  somethingClicked(event: Event) {
+    console.log(event);
+  }
   ngOnDestroy() {
     this.subscriptionArr.forEach((el) => el.unsubscribe());
   }

@@ -9,18 +9,21 @@
   <div *ngIf="showSpinner" class="spinner-wrapper">
     <app-my-loader *ngIf="showSpinner" [loading]="showSpinner"></app-my-loader>
   </div>
-  <div class="view" *ngIf="publicationData">
-    <app-single-list-component
-      [publicationData]="publicationData"
-      [showAdd]="true"
-      [showAbstract]="true"
-      [isDetailed]="true"
-      (addClicked)="addItemToList(publicationData.id)"
-      [viewMode]="true"
-    ></app-single-list-component>
+
+  <div class="view" *ngIf="termsOfService">
+    <div class="title-wrapper">
+      <h5 class="title">Terms Of Service</h5>
+    </div>
+    <h5 class="tos">{{ termsOfService }}</h5>
+    <div class="button-wrapper">
+      <button mat-button class="mat-button-style" (click)="closeClicked()">
+        <fa-icon [icon]="faWindowClose"></fa-icon>
+        <a class="button-text">Close</a>
+      </button>
+    </div>
   </div>
   <div style="flex: 1;"></div>
-  <div *ngIf="publicationData" class="footer">
+  <div *ngIf="termsOfService" class="footer">
     <app-footer></app-footer>
   </div>
 </div>

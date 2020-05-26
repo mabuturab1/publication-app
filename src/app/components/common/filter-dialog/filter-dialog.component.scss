@@ -27,7 +27,7 @@ $icon-color: #ffffff;
   background-color: $background-color;
 }
 .citation-wrapper {
-  margin-top: 2.5rem;
+  margin-top: 3.5rem;
 }
 
 .checkbox-button-wrapper {
@@ -130,4 +130,11 @@ $icon-color: #ffffff;
   height: 3rem;
   width: 100%;
   margin: 1.5rem 0;
+  .histogram-note {
+    color: white;
+    font-size: 0.7rem;
+    font-style: italic;
+    display: inline-block;
+    margin-top: 1rem;
+  }
 }

@@ -53,6 +53,8 @@ import { FooterComponent } from './components/footer/footer.component';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { ButtonModule } from 'primeng/button';
 import { TooltipModule } from 'primeng/tooltip';
+import { TermsOfServiceComponent } from './components/terms-of-service/terms-of-service.component';
+import { LogEventDirective } from './components/common/directives/log-event.directive';
 
 @NgModule({
   declarations: [
@@ -92,6 +94,10 @@ import { TooltipModule } from 'primeng/tooltip';
     BadgeTooltipComponent,
 
     FooterComponent,
+
+    TermsOfServiceComponent,
+
+    LogEventDirective,
   ],
   imports: [
     BrowserModule,

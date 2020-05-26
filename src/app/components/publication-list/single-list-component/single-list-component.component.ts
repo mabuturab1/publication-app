@@ -16,6 +16,7 @@ import {
   faGem,
 } from '@fortawesome/free-solid-svg-icons';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { EventLoggerService } from 'src/app/services/event-logger.service';
 @Component({
   selector: 'app-single-list-component',
   templateUrl: './single-list-component.component.html',
@@ -68,7 +69,8 @@ export class SingleListComponentComponent implements OnInit {
   expandBadges = false;
   constructor(
     private dataProviderService: DataProviderService,
-    private _snackBar: MatSnackBar
+    private _snackBar: MatSnackBar,
+    private eventLoggerService: EventLoggerService
   ) {}
 
   ngOnInit(): void {}

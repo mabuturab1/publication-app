@@ -66,7 +66,7 @@ export class FilterDialogComponent implements OnInit, OnChanges {
 
     for (
       let i = this.histogram.year.min;
-      i <= Math.max(this.histogram.year.max, this.histogram.year.min + 1);
+      i <= Math.max(maxDate, minDate + 1);
       i++
     ) {
       this.dates.push({
@@ -74,7 +74,9 @@ export class FilterDialogComponent implements OnInit, OnChanges {
         value: i.toString(),
       });
       this.xAxisData.push(i);
-      this.yAxisData.push(this.histogram.year.y[i - this.histogram.year.min]);
+      if (this.histogram.year && this.histogram.year.y)
+        this.yAxisData.push(this.histogram.year.y[i - this.histogram.year.min]);
+      else this.yAxisData.push(0);
     }
   }
 
