@@ -1,5 +1,12 @@
 <div class="wrapper" appHideMe (escapeClicked)="closeClicked()">
-  <div class="icon-wrapper" (click)="closeClicked()">
+  <div
+    class="icon-wrapper"
+    (click)="closeClicked()"
+    appLogEvent
+    [localId]="'Close'"
+    [parentId]="'Toolbar'"
+    [component]="'Contact Us'"
+  >
     <div class="cross-times">
       <a class="icon-style">
         <fa-icon [icon]="faTimes" size="lg"></fa-icon>
@@ -18,26 +25,47 @@
           [showMaterialSelect]="true"
           [fullWidth]="true"
           (itemSelected)="selectionChanged($event)"
+          [componentName]="'Contact Us'"
         ></app-dropdown-button>
       </div>
     </div>
     <div class="message-area">
       <p class="subtitle">Your message</p>
-      <textarea class="message-textarea" [(ngModel)]="message"></textarea>
+      <textarea
+        *ngIf="!showSpinner"
+        class="message-textarea"
+        [(ngModel)]="message"
+        appLogEvent
+        [localId]="'Message'"
+        [parentId]="'Message Section'"
+        [component]="'Contact Us'"
+      ></textarea>
+      <div *ngIf="showSpinner" class="loader-wrapper">
+        <app-my-loader [loading]="showSpinner"></app-my-loader>
+      </div>
     </div>
     <div class="button-group">
       <button
         mat-button
         class="mat-button-style white-text contact-button"
         (click)="closeClicked()"
+        appLogEvent
+        [localId]="'Cancel'"
+        [parentId]="'Toolbar'"
+        [component]="'Contact Us'"
       >
         <fa-icon [icon]="faBan"></fa-icon>
         <a class="button-text">Cancel</a>
       </button>
       <button
+        [disabled]="message == null || message == ''"
         mat-button
         class="mat-button-style white-text contact-button"
         (click)="sendMessage()"
+        appLogEvent
+        [localId]="'Send'"
+        [parentId]="'Toolbar'"
+        [component]="'Contact Us'"
       >
         <fa-icon [icon]="faPaperPlane"></fa-icon>
         <a class="button-text">Send</a>
@@ -61,6 +89,10 @@
         mat-button
         class="mat-button-style white-text contact-button"
         (click)="closeClicked()"
+        appLogEvent
+        [localId]="'Okay'"
+        [parentId]="'Toolbar'"
+        [component]="'Contact Us'"
       >
         <fa-icon [icon]="faCheckSquare"></fa-icon>
         <a class="button-text">Okay</a>
@@ -79,14 +111,16 @@
         <h6 class="subtitle">Sorry about that</h6>
       </div>
     </div>
-    <div *ngIf="showSpinner" class="loader-wrapper">
-      <app-my-loader [loading]="showSpinner"></app-my-loader>
-    </div>
+
     <div class="okay-button">
       <button
         mat-button
         class="mat-button-style white-text contact-button"
         (click)="closeClicked()"
+        appLogEvent
+        [localId]="'Okay'"
+        [parentId]="'Toolbar'"
+        [component]="'Contact Us'"
       >
         <fa-icon [icon]="faCheckSquare"></fa-icon>
         <a class="button-text">Okay</a>
@@ -95,6 +129,6 @@
   </div>
   <div style="flex: 1;"></div>
   <div class="footer">
-    <app-footer></app-footer>
+    <app-footer [componentName]="'Contact Us'"></app-footer>
   </div>
 </div>

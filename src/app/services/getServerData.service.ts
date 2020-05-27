@@ -237,7 +237,7 @@ export class GetServerDataService {
       )
       .subscribe(
         (response: any) => {
-          callback(response.publication_ids);
+          callback(response);
         },
         (error) => {
           callback(null);
@@ -521,6 +521,28 @@ export class GetServerDataService {
           callback(null);
 
           this.showSnackbar.next('An error occurred while clearing reactions ');
+        }
+      );
+  }
+  updateTelemetry(
+    data: any,
+
+    callback
+  ) {
+    this.http
+      .put(
+        this.utilsService.getTelemetry(),
+        { ...data },
+        {
+          headers: this.getHttpHeaders(),
+        }
+      )
+      .subscribe(
+        (el) => {
+          callback(el);
+        },
+        (error) => {
+          callback(null);
         }
       );
   }

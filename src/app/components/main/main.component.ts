@@ -116,16 +116,14 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy {
     this.currIndex = data.currentIndex;
     this.allIds = data.allIds;
     this.publicationRecords = data.publicationRecords;
+    this.histogram = data.histogram;
 
     if (this.publicationRecords.length < 1) this.noData = true;
   }
 
   getDiscoveryLists() {
     if (this.publicationService.getCurrentActiveListId() == null) return;
-    console.log(
-      'active id for list is',
-      this.publicationService.getCurrentActiveListId()
-    );
+
     this.updateFilterPair();
     this.itemsList = [];
     this.publicationRecords = [];
@@ -218,7 +216,6 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy {
       this.filter = filterPair.filter;
       this.sortType = filterPair.sort;
     }
-    console.log(filterPair);
   }
   hideClicked(publicationData: PUBLICATION_RECORD) {
     var index = this.publicationRecords.findIndex(
@@ -397,14 +394,18 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy {
       return this.contractPublication.get(item.id);
     return false;
   }
-  ngOnDestroy() {
-    this.subscriptionArr.forEach((el) => el.unsubscribe());
+  storeDataLocally() {
     this.publicationService.setDiscoveryFeedData({
       currentIndex: this.currIndex,
       publicationRecords: this.publicationRecords,
       allIds: this.allIds,
       filter: this.filter,
       sortType: this.sortType,
+      histogram: this.histogram,
     });
+  }
+  ngOnDestroy() {
+    this.subscriptionArr.forEach((el) => el.unsubscribe());
+    this.storeDataLocally();
   }
 }

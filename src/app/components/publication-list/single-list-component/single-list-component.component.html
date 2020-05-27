@@ -2,17 +2,20 @@
   class="card-style"
   [class.mat-elevation-z0]="removeShadow"
   [class.no-theme-background]="!applyTheme"
-  appLogEvent
 >
   <div *ngIf="showSpinner">
     <app-my-loader [loading]="showSpinner"></app-my-loader>
   </div>
-  <div *ngIf="!showSpinner" [id]="publicationData.id">
+  <div *ngIf="!showSpinner">
     <input
       *ngIf="isMultipleSelection"
       type="checkbox"
       class="checkbox-style"
       (change)="selectionChanged($event)"
+      appLogEvent
+      [localId]="'multiple_selection_checkbox'"
+      [parentId]="'Publication Item Id:' + publicationData.mag_id"
+      [component]="componentName"
     />
     <mat-card-header>
       <mat-card-title>
@@ -35,6 +38,10 @@
               <div
                 class="single-tag"
                 *ngFor="let item of getTags(publicationData)"
+                appLogEvent
+                [localId]="item.display_name"
+                [parentId]="'Publication Item Id:' + publicationData.mag_id"
+                [component]="componentName"
               >
                 <app-badge-button
                   [buttonLabel]="item.display_name"
@@ -48,6 +55,10 @@
               <div
                 class="single-badge"
                 *ngFor="let item of getRelatesToPublication(publicationData)"
+                appLogEvent
+                [localId]="item.display_name"
+                [parentId]="'Publication Item Id:' + publicationData.mag_id"
+                [component]="componentName"
               >
                 <app-badge-button
                   [buttonLabel]="item.value"
@@ -66,6 +77,10 @@
               <div
                 class="single-badge"
                 *ngFor="let item of getRelatesToJournal(publicationData)"
+                appLogEvent
+                [localId]="item.display_name"
+                [parentId]="'Publication Item Id:' + publicationData.mag_id"
+                [component]="componentName"
               >
                 <app-badge-button
                   [buttonLabel]="item.value"
@@ -83,7 +98,14 @@
             class="publication-details-wrapper"
             *ngIf="showAuthorsAndAffilis"
           >
-            <div class="author-wrapper" *ngIf="publicationData.authors">
+            <div
+              class="author-wrapper"
+              *ngIf="publicationData.authors"
+              appLogEvent
+              [localId]="'Authors'"
+              [parentId]="'Publication Item Id:' + publicationData.mag_id"
+              [component]="componentName"
+            >
               <app-expandable-button
                 [textColor]="getTextColorForBadge()"
                 [authors]="publicationData.authors"
@@ -96,6 +118,10 @@
             <div
               class="affiliations-wrapper"
               *ngIf="publicationData.affiliations"
+              appLogEvent
+              [localId]="'Affiliations'"
+              [parentId]="'Publication Item Id:' + publicationData.mag_id"
+              [component]="componentName"
             >
               <app-expandable-button
                 [affiliationsList]="publicationData.affiliations"
@@ -133,6 +159,10 @@
             class="mat-button-style"
             *ngIf="disabled"
             (click)="needButtonClicked()"
+            appLogEvent
+            [localId]="'I want this'"
+            [parentId]="'Publication Item Id:' + publicationData.mag_id"
+            [component]="componentName"
           >
             <fa-icon [icon]="faGem"></fa-icon>
             <a class="button-text">I want this</a>
@@ -146,6 +176,10 @@
           *ngIf="userReaction"
           class="button-group"
           [class.no-theme-color]="!applyTheme"
+          appLogEvent
+          [localId]="getUserReaction(publicationData)"
+          [parentId]="'Publication Item Id:' + publicationData.mag_id"
+          [component]="componentName"
         >
           <button
             mat-button
@@ -160,6 +194,10 @@
             mat-button
             class="mat-button-style"
             (click)="clearReactionClicked()"
+            appLogEvent
+            [localId]="'Clear Reaction'"
+            [parentId]="'Publication Item Id:' + publicationData.mag_id"
+            [component]="componentName"
           >
             <fa-icon [icon]="faBan"></fa-icon>
             <a class="button-text">Clear Reaction</a>
@@ -175,6 +213,10 @@
             class="mat-button-style remove-shadow"
             *ngIf="showReactions && !userReaction"
             (click)="thumbsDownClicked()"
+            appLogEvent
+            [localId]="'Thumbs down'"
+            [parentId]="'Publication Item Id:' + publicationData.mag_id"
+            [component]="componentName"
           >
             <fa-icon [icon]="faThumbsDown"></fa-icon>
           </button>
@@ -183,6 +225,10 @@
             class="mat-button-style remove-shadow"
             *ngIf="showReactions && !userReaction"
             (click)="shrugClicked()"
+            appLogEvent
+            [localId]="'Shrug'"
+            [parentId]="'Publication Item Id:' + publicationData.mag_id"
+            [component]="componentName"
           >
             <fa-icon [icon]="faMehRollingEyes"></fa-icon>
           </button>
@@ -191,6 +237,10 @@
             class="mat-button-style remove-shadow"
             *ngIf="showReactions && !userReaction"
             (click)="thumbsUpClicked()"
+            appLogEvent
+            [localId]="'Thumbs up'"
+            [parentId]="'Publication Item Id:' + publicationData.mag_id"
+            [component]="componentName"
           >
             <fa-icon [icon]="faThumbsUp"></fa-icon>
           </button>
@@ -201,6 +251,10 @@
             *ngIf="
               publicationData.urls != null && publicationData.urls.length > 0
             "
+            appLogEvent
+            [localId]="'External URL'"
+            [parentId]="'Publication Item Id:' + publicationData.mag_id"
+            [component]="componentName"
           >
             <fa-icon [icon]="faExternalLinkAlt"></fa-icon>
           </a>
@@ -209,6 +263,10 @@
             class="mat-button-style"
             *ngIf="showRemove"
             (click)="removeButtonClicked()"
+            appLogEvent
+            [localId]="'Remove'"
+            [parentId]="'Publication Item Id:' + publicationData.mag_id"
+            [component]="componentName"
           >
             <fa-icon [icon]="faTrashAlt"></fa-icon>
             <a class="button-text">Remove</a>
@@ -219,6 +277,10 @@
             class="mat-button-style"
             *ngIf="showHide"
             (click)="hideButtonClicked()"
+            appLogEvent
+            [localId]="'Hide'"
+            [parentId]="'Publication Item Id:' + publicationData.mag_id"
+            [component]="componentName"
           >
             <fa-icon [icon]="faEyeSlash"></fa-icon>
             <a class="button-text">Hide</a>
@@ -228,6 +290,10 @@
             class="mat-button-style"
             *ngIf="showView && !disabled"
             (click)="viewButtonClicked()"
+            appLogEvent
+            [localId]="'View'"
+            [parentId]="'Publication Item Id:' + publicationData.mag_id"
+            [component]="componentName"
           >
             <fa-icon [icon]="faEye"></fa-icon>
             <a class="button-text">View</a>
@@ -236,7 +302,11 @@
             mat-button
             class="mat-button-style"
             *ngIf="showAdd && !disabled"
-            (click)="addButtonClicked()"
+            appLogEvent
+            [localId]="'Add'"
+            [parentId]="'Publication Item Id:' + publicationData.mag_id"
+            [component]="componentName"
+            (click)="addButtonClicked($event)"
           >
             <fa-icon [icon]="faPlus"></fa-icon>
             <a class="button-text">Add</a>
@@ -247,6 +317,10 @@
             class="mat-button-style"
             *ngIf="showSeedNewList && !disabled"
             (click)="seedNewListButtonClicked()"
+            appLogEvent
+            [localId]="'Seed new list'"
+            [parentId]="'Publication Item Id:' + publicationData.mag_id"
+            [component]="componentName"
           >
             <fa-icon [icon]="faFileExport"></fa-icon>
             <a class="button-text">Seed New List</a>

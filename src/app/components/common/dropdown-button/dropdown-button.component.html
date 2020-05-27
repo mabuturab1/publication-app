@@ -1,5 +1,12 @@
 <div class="compact-button" appEventBlocker *ngIf="!showMaterialSelect">
-  <a class="button" (click)="toggleDetailDialog()">
+  <a
+    class="button"
+    (click)="toggleDetailDialog()"
+    appLogEvent
+    [localId]="buttonLabel"
+    [parentId]="'Toolbar'"
+    [component]="componentName"
+  >
     <a class="button-text"> {{ buttonLabel }}</a>
     <fa-icon [icon]="faAngleDown"></fa-icon>
   </a>
@@ -23,6 +30,10 @@
     [class.small-select]="smallPadding"
     [class.full-width]="fullWidth"
     [class.add-padding]="!smallPadding"
+    appLogEvent
+    [localId]="buttonLabel"
+    [parentId]="'Toolbar'"
+    [component]="componentName"
   >
     <mat-label class="icon-style"
       ><fa-icon *ngIf="icon != null" [icon]="icon"></fa-icon>

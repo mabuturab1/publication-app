@@ -179,6 +179,13 @@ $background-color: #1e2129;
   color: $text-color;
   background-color: $background-color;
 }
+::ng-deep {
+  .search-button-wrapper .mat-button-style.mat-button[disabled][disabled] {
+    color: $text-color;
+    background-color: rgba($color: $background-color, $alpha: 0.5);
+    opacity: 0.8;
+  }
+}
 .overflow-hidden {
   overflow: hidden;
 }

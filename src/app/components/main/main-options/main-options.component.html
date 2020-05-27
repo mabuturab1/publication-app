@@ -7,27 +7,50 @@
     <app-detail-button
       (showDetailedLook)="viewTypeChanged($event)"
       [buttonLabel]="'Detailed'"
+      [componentName]="'Main'"
     ></app-detail-button>
+
     <app-filter-button
       [filter]="filter"
       [histogram]="histogram"
       (filterResults)="filterResultsChanged($event)"
+      [componentName]="'Main Options'"
     ></app-filter-button>
     <app-sort-button
       [buttonLabel]="sortLabel"
       (sortType)="sortTypeUpdated($event)"
+      [componentName]="'Main Options'"
     ></app-sort-button>
-    <div class="add-button">
+    <div
+      class="add-button"
+      appLogEvent
+      [localId]="'Add'"
+      [parentId]="'Main Toolbar'"
+      [component]="'Main Options'"
+    >
       <a class="button" (click)="addClicked()">
         <a class="button-text" [class.highlight]="highlightAdd"> Add</a>
       </a>
     </div>
-    <div class="list-button">
+    <div
+      class="list-button"
+      appLogEvent
+      [localId]="'My List'"
+      [parentId]="'Main Toolbar'"
+      [component]="'Main Options'"
+    >
       <a class="button" (click)="myListClicked()">
         <a class="button-text" [class.highlight]="highlightMyList"> My list</a>
       </a>
     </div>
-    <div class="contact-us" (click)="contactUs()">
+    <div
+      class="contact-us"
+      (click)="contactUs()"
+      appLogEvent
+      [localId]="'Contact Us'"
+      [parentId]="'Main Toolbar'"
+      [component]="'Main Options'"
+    >
       <a class="button">
         <a class="button-text"> Contact Us</a>
       </a>

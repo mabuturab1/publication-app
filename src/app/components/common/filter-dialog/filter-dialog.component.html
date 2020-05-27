@@ -1,6 +1,13 @@
 <div class="dialog-wrapper mat-elevation-z24">
   <mat-card class="card-style">
-    <div class="icon-wrapper" (click)="closeClicked()">
+    <div
+      class="icon-wrapper"
+      (click)="closeClicked()"
+      appLogEvent
+      [localId]="'close'"
+      [parentId]="'Filter Dialog'"
+      [component]="componentName"
+    >
       <div class="cross-times">
         <a class="icon-style">
           <fa-icon [icon]="faTimes"></fa-icon>
@@ -9,7 +16,13 @@
     </div>
     <mat-card-content>
       <div class="date-wrapper">
-        <div class="from-date">
+        <div
+          class="from-date"
+          appLogEvent
+          [localId]="'From Date'"
+          [parentId]="'Filter Dialog'"
+          [component]="componentName"
+        >
           <p class="label">From Date</p>
           <p-dropdown
             [style]="{ minWidth: '100px', width: '100px', color: 'white' }"
@@ -19,7 +32,13 @@
             editable="true"
           ></p-dropdown>
         </div>
-        <div class="to-date">
+        <div
+          class="to-date"
+          appLogEvent
+          [localId]="'To Date'"
+          [parentId]="'Filter Dialog'"
+          [component]="componentName"
+        >
           <p class="label">To Date</p>
           <p-dropdown
             [style]="{ minWidth: '100px', width: '100px', color: 'white' }"
@@ -30,7 +49,14 @@
           ></p-dropdown>
         </div>
       </div>
-      <div class="histogram-wrapper" *ngIf="histogram">
+      <div
+        class="histogram-wrapper"
+        *ngIf="histogram"
+        appLogEvent
+        [localId]="'Histogram'"
+        [parentId]="'Filter Dialog'"
+        [component]="componentName"
+      >
         <app-histogram
           [xAxisData]="xAxisData"
           [yAxisData]="yAxisData"
@@ -47,7 +73,13 @@
         <p class="medium-label">
           Citation Distance:
         </p>
-        <div class="checkbox-button-wrapper">
+        <div
+          class="checkbox-button-wrapper"
+          appLogEvent
+          [localId]="'Exclude Directly Cited'"
+          [parentId]="'Filter Dialog'"
+          [component]="componentName"
+        >
           <input
             class="checkbox-style"
             type="checkbox"
@@ -59,7 +91,13 @@
             >Exclude directly cited papers</label
           >
         </div>
-        <div class="checkbox-button-wrapper">
+        <div
+          class="checkbox-button-wrapper"
+          appLogEvent
+          [localId]="'Exlcude Directly Citing'"
+          [parentId]="'Filter Dialog'"
+          [component]="componentName"
+        >
           <input
             class="checkbox-style"
             type="checkbox"
@@ -72,7 +110,14 @@
           >
         </div>
       </div>
-      <div class="exclude-keyword" [class.top-margin]="!showExclude">
+      <div
+        class="exclude-keyword"
+        [class.top-margin]="!showExclude"
+        appLogEvent
+        [localId]="'Exclude Keywords'"
+        [parentId]="'Filter Dialog'"
+        [component]="componentName"
+      >
         <p class="medium-label">
           Exclude Keywords:
         </p>
@@ -84,11 +129,23 @@
             mat-button
             class="mat-button-style"
             (click)="excludeKeywords = ''"
+            appLogEvent
+            [localId]="'Clear'"
+            [parentId]="'Filter Dialog'"
+            [component]="componentName"
           >
             <fa-icon [icon]="faEraser"></fa-icon>
             <a class="button-text">Clear</a>
           </button>
-          <button mat-button class="mat-button-style" (click)="onApplyCliked()">
+          <button
+            mat-button
+            class="mat-button-style"
+            (click)="onApplyCliked()"
+            appLogEvent
+            [localId]="'Apply'"
+            [parentId]="'Filter Dialog'"
+            [component]="componentName"
+          >
             <fa-icon [icon]="faCheck"></fa-icon>
             <a class="button-text">Apply</a>
           </button>

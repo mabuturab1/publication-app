@@ -9,6 +9,7 @@ export class DetailButtonComponent implements OnInit {
   @Input() buttonLabel = '';
   list = ['Detailed', 'Compact'];
   @Input() smallPadding = false;
+  @Input() componentName: string;
 
   constructor() {}
   @Output() showDetailedLook = new EventEmitter<boolean>();

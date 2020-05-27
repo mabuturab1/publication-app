@@ -27,6 +27,7 @@
         (viewClicked)="viewPublicationClicked(item)"
         (removeClicked)="removeClicked(item)"
         (iAmSelected)="selectionStatusChanged($event, item)"
+        [componentName]="'Current Publication'"
       ></app-single-list-component>
     </div>
     <div class="tempWrapper" *ngIf="fetchingData">
@@ -36,6 +37,7 @@
       >
         <app-single-list-component
           [showSpinner]="fetchingData"
+          [componentName]="'Current Publication'"
         ></app-single-list-component>
       </div>
     </div>

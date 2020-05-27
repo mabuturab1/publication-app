@@ -48,6 +48,7 @@
         (shrug)="shrugClicked($event, item)"
         (clearReaction)="clearReaction($event, item)"
         [userReaction]="getReactionForPublication(item)"
+        [componentName]="'Main'"
       ></app-single-list-component>
     </div>
   </div>
@@ -58,7 +59,15 @@
       Get started by adding papers to your list. Then related papers will appear
       here.
     </h4>
-    <button mat-button class="mat-button-style" (click)="onAddClicked()">
+    <button
+      mat-button
+      class="mat-button-style"
+      (click)="onAddClicked()"
+      appLogEvent
+      [localId]="'Add New'"
+      [parentId]="'Discovery Feed'"
+      [component]="'Main'"
+    >
       <fa-icon [icon]="faPlus"></fa-icon>
       <a class="button-text">Add</a>
     </button>
@@ -79,12 +88,20 @@
     </h4>
     <h4 class="message">
       You can
-      <span class="contact-us" (click)="contactUsClicked()">contact us</span> if
-      the problem persists
+      <span
+        class="contact-us"
+        (click)="contactUsClicked()"
+        appLogEvent
+        [localId]="'Contact Us'"
+        [parentId]="'Discovery Feed'"
+        [component]="'Main'"
+        >contact us</span
+      >
+      if the problem persists
     </h4>
   </div>
 
   <div *ngIf="!showSpinner" class="footer">
-    <app-footer></app-footer>
+    <app-footer [componentName]="'Main'"></app-footer>
   </div>
 </div>

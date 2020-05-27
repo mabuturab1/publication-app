@@ -15,6 +15,7 @@ export class FilterButtonComponent implements OnInit {
   @Input() showExlcude = true;
   @Input() filter: DISCOVERY_FILTER = {};
   @Input() histogram: HISTOGRAM_DATA;
+  @Input() componentName: string;
   @Output() filterResults = new EventEmitter<any>();
   constructor() {}
   filterDialogButtonClicked(event: any) {
@@ -28,7 +29,6 @@ export class FilterButtonComponent implements OnInit {
     this.filterResults.emit(event);
   }
   closeDialog(event: boolean) {
-    console.log('hiding dialog filter', event);
     if (event) {
       this.showFilterDialog = false;
     }

@@ -64,6 +64,7 @@ export class CurrentPublicationListComponent
             true
           );
         }
+        this.storeDataLocally();
       })
     );
     this.subscriptionArr.push(
@@ -106,6 +107,7 @@ export class CurrentPublicationListComponent
           // this.showSpinner = true;
 
           this.publicationService.updateCurrentActiveListIds(publicationIds);
+          this.storeDataLocally();
           this.publicationService.setNewActiveList(
             this.publicationService.getCurrentActiveListId()
           );
@@ -149,13 +151,13 @@ export class CurrentPublicationListComponent
     this.publicationRecords = this.publicationRecords.filter((el) =>
       this.allIds.includes(el.id)
     );
-    console.log('loaded items check is', this.loadedItems);
+
     if (this.allIds.length < 1) this.noData = true;
     else this.noData = false;
+
     this.updateItemList();
   }
   changeIndexOfNewItem(originalList: string[], compareList: string[]) {
-    console.log('change index of new item');
     var list = [...new Set(compareList)];
     var sameList = list.filter((el) => originalList.includes(el));
     var exclusiveItems = list.filter((el) => !originalList.includes(el));
@@ -175,6 +177,7 @@ export class CurrentPublicationListComponent
       if (!data) return;
       var list = this.publicationService.getCurrentActiveList();
       this.updateDataWithCurrentList(list, false);
+
       // this.updateItemList();
     });
   }
@@ -216,6 +219,7 @@ export class CurrentPublicationListComponent
         objectKeys.forEach((key) => {
           this.publicationRecords.push(data[key]);
         });
+        this.storeDataLocally();
       }
     );
   }
@@ -280,6 +284,7 @@ export class CurrentPublicationListComponent
     this.storeDataLocally();
     this.loadedItems = this.loadedItems - this.preLoadItems;
     this.publicationService.updateCurrentActiveListIds(this.allIds);
+    this.storeDataLocally();
     this.publicationService.setNewActiveList(
       this.publicationService.getCurrentActiveListId()
     );

@@ -1,13 +1,10 @@
 <mat-card class="card-style" [class.activeItem]="isActiveList">
   <mat-card-header>
-    <mat-card-title
-      >
-      
+    <mat-card-title>
       <h6 class="paper-title">
         {{ data?.list_name }}
       </h6></mat-card-title
     >
-   
   </mat-card-header>
 
   <mat-card-actions>
@@ -16,6 +13,10 @@
         mat-button
         class="mat-button-style"
         (click)="renameButtonClicked()"
+        appLogEvent
+        [localId]="'Rename'"
+        [parentId]="'Publication list item' + data.list_id"
+        [component]="'Manage'"
       >
         <a class="button-text">Rename</a>
       </button>
@@ -23,6 +24,10 @@
         mat-button
         class="mat-button-style"
         (click)="duplicateButtonClicked()"
+        appLogEvent
+        [localId]="'Duplicate'"
+        [parentId]="'Publication list item' + data.list_id"
+        [component]="'Manage'"
       >
         <a class="button-text">Duplicate</a>
       </button>
@@ -31,6 +36,10 @@
         class="mat-button-style"
         *ngIf="!isActiveList"
         (click)="removeButtonClicked()"
+        appLogEvent
+        [localId]="'Remove'"
+        [parentId]="'Publication list item' + data.list_id"
+        [component]="'Manage'"
       >
         <fa-icon [icon]="faTrashAlt"></fa-icon>
         <a class="button-text">Remove</a>
@@ -40,6 +49,10 @@
         class="mat-button-style"
         *ngIf="!isActiveList"
         (click)="activateClicked()"
+        appLogEvent
+        [localId]="'Activate'"
+        [parentId]="'Publication list item' + data.list_id"
+        [component]="'Manage'"
       >
         <fa-icon [icon]="faCheckSquare"></fa-icon>
         <a class="button-text">Activate</a>

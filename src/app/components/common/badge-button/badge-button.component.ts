@@ -28,7 +28,7 @@ export class BadgeButtonComponent implements OnInit {
   ngOnInit(): void {}
   onButtonClicked(event: Event) {
     this.buttonClicked.emit(true);
-    console.log(this.overlayPanel);
+
     if (this.overlayPanel && this.tooltipText) this.overlayPanel.toggle(event);
   }
   getClass() {

@@ -9,7 +9,9 @@ export class SortButtonComponent implements OnInit {
   @Input() buttonLabel = 'Sort';
   @Input() list = ['Closeness', 'Date'];
   @Input() values = ['closeness', 'date'];
+  @Input() componentName: string;
   @Output() sortType = new EventEmitter<string>();
+
   constructor() {}
 
   ngOnInit(): void {}

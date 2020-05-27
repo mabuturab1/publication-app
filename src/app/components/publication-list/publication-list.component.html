@@ -10,6 +10,16 @@
         <div class="cross-times">
           <a
             class="icon-style"
+            appLogEvent
+            [localId]="'Close'"
+            [parentId]="'Toolbar'"
+            [component]="
+              onlyLocateScreen
+                ? 'Locate Publication'
+                : showManageScreen
+                ? 'Manage Publication'
+                : 'Current Publication'
+            "
             (click)="
               !showManageScreen && showManageButton
                 ? closeDrawer($event)

@@ -1,6 +1,5 @@
-<div class="wrapper" >
+<div class="wrapper">
   <div class="title-wrapper fixed-top">
-    
     <h6 class="title">Locate a publication</h6>
   </div>
   <div class="content-wrapper">
@@ -10,13 +9,22 @@
         [(ngModel)]="locatePublication"
         (change)="locateInputChanged($event)"
         (keydown)="listenForEnter($event)"
+        appLogEvent
+        [localId]="'Locate Input'"
+        [parentId]="'Toolbar'"
+        [component]="'Locate Publication'"
       />
     </div>
     <div class="search-button-wrapper">
       <button
+        [disabled]="locatePublication == null || locatePublication == ''"
         mat-button
         class="mat-button-style white-text search-button"
         (click)="onSearchClicked()"
+        appLogEvent
+        [localId]="'Search'"
+        [parentId]="'Toolbar'"
+        [component]="'Locate Publication'"
       >
         <fa-icon [icon]="faSearch"></fa-icon>
         <a class="button-text">Search</a>
@@ -29,15 +37,19 @@
           <app-filter-button
             (filterResults)="filterResultsChanged($event)"
             [showExlcude]="false"
+            [histogram]="histogram"
+            [componentName]="'Locate Publication'"
           ></app-filter-button>
           <app-detail-button
             (showDetailedLook)="viewTypeChanged($event)"
             [buttonLabel]="'Detailed'"
             [smallPadding]="true"
+            [componentName]="'Locate publication'"
           ></app-detail-button>
           <app-sort-button
             [list]="['Relevance', 'Date']"
             (sortType)="sortTypeChanged($event)"
+            [componentName]="'Locate Publication'"
           ></app-sort-button>
         </div>
       </div>
@@ -63,12 +75,14 @@
             (seedNewListClicked)="seedNewListClicked(item.id)"
             (hideClicked)="hideClicked(item)"
             (needClicked)="needButtonClicked(item)"
+            [componentName]="'Locate Publication'"
           ></app-single-list-component>
         </div>
         <div class="tempDataWrapper" *ngIf="fetchingData">
           <div class="single-publication" *ngFor="let item of itemsList">
             <app-single-list-component
               [showSpinner]="fetchingData"
+              [componentName]="'Locate Publications'"
             ></app-single-list-component>
           </div>
         </div>

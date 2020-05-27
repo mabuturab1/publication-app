@@ -1,5 +1,12 @@
 <div class="filter-button">
-  <a class="button" (click)="filterDialogButtonClicked($event)">
+  <a
+    class="button"
+    (click)="filterDialogButtonClicked($event)"
+    appLogEvent
+    [localId]="'filter button'"
+    [parentId]="'Toolbar'"
+    [component]="componentName"
+  >
     <a class="button-text"> Filter</a>
     <fa-icon [icon]="faAngleDown"></fa-icon>
   </a>
@@ -15,6 +22,7 @@
       [histogram]="histogram"
       (filterResults)="filterResultsChanged($event)"
       (close)="closeDialog($event)"
+      [componentName]="componentName"
     ></app-filter-dialog>
   </div>
 </div>

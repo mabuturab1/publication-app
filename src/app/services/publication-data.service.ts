@@ -1,4 +1,7 @@
-import { Managed_List } from 'src/app/services/getServerData.service';
+import {
+  Managed_List,
+  HISTOGRAM_DATA,
+} from 'src/app/services/getServerData.service';
 import {
   PUBLICATION_LIST,
   PUBLICATION_RECORD,
@@ -21,6 +24,7 @@ export interface ComponentData {
   searchFilter?: SEARCH_FILTER;
   sortType?: string;
   query?: string;
+  histogram?: HISTOGRAM_DATA;
 }
 export interface DiscoveryFilterPair {
   filter: DISCOVERY_FILTER;
@@ -48,6 +52,7 @@ export class PublicationDataService {
   currentNeededPublication: PUBLICATION_RECORD;
   currentDiscoveryFeedData: ComponentData;
   currentPublicationsData: ComponentData;
+  multipleSelection = false;
   currentLocatePublicationsData: ComponentData;
   currentlySelectedPublication: PUBLICATION_RECORD;
   currentDiscoveryFilterPair: DiscoveryFilterPair;
@@ -66,6 +71,13 @@ export class PublicationDataService {
   currentActiveListId: string;
   customContactUsText = '';
   errorInDiscovery = false;
+
+  setMultiSelection(val: boolean) {
+    this.multipleSelection = val;
+  }
+  getMultiSelection() {
+    return this.multipleSelection;
+  }
   setErrorInDiscovery(val: boolean) {
     this.errorInDiscovery = val;
   }
@@ -232,5 +244,29 @@ export class PublicationDataService {
   }
   onPublicationListScrollDownCalled() {
     this.onPublicationListScrollDown.next(true);
+  }
+
+  getStateObject() {
+    let locateDataState = this.getCurrentLocatePublicationsData();
+    let currentListDataState = this.getCurrentPublicationsData();
+    let stateObj = {
+      activeId: this.getCurrentActiveListId(),
+      locatePublicationDrawer: this.locateDrawerOpened,
+      myListDrawer: this.listDrawerOpened,
+      locateData: locateDataState
+        ? {
+            sort: locateDataState.sortType,
+            query: locateDataState.query,
+            filter: locateDataState.searchFilter,
+          }
+        : null,
+      currentListData: currentListDataState
+        ? {
+            sort: currentListDataState.sortType,
+            isMultipleSelection: this.getMultiSelection(),
+          }
+        : null,
+    };
+    return stateObj;
   }
 }

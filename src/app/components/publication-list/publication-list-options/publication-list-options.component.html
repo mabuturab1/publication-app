@@ -5,27 +5,46 @@
   <div class="list-title" [class.remove-margin]="!showManageButton">
     <h6 *ngIf="showManageButton" class="publication-list-title">
       Publication List
-     </h6>
+    </h6>
     <h3 class="title">{{ getPublicationName() }}</h3>
   </div>
   <div class="button-group">
     <div class="button-group-2">
-      <div class="select-button">
+      <div
+        class="select-button"
+        appLogEvent
+        [localId]="isMultipleSelection ? 'Select' : 'Cancel'"
+        [parentId]="'Toolbar'"
+        [component]="'Publication List Options'"
+      >
         <a class="button" (click)="toggleMultipleSelection()">
           <a class="button-text">
             {{ isMultipleSelection ? "Cancel" : "Select" }}</a
           >
         </a>
       </div>
-      <div class="select-button" *ngIf="isMultipleSelection">
+      <div
+        class="select-button"
+        *ngIf="isMultipleSelection"
+        appLogEvent
+        [localId]="'Remove'"
+        [parentId]="'Toolbar'"
+        [component]="'Publication List Options'"
+      >
         <a class="button" (click)="removeButtonClicked()">
           <a class="button-text"> {{ "Remove" }}</a>
         </a>
       </div>
-      <div class="detail-button" *ngIf="!isMultipleSelection">
+      <div
+        class="detail-button"
+        *ngIf="!isMultipleSelection"
+        appLogEvent
+        [localId]="'Add'"
+        [parentId]="'Toolbar'"
+        [component]="'Publication List'"
+      >
         <a class="button" (click)="showLocate($event)">
           <a class="button-text">Add</a>
-        
         </a>
       </div>
       <div class="select-option-wrapper" *ngIf="isMultipleSelection">
@@ -37,15 +56,24 @@
           [showMaterialSelect]="true"
           [buttonLabel]="'Select a list'"
           (itemSelected)="listItemSelected($event)"
+          [componentName]="'Publication List Options'"
         ></app-dropdown-button>
       </div>
       <app-detail-button
         *ngIf="!isMultipleSelection"
         (showDetailedLook)="viewTypeChanged($event)"
         [buttonLabel]="'Compact'"
+        [componentName]="'Publication List Options'"
       ></app-detail-button>
       <div class="list-button" *ngIf="showManageButton">
-        <a class="button" (click)="showManage($event)">
+        <a
+          class="button"
+          (click)="showManage($event)"
+          appLogEvent
+          [localId]="'Manage'"
+          [parentId]="'Toolbar'"
+          [component]="'Publication List Options'"
+        >
           <a class="button-text"> Manage</a>
         </a>
       </div>

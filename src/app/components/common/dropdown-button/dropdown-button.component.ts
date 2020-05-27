@@ -16,6 +16,7 @@ export class DropdownButton implements OnInit {
   @Input() icon: any;
   @Input() fullWidth = false;
   @Input() placeholderText: string;
+  @Input() componentName: string;
   @Input() smallPadding = false;
   showDialog = false;
   faFileExport = faFileExport;

@@ -36,6 +36,7 @@ export class SingleListComponentComponent implements OnInit {
   faGem = faGem;
 
   testText = 'test';
+  @Input() componentName: string;
   @Input() isMultipleSelection = false;
   @Input() showSpinner = false;
   @Input() fetchingPublication = false;
@@ -67,6 +68,7 @@ export class SingleListComponentComponent implements OnInit {
   @Output() clearReaction = new EventEmitter<boolean>();
   @Output() iAmSelected = new EventEmitter<boolean>();
   expandBadges = false;
+
   constructor(
     private dataProviderService: DataProviderService,
     private _snackBar: MatSnackBar,
@@ -77,7 +79,7 @@ export class SingleListComponentComponent implements OnInit {
   selectionChanged(event: any) {
     this.iAmSelected.emit(event.target.checked);
   }
-  addButtonClicked() {
+  addButtonClicked(event: Event) {
     this.addClicked.emit(true);
   }
   viewButtonClicked() {
@@ -135,17 +137,29 @@ export class SingleListComponentComponent implements OnInit {
     if (items == null || items.length < 1) return [];
     return items;
   }
-  getIconForContractPublication(publicaionData: PUBLICATION_RECORD) {
+  getIconForContractPublication(publicationData: PUBLICATION_RECORD) {
     if (
-      publicaionData.user_data == null ||
-      publicaionData.user_data.reaction == null
+      publicationData.user_data == null ||
+      publicationData.user_data.reaction == null
     )
       return null;
-    if (publicaionData.user_data.reaction == 'thumbs up') return faThumbsUp;
-    if (publicaionData.user_data.reaction == 'thumbs down') return faThumbsDown;
-    if (publicaionData.user_data.reaction == 'shrug') return faMehRollingEyes;
+    if (publicationData.user_data.reaction == 'thumbs up') return faThumbsUp;
+    if (publicationData.user_data.reaction == 'thumbs down')
+      return faThumbsDown;
+    if (publicationData.user_data.reaction == 'shrug') return faMehRollingEyes;
   }
   isThumbsDown(publicationData: PUBLICATION_RECORD) {
     return this.getIconForContractPublication(publicationData) == faThumbsDown;
+  }
+  getUserReaction(publicationData: PUBLICATION_RECORD) {
+    if (
+      publicationData.user_data == null ||
+      publicationData.user_data.reaction == null
+    )
+      return null;
+    if (publicationData.user_data.reaction == 'thumbs up') return 'thumbs up';
+    if (publicationData.user_data.reaction == 'thumbs down')
+      return 'thumbs down';
+    if (publicationData.user_data.reaction == 'shrug') return 'shrug';
   }
 }

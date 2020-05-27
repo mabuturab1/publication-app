@@ -1,10 +1,12 @@
-import { Managed_List } from 'src/app/services/getServerData.service';
+import {
+  Managed_List,
+  HISTOGRAM_DATA,
+} from 'src/app/services/getServerData.service';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import {
   GetServerDataService,
   SEARCH_FILTER,
-  SEARCH_SORT,
   PUBLICATION_RECORD,
   PUBLICATION_LIST,
 } from './../../../services/getServerData.service';
@@ -50,6 +52,8 @@ export class LocatePublicationComponent implements OnInit, OnDestroy {
   showSpinner = false;
   noData = false;
   hasDataToStore = false;
+  histogram: HISTOGRAM_DATA;
+
   searchFilter: SEARCH_FILTER = {
     year_start: 1940,
     year_end: 2018,
@@ -99,6 +103,7 @@ export class LocatePublicationComponent implements OnInit, OnDestroy {
     this.locatePublication = '';
     this.currIndex = 0;
     this.publicationService.setCurrentLocatePublications(null);
+    this.storeDataLocally();
   }
   updateLocalData() {
     let data = this.publicationService.getCurrentLocatePublicationsData();
@@ -109,6 +114,7 @@ export class LocatePublicationComponent implements OnInit, OnDestroy {
     this.locatePublication = data.query;
     this.searchFilter = data.searchFilter;
     this.sortType = data.sortType;
+    this.histogram = data.histogram;
     if (this.publicationRecords.length < 1) this.noData = true;
   }
   toggleDetailDialog() {
@@ -129,12 +135,16 @@ export class LocatePublicationComponent implements OnInit, OnDestroy {
     );
     this.router.navigate(['contact-us']);
   }
-  locateInputChanged($event) {}
+  locateInputChanged($event) {
+    this.storeDataLocally();
+  }
   filterResultsChanged(event: any) {
     this.searchFilter = event;
+    this.storeDataLocally();
   }
   sortTypeChanged(event: string) {
     this.sortType = event.toLowerCase();
+    this.storeDataLocally();
   }
   onSearchClicked() {
     this.publicationRecords = [];
@@ -151,12 +161,12 @@ export class LocatePublicationComponent implements OnInit, OnDestroy {
 
         this.allIds = [];
         if (data == null) return;
-        this.allIds = data.filter((el: string) => {
+        this.allIds = data.publication_ids.filter((el: string) => {
           if (!this.publicationService.isCurrentPublication(el)) return el;
         });
+        this.histogram = data.histograms;
         if (this.allIds.length < 1) this.noData = true;
         else this.noData = false;
-
         this.updateItemList();
       }
     );
@@ -209,6 +219,7 @@ export class LocatePublicationComponent implements OnInit, OnDestroy {
         this.preLoadItems = 1;
         this.onScroll();
         this.preLoadItems = temp;
+        this.storeDataLocally();
       }
     );
   }
@@ -267,7 +278,10 @@ export class LocatePublicationComponent implements OnInit, OnDestroy {
       },
       (data) => {
         this.showSpinner = false;
-        if (data != null) this.updateActiveList(data);
+        if (data != null) {
+          this.updateActiveList(data);
+          this.storeDataLocally();
+        }
       }
     );
   }
@@ -280,6 +294,7 @@ export class LocatePublicationComponent implements OnInit, OnDestroy {
           if (data1) {
             this.publicationService.setCurrentPublications(null);
             this.publicationService.setDiscoveryFeedData(null);
+            this.storeDataLocally();
             this.publicationService.setNewActiveList(
               this.publicationService.getCurrentActiveListId()
             );
@@ -334,16 +349,19 @@ export class LocatePublicationComponent implements OnInit, OnDestroy {
   listenForEnter(event: KeyboardEvent) {
     if (event.keyCode == 13) this.onSearchClicked();
   }
+  storeDataLocally() {
+    this.publicationService.setCurrentLocatePublications({
+      publicationRecords: this.publicationRecords,
+      query: this.locatePublication,
+      allIds: this.allIds,
+      currentIndex: this.currIndex,
+      searchFilter: this.searchFilter,
+      sortType: this.sortType,
+      histogram: this.histogram,
+    });
+  }
   ngOnDestroy() {
     this.subscriptionArr.forEach((el) => el.unsubscribe());
-    if (this.hasDataToStore)
-      this.publicationService.setCurrentLocatePublications({
-        publicationRecords: this.publicationRecords,
-        query: this.locatePublication,
-        allIds: this.allIds,
-        currentIndex: this.currIndex,
-        searchFilter: this.searchFilter,
-        sortType: this.sortType,
-      });
+    if (this.hasDataToStore) this.storeDataLocally();
   }
 }

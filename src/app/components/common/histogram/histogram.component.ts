@@ -6,6 +6,7 @@ import {
   Output,
   EventEmitter,
   OnChanges,
+  SimpleChanges,
 } from '@angular/core';
 import { faSortDown } from '@fortawesome/free-solid-svg-icons';
 import { Options, LabelType } from 'ng5-slider';
@@ -44,8 +45,8 @@ export class HistogramComponent implements OnInit, OnChanges {
     this.udpateData = data;
   }
   datesChanged($event) {
-    // this.prevDateChanged.emit(this.minValue);
-    // this.nextDataChanged.emit(this.maxValue);
+    this.prevDateChanged.emit(this.minValue);
+    this.nextDataChanged.emit(this.maxValue);
   }
   constructor() {}
 
@@ -80,9 +81,20 @@ export class HistogramComponent implements OnInit, OnChanges {
       this.yData.push(Math.round((this.yAxisData[i] / max) * 20) + 1);
     }
   }
-  ngOnChanges() {
-    this.normalizeYData();
-    this.initOptions();
+  ngOnChanges(changes: SimpleChanges) {
+    for (let propName in changes) {
+      let change = changes[propName];
+      switch (propName) {
+        case 'xAxisData':
+          this.normalizeYData();
+          this.initOptions();
+          break;
+        case 'yAxisData':
+          this.normalizeYData();
+          this.initOptions();
+          break;
+      }
+    }
   }
   getPixels(item: number) {
     return item + 'px';
@@ -96,6 +108,8 @@ export class HistogramComponent implements OnInit, OnChanges {
     else return false;
   }
   getTooltipText(index: number) {
-    return `${this.yAxisData[index]} papers in ${this.xAxisData[index]}`;
+    let number = this.yAxisData[index];
+    if (!number) number = 0;
+    return `${number} papers in ${this.xAxisData[index]}`;
   }
 }

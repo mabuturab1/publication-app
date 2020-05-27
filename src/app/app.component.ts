@@ -1,3 +1,4 @@
+import { EventLoggerService } from './services/event-logger.service';
 import { PublicationDataService } from 'src/app/services/publication-data.service';
 import { Subscription } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -12,13 +13,16 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 export class AppComponent implements OnInit, OnDestroy {
   title = 'publication-app';
   subscriptionArr: Subscription[] = [];
+  interval: any;
 
   constructor(
     private getServerDataService: GetServerDataService,
     private _snackBar: MatSnackBar,
-    private publicationService: PublicationDataService
+    private publicationService: PublicationDataService,
+    private eventLoggerService: EventLoggerService
   ) {}
   ngOnInit() {
+    this.startTelemetry();
     this.subscriptionArr.push(
       this.getServerDataService.showSnackbar.subscribe((el) => {
         this.showErrorMessage(el);
@@ -36,14 +40,24 @@ export class AppComponent implements OnInit, OnDestroy {
       })
     );
   }
+  startTelemetry() {
+    this.interval = setInterval(() => {
+      let telemetryData = this.eventLoggerService.getEventList();
+      if (telemetryData && telemetryData.length > 0)
+        this.getServerDataService.updateTelemetry(
+          telemetryData,
+          (data: any) => {
+            this.eventLoggerService.clearEventList();
+          }
+        );
+    }, 15000);
+  }
   showErrorMessage(message: string) {
     this._snackBar.open(message, 'Okay', {
       duration: 4000,
     });
   }
-  somethingClicked(event: Event) {
-    console.log(event);
-  }
+
   ngOnDestroy() {
     this.subscriptionArr.forEach((el) => el.unsubscribe());
   }

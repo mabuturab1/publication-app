@@ -1,5 +1,12 @@
 <div class="wrapper" appHideMe (escapeClicked)="closeClicked()">
-  <div class="icon-wrapper" (click)="closeClicked()">
+  <div
+    class="icon-wrapper"
+    (click)="closeClicked()"
+    appLogEvent
+    [localId]="'Close'"
+    [parentId]="'Toolbar'"
+    [parentId]="'Terms Of Service'"
+  >
     <div class="cross-times">
       <a class="icon-style">
         <fa-icon [icon]="faTimes" size="lg"></fa-icon>
@@ -16,7 +23,15 @@
     </div>
     <h5 class="tos">{{ termsOfService }}</h5>
     <div class="button-wrapper">
-      <button mat-button class="mat-button-style" (click)="closeClicked()">
+      <button
+        mat-button
+        class="mat-button-style"
+        (click)="closeClicked()"
+        appLogEvent
+        [localId]="'Close'"
+        [parentId]="'Toolbar'"
+        [component]="'Terms Of Service'"
+      >
         <fa-icon [icon]="faWindowClose"></fa-icon>
         <a class="button-text">Close</a>
       </button>
@@ -24,6 +39,6 @@
   </div>
   <div style="flex: 1;"></div>
   <div *ngIf="termsOfService" class="footer">
-    <app-footer></app-footer>
+    <app-footer [componentName]="'Terms Of Service'"></app-footer>
   </div>
 </div>

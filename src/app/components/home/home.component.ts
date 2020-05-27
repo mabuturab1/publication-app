@@ -62,7 +62,6 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
       let uid = params['uid'];
       if (uid != null) {
         this.doLogin(uid);
-        console.log('do login in subscribe home');
       } else
         this.getServerDataService.getToken((data) => {
           if (data != null)
@@ -71,7 +70,6 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     });
   }
   doLogin(uid: string) {
-    console.log('do login in home');
     let status = this.getServerDataService.getUserLoginStatus();
     if (status) this.isAuthenticated = status;
     else

@@ -50,6 +50,9 @@ export class UtilsService {
   getReactions(listId: string, publicationId: string) {
     return `/api/reactions/${listId}/${publicationId}`;
   }
+  getTelemetry() {
+    return `api/telemetry`;
+  }
   getQueryParam(obj: Object) {
     let query = '';
     query = query + encodeURIComponent('{');

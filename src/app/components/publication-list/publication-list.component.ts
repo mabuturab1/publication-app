@@ -120,12 +120,17 @@ export class PublicationListComponent implements OnInit, OnDestroy {
   }
   viewTypeChanged(event: boolean) {
     this.showDetailedLookForPublication = event;
+    this.publicationService.setCurrentPublications({
+      ...this.publicationService.getCurrentPublicationsData(),
+      sortType: this.showDetailedLookForPublication ? 'Detailed' : 'Compact',
+    });
   }
   ngOnDestroy() {
     this.subscriptionArr.forEach((el) => el.unsubscribe());
   }
   selectionModeUpdated(event: string) {
     this.isMultipleSelection = event == 'multiple';
+    this.publicationService.setMultiSelection(this.isMultipleSelection);
   }
   removeButtonClicked() {
     this.publicationService.removeMultipleItemsFromActiveList(

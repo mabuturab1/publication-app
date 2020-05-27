@@ -36,7 +36,9 @@ export class FilterDialogComponent implements OnInit, OnChanges {
   @Input() showExclude = true;
   @Input() initFilter: DISCOVERY_FILTER = {};
   @Input() histogram: HISTOGRAM_DATA;
+  @Input() componentName: string;
   @Output() close = new EventEmitter<boolean>();
+
   constructor() {}
   // dialogClicked(event: Event) {
   //   event.stopPropagation();
@@ -46,7 +48,6 @@ export class FilterDialogComponent implements OnInit, OnChanges {
     if (this.histogram != null) this.updateHistogramData();
   }
   updateHistogramData() {
-    console.log('histogram is', this.histogram);
     if (this.histogram == null) return;
     this.dates = [];
     this.xAxisData = [];
@@ -64,11 +65,7 @@ export class FilterDialogComponent implements OnInit, OnChanges {
     this.prevSelectedFrom = minDate;
     this.prevSelectedTo = maxDate;
 
-    for (
-      let i = this.histogram.year.min;
-      i <= Math.max(maxDate, minDate + 1);
-      i++
-    ) {
+    for (let i = this.histogram.year.min; i <= maxDate; i++) {
       this.dates.push({
         label: i.toString(),
         value: i.toString(),
@@ -134,13 +131,13 @@ export class FilterDialogComponent implements OnInit, OnChanges {
     let filter: any = {
       year_start: Number(this.selectedFromDate),
       year_end: Number(this.selectedToDate),
-
+      exclude_keywords: this.excludeKeywords,
       // cutOff: 200,
     };
     if (this.showExclude) {
       filter = {
         ...filter,
-        exclude_keywords: this.excludeKeywords,
+
         exclude_in_refs: this.excludeCited,
         exclude_out_refs: this.excludeCiting,
       };
@@ -148,7 +145,6 @@ export class FilterDialogComponent implements OnInit, OnChanges {
     this.filterResults.emit(filter);
   }
   closeClicked() {
-    console.log('close clicked in filter');
     this.close.emit(true);
   }
 }

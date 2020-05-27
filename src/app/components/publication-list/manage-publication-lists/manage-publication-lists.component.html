@@ -10,7 +10,14 @@
       </div>
     </div>
     <div class="button-group">
-      <a class="button" (click)="newButtonClicked()">
+      <a
+        class="button"
+        (click)="newButtonClicked()"
+        appLogEvent
+        [localId]="'New'"
+        [parentId]="'Toolbar'"
+        [component]="'Manage'"
+      >
         <a class="button-text">New</a>
       </a>
     </div>

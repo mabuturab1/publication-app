@@ -1,5 +1,5 @@
 import { Router } from '@angular/router';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
   selector: 'app-footer',
@@ -8,7 +8,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class FooterComponent implements OnInit {
   constructor(private router: Router) {}
-
+  @Input() componentName: string;
   ngOnInit(): void {}
   onTos() {
     this.router.navigate(['terms-of-service']);

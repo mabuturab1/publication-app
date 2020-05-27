@@ -1,5 +1,12 @@
 <div class="wrapper" appHideMe (escapeClicked)="closeClicked()">
-  <div class="icon-wrapper" (click)="closeClicked()">
+  <div
+    class="icon-wrapper"
+    (click)="closeClicked()"
+    appLogEvent
+    [localId]="'Close'"
+    [parentId]="'Toolbar'"
+    [component]="'View Publication'"
+  >
     <div class="cross-times">
       <a class="icon-style">
         <fa-icon [icon]="faTimes" size="lg"></fa-icon>
@@ -17,10 +24,11 @@
       [isDetailed]="true"
       (addClicked)="addItemToList(publicationData.id)"
       [viewMode]="true"
+      [componentName]="'View Publication'"
     ></app-single-list-component>
   </div>
   <div style="flex: 1;"></div>
   <div *ngIf="publicationData" class="footer">
-    <app-footer></app-footer>
+    <app-footer [componentName]="'View Publication'"></app-footer>
   </div>
 </div>

@@ -1,18 +1,38 @@
 <div class="wrapper">
-  
-  <mat-form-field class="input-text" >
+  <mat-form-field class="input-text">
     <mat-label>Publication List Name</mat-label>
-    <input matInput type="text" [(ngModel)]="name">
-   
-     
-  
+    <input
+      matInput
+      type="text"
+      [(ngModel)]="name"
+      appLogEvent
+      [localId]="'Publication List Name'"
+      [parentId]="'New List'"
+      [component]="'New List'"
+    />
   </mat-form-field>
   <div class="button-group">
-    <button mat-button class="mat-button-style" (click)="cancelButtonClicked()">
-      <fa-icon  style="color: white;" [icon]="faBan"></fa-icon>
+    <button
+      mat-button
+      class="mat-button-style"
+      (click)="cancelButtonClicked()"
+      appLogEvent
+      [localId]="'Cancel'"
+      [parentId]="'New List'"
+      [component]="'New List'"
+    >
+      <fa-icon style="color: white;" [icon]="faBan"></fa-icon>
       <a class="button-text">Cancel</a>
     </button>
-    <button mat-button class="mat-button-style" (click)="saveButtonClicked()">
+    <button
+      mat-button
+      class="mat-button-style"
+      (click)="saveButtonClicked()"
+      appLogEvent
+      [localId]="'Save'"
+      [parentId]="'New List'"
+      [component]="'New List'"
+    >
       <fa-icon style="color: white;" [icon]="faSave"></fa-icon>
       <a class="button-text">Save</a>
     </button>

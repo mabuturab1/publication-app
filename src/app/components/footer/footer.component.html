@@ -5,10 +5,23 @@
         class="single-footer-item"
         target="_blank"
         href="https://aka.ms/msracad"
+        appLogEvent
+        [localId]="'Date based'"
+        [parentId]="'Toolbar'"
+        [component]="componentName"
         >Data based on Microsoft Academic Graph
       </a>
     </li>
-    <li class="single-footer-item" (click)="onTos()">Terms of service</li>
+    <li
+      class="single-footer-item"
+      (click)="onTos()"
+      appLogEvent
+      [localId]="'Terms of service'"
+      [parentId]="'Toolbar'"
+      [component]="componentName"
+    >
+      Terms of service
+    </li>
     <li class="single-footer-item copyright">
       &copy; Copyright Raticle Ltd 2020
     </li>
