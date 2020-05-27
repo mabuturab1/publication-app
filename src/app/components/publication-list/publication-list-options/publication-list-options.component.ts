@@ -19,6 +19,8 @@ export class PublicationListOptionsComponent implements OnInit {
   @Input() showManageButton = true;
   @Input() alignAsRow = false;
   @Input() isMultipleSelection = false;
+  @Input() showCopyTo = true;
+  @Input() showRemove = true;
   @Output() selectionModeChanged = new EventEmitter<string>();
   @Input() copyToListItems: string[];
   @Input() copyToListItemValues: string[];

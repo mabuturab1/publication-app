@@ -18,6 +18,7 @@ export class DropdownButton implements OnInit {
   @Input() placeholderText: string;
   @Input() componentName: string;
   @Input() smallPadding = false;
+  @Input() width: string;
   showDialog = false;
   faFileExport = faFileExport;
   toggleDetailDialog() {

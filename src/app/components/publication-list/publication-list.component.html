@@ -38,6 +38,8 @@
       [class.fixed-header]="fixedHeader"
     >
       <app-publication-list-options
+      [showCopyTo]="publicationRecordsListId.length>0"
+      [showRemove]="publicationRecordsListId.length>0"
         (showLocatePublication)="locatePublication(true)"
         (showManageScreen)="showManageWindow($event)"
         (showDetailedLook)="viewTypeChanged($event)"
@@ -49,6 +51,7 @@
         [copyToListItems]="managedList"
         [copyToListItemValues]="maangedListIds"
         (copyToItemsSelected)="managedListItemSelected($event)"
+
       ></app-publication-list-options>
     </div>
   </div>

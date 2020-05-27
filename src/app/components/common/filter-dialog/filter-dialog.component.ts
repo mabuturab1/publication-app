@@ -32,6 +32,8 @@ export class FilterDialogComponent implements OnInit, OnChanges {
   excludeKeywords = '';
   xAxisData = [];
   yAxisData = [];
+  baseWidth = 340;
+  width = '340px';
   @Output() filterResults = new EventEmitter<any>();
   @Input() showExclude = true;
   @Input() initFilter: DISCOVERY_FILTER = {};
@@ -60,6 +62,7 @@ export class FilterDialogComponent implements OnInit, OnChanges {
       this.histogram && this.histogram.year && this.histogram.year.max
         ? this.histogram.year.max
         : 2018;
+
     this.selectedFromDate = minDate.toString();
     this.selectedToDate = maxDate.toString();
     this.prevSelectedFrom = minDate;
@@ -75,6 +78,8 @@ export class FilterDialogComponent implements OnInit, OnChanges {
         this.yAxisData.push(this.histogram.year.y[i - this.histogram.year.min]);
       else this.yAxisData.push(0);
     }
+
+    this.width = Math.max(this.baseWidth, this.dates.length * 4 + 40) + 'px';
   }
 
   ngOnChanges(changes: SimpleChanges) {

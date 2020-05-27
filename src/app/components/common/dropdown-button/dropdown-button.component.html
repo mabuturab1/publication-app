@@ -27,6 +27,7 @@
   <mat-form-field
     style="height: 36px; margin: 0 1rem;"
     class="select-width"
+    [style.width]="fullWidth?'100%':width!=null?width:'120px'"
     [class.small-select]="smallPadding"
     [class.full-width]="fullWidth"
     [class.add-padding]="!smallPadding"

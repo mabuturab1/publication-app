@@ -25,7 +25,7 @@
       </div>
       <div
         class="select-button"
-        *ngIf="isMultipleSelection"
+        *ngIf="isMultipleSelection&&showRemove"
         appLogEvent
         [localId]="'Remove'"
         [parentId]="'Toolbar'"
@@ -47,7 +47,7 @@
           <a class="button-text">Add</a>
         </a>
       </div>
-      <div class="select-option-wrapper" *ngIf="isMultipleSelection">
+      <div class="select-option-wrapper" *ngIf="isMultipleSelection&&showCopyTo">
         <app-dropdown-button
           [placeholderText]="'Copy To'"
           [dropdownList]="copyToListItems"
@@ -57,6 +57,7 @@
           [buttonLabel]="'Select a list'"
           (itemSelected)="listItemSelected($event)"
           [componentName]="'Publication List Options'"
+          [width]="'130px'"
         ></app-dropdown-button>
       </div>
       <app-detail-button
