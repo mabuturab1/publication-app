@@ -16,6 +16,8 @@ import {
   Output,
   EventEmitter,
   SimpleChanges,
+  ViewChild,
+  ElementRef,
 } from '@angular/core';
 
 import { Router } from '@angular/router';
@@ -45,7 +47,8 @@ export class CurrentPublicationListComponent
   subscriptionArr: Subscription[] = [];
   fetchingData = false;
   publicationRecords: PUBLICATION_RECORD[] = [];
-
+  @ViewChild('wrapper', { static: false })
+  wrapper: ElementRef;
   constructor(
     private dataProviderService: DataProviderService,
     private publicationService: PublicationDataService,
@@ -294,6 +297,11 @@ export class CurrentPublicationListComponent
     //     this.publicationService.getCurrentActiveListId()
     //   );
     // });
+  }
+  getWindowWidth() {
+    let size = this.wrapper.nativeElement.getBoundingClientRect();
+    if (size && size.width) return size.width;
+    return window.innerWidth;
   }
   storeDataLocally() {
     this.publicationService.setCurrentPublications({

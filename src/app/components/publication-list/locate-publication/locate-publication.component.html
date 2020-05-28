@@ -1,4 +1,4 @@
-<div class="wrapper">
+<div class="wrapper" #wrapper>
   <div class="title-wrapper fixed-top">
     <h6 class="title">Locate a publication</h6>
   </div>
@@ -76,6 +76,7 @@
             (hideClicked)="hideClicked(item)"
             (needClicked)="needButtonClicked(item)"
             [componentName]="'Locate Publication'"
+            [windowWidth]="getWindowWidth()"
           ></app-single-list-component>
         </div>
         <div class="tempDataWrapper" *ngIf="fetchingData">

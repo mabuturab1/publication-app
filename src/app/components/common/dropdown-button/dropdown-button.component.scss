@@ -50,6 +50,7 @@ $text-color: #ffffff;
 .add-padding {
   padding: 0rem 1rem;
 }
+
 ::ng-deep .mat-select-value {
   color: $text-color;
 }
@@ -66,7 +67,9 @@ $text-color: #ffffff;
 ::ng-deep .compact-button .mat-form-field-infix {
   border-top: 0.40375em solid transparent;
 }
-
+.myPanelClass {
+  margin-top: 30px !important;
+}
 .button {
   color: $text-color;
   padding: 0.75rem 1rem;

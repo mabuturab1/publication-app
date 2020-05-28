@@ -1,4 +1,5 @@
 <button
+  #tooltipButton
   *ngIf="buttonLabel !== '' && buttonAfterText === ''"
   (click)="onButtonClicked($event)"
   class="button light-blue-button"
@@ -8,6 +9,7 @@
   <a class="single-item"> {{ buttonLabel }}</a>
 </button>
 <button
+  #tooltipButton
   *ngIf="buttonLabel !== '' && buttonAfterText !== ''"
   (click)="onButtonClicked($event)"
   class="button no-padding"
@@ -23,6 +25,10 @@
 <div class="button-badge-wrapper" #badgeWrapper></div>
 <p-overlayPanel [appendTo]="badgeWrapper" [showCloseIcon]="true" #panel>
   <ng-template pTemplate>
-    <div class="content" [innerHTML]="tooltipText"></div>
+    <div
+      [style.width]="getWidth(tooltipButton)"
+      class="content"
+      [innerHTML]="tooltipText"
+    ></div>
   </ng-template>
 </p-overlayPanel>

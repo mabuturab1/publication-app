@@ -1,107 +1,111 @@
-<div class="main-options-wrapper">
-  <app-main-options
-    (showDetailedLook)="viewTypeChanged($event)"
-    (buttonClicked)="optionButtonClicked($event)"
-    (sortTypeChanged)="sortTypeUpdated($event)"
-    (filterResults)="filterResultsChanged($event)"
-    [showOptions]="showToolbar"
-    [filter]="filter"
-    [sortLabel]="sortType"
-    [highlightAdd]="addSidebarOpened"
-    [highlightMyList]="myListSidebarOpened"
-    [histogram]="histogram"
-  ></app-main-options>
-</div>
-<div
-  class="publication-wrapper"
-  [class.overflow-hidden]="showSpinner"
-  infiniteScroll
-  [infiniteScrollDistance]="2"
-  [infiniteScrollThrottle]="50"
-  [scrollWindow]="false"
-  [fromRoot]="true"
-  (scrolled)="onScroll()"
->
-  <div *ngIf="showSpinner" class="loader-wrapper">
-    <app-my-loader [loading]="showSpinner"></app-my-loader>
+<div class="wrapper">
+  <div class="main-options-wrapper">
+    <app-main-options
+      (showDetailedLook)="viewTypeChanged($event)"
+      (buttonClicked)="optionButtonClicked($event)"
+      (sortTypeChanged)="sortTypeUpdated($event)"
+      (filterResults)="filterResultsChanged($event)"
+      [showOptions]="showToolbar"
+      [filter]="filter"
+      [sortLabel]="sortType"
+      [highlightAdd]="addSidebarOpened"
+      [highlightMyList]="myListSidebarOpened"
+      [histogram]="histogram"
+    ></app-main-options>
   </div>
-
   <div
-    class="main-list-wrapper"
-    *ngIf="showList && showToolbar && !showSpinner && !noData"
+    class="publication-wrapper custom-scrollbar"
+    [class.overflow-hidden]="showSpinner"
+    infiniteScroll
+    [infiniteScrollDistance]="2"
+    [infiniteScrollThrottle]="50"
+    [scrollWindow]="false"
+    [fromRoot]="true"
+    (scrolled)="onScroll()"
   >
-    <div class="single-publication" *ngFor="let item of publicationRecords">
-      <app-single-list-component
-        [publicationData]="item"
-        [isDetailed]="showDetailedLook"
-        [contractPublication]="getReactionForPublication(item) == 'thumbs down'"
-        [showView]="true"
-        [showAdd]="true"
-        (addClicked)="addItemToList(item.id)"
-        (viewClicked)="viewPublicationClicked(item)"
-        (hideClicked)="hideClicked(item)"
-        [applyTheme]="false"
-        [showAuthorsAndAffilis]="true"
-        [showReactions]="true"
-        (thumbsUp)="thumbsUpClicked($event, item)"
-        (thumbsDown)="thumbsDownClicked($event, item)"
-        (shrug)="shrugClicked($event, item)"
-        (clearReaction)="clearReaction($event, item)"
-        [userReaction]="getReactionForPublication(item)"
-        [componentName]="'Main'"
-      ></app-single-list-component>
+    <div *ngIf="showSpinner" class="loader-wrapper">
+      <app-my-loader [loading]="showSpinner"></app-my-loader>
     </div>
-  </div>
 
-  <div *ngIf="!showList && showToolbar" class="empty-message">
-    <h4>Hey there, welcome! Your slate it currently empty.</h4>
-    <h4>
-      Get started by adding papers to your list. Then related papers will appear
-      here.
-    </h4>
-    <button
-      mat-button
-      class="mat-button-style"
-      (click)="onAddClicked()"
-      appLogEvent
-      [localId]="'Add New'"
-      [parentId]="'Discovery Feed'"
-      [component]="'Main'"
+    <div
+      class="main-list-wrapper"
+      *ngIf="showList && showToolbar && !showSpinner && !noData"
     >
-      <fa-icon [icon]="faPlus"></fa-icon>
-      <a class="button-text">Add</a>
-    </button>
-  </div>
-  <div *ngIf="!showToolbar" class="empty-message">
-    <h4>You need to obtain credentials from Raticle to use this system.</h4>
-    <h4>
-      If you are a researcher that would like to test our system (for free)
-      please email us: info@raticle.com
-    </h4>
-  </div>
-  <div *ngIf="noData && !showSpinner" class="empty-message">
-    <h4 *ngIf="!error" class="message">{{ noDataText }}</h4>
-    <h4 *ngIf="error" class="message">
-      We are having problems creating a Discovery Feed for the chosen
-      publications. This might be due to a problem we are having with a specific
-      publication in the your publication list.
-    </h4>
-    <h4 class="message">
-      You can
-      <span
-        class="contact-us"
-        (click)="contactUsClicked()"
+      <div class="single-publication" *ngFor="let item of publicationRecords">
+        <app-single-list-component
+          [publicationData]="item"
+          [isDetailed]="showDetailedLook"
+          [contractPublication]="
+            getReactionForPublication(item) == 'thumbs down'
+          "
+          [showView]="true"
+          [showAdd]="true"
+          (addClicked)="addItemToList(item.id)"
+          (viewClicked)="viewPublicationClicked(item)"
+          (hideClicked)="hideClicked(item)"
+          [applyTheme]="false"
+          [showAuthorsAndAffilis]="true"
+          [showReactions]="true"
+          (thumbsUp)="thumbsUpClicked($event, item)"
+          (thumbsDown)="thumbsDownClicked($event, item)"
+          (shrug)="shrugClicked($event, item)"
+          (clearReaction)="clearReaction($event, item)"
+          [userReaction]="getReactionForPublication(item)"
+          [componentName]="'Main'"
+        ></app-single-list-component>
+      </div>
+    </div>
+
+    <div *ngIf="!showList && showToolbar" class="empty-message">
+      <h4>Hey there, welcome! Your slate it currently empty.</h4>
+      <h4>
+        Get started by adding papers to your list. Then related papers will
+        appear here.
+      </h4>
+      <button
+        mat-button
+        class="mat-button-style"
+        (click)="onAddClicked()"
         appLogEvent
-        [localId]="'Contact Us'"
+        [localId]="'Add New'"
         [parentId]="'Discovery Feed'"
         [component]="'Main'"
-        >contact us</span
       >
-      if the problem persists
-    </h4>
-  </div>
+        <fa-icon [icon]="faPlus"></fa-icon>
+        <a class="button-text">Add</a>
+      </button>
+    </div>
+    <div *ngIf="!showToolbar" class="empty-message">
+      <h4>You need to obtain credentials from Raticle to use this system.</h4>
+      <h4>
+        If you are a researcher that would like to test our system (for free)
+        please email us: info@raticle.com
+      </h4>
+    </div>
+    <div *ngIf="noData && !showSpinner" class="empty-message">
+      <h4 *ngIf="!error" class="message">{{ noDataText }}</h4>
+      <h4 *ngIf="error" class="message">
+        We are having problems creating a Discovery Feed for the chosen
+        publications. This might be due to a problem we are having with a
+        specific publication in the your publication list.
+      </h4>
+      <h4 class="message">
+        You can
+        <span
+          class="contact-us"
+          (click)="contactUsClicked()"
+          appLogEvent
+          [localId]="'Contact Us'"
+          [parentId]="'Discovery Feed'"
+          [component]="'Main'"
+          >contact us</span
+        >
+        if the problem persists
+      </h4>
+    </div>
 
-  <div *ngIf="!showSpinner" class="footer">
-    <app-footer [componentName]="'Main'"></app-footer>
+    <div *ngIf="!showSpinner" class="footer">
+      <app-footer [componentName]="'Main'"></app-footer>
+    </div>
   </div>
 </div>

@@ -1,5 +1,12 @@
+.wrapper {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-flow: column;
+}
 .publication-wrapper {
   overflow: auto;
+  flex: 1;
   width: 100%;
   position: relative;
   .spinner {
@@ -19,9 +26,7 @@
 }
 .main-options-wrapper {
   margin: 0;
-  margin-bottom: 10px;
-  position: absolute;
-  top: 0;
+
   width: 100%;
   z-index: 1000;
 }

@@ -12,13 +12,14 @@ $icon-color: #ffffff;
   position: relative;
 
   .content-wrapper {
-    margin-top: 4rem;
+    // margin-top: 4rem;
     width: 100%;
-    height: calc(100% - 4rem);
+    // height: calc(100% - 4rem);
+    height: 100vh;
     display: flex;
     justify-content: center;
 
-    overflow: auto;
+    // overflow: auto;
   }
   .remove-margin {
     margin-top: 0;
@@ -26,7 +27,7 @@ $icon-color: #ffffff;
   }
   .main-wrapper {
     width: 100%;
-
+    height: 100%;
     background-color: $background-color;
   }
   .dark-theme {

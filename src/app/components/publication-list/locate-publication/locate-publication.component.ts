@@ -17,6 +17,8 @@ import {
   Output,
   EventEmitter,
   OnDestroy,
+  ViewChild,
+  ElementRef,
 } from '@angular/core';
 import {
   faSearch,
@@ -61,7 +63,8 @@ export class LocatePublicationComponent implements OnInit, OnDestroy {
   sortType = 'date';
 
   @Output() updateScrollPosition = new EventEmitter<string>();
-
+  @ViewChild('wrapper', { static: false })
+  wrapper: ElementRef;
   @Output() hideLocatePublication = new EventEmitter<boolean>();
   fetchingData = false;
   subscriptionArr: Subscription[] = [];
@@ -145,6 +148,12 @@ export class LocatePublicationComponent implements OnInit, OnDestroy {
   sortTypeChanged(event: string) {
     this.sortType = event.toLowerCase();
     this.storeDataLocally();
+  }
+  getWindowWidth() {
+    let size = this.wrapper.nativeElement.getBoundingClientRect();
+
+    if (size && size.width) return size.width;
+    return window.innerWidth;
   }
   onSearchClicked() {
     this.publicationRecords = [];

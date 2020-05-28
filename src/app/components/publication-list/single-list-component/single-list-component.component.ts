@@ -55,6 +55,7 @@ export class SingleListComponentComponent implements OnInit {
   @Input() userReaction: string = null;
   @Input() contractPublication = false;
   @Input() viewMode = false;
+  @Input() windowWidth: number;
   @Output() addClicked = new EventEmitter<boolean>();
   @Output() removeClicked = new EventEmitter<boolean>();
   @Output() viewClicked = new EventEmitter<boolean>();

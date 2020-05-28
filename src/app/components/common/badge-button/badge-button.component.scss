@@ -64,7 +64,10 @@ $text-color: #fff;
     text-transform: uppercase;
   }
 }
-
+.content {
+  min-width: 300px;
+  max-width: 400px;
+}
 ::ng-deep {
   .button-badge-wrapper {
     position: relative;
@@ -73,7 +76,5 @@ $text-color: #fff;
   .button-badge-wrapper > div {
     top: 0 !important;
     left: 10px !important;
-    min-width: 300px;
-    max-width: 400px;
   }
 }
