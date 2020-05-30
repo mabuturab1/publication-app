@@ -130,6 +130,7 @@ export class PublicationListComponent implements OnInit, OnDestroy {
   }
   selectionModeUpdated(event: string) {
     this.isMultipleSelection = event == 'multiple';
+    this.publicationRecordsListId = [];
     this.publicationService.setMultiSelection(this.isMultipleSelection);
   }
   removeButtonClicked() {

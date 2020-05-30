@@ -1,5 +1,5 @@
 import { PublicationDataService } from 'src/app/services/publication-data.service';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subscription } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { UtilsService } from './utils.service';
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
@@ -138,6 +138,7 @@ export class GetServerDataService {
   gettingActiveList = false;
   showSnackbar = new Subject<string>();
   currentClientId: string;
+
   constructor(
     private http: HttpClient,
     private utilsService: UtilsService,
@@ -156,7 +157,7 @@ export class GetServerDataService {
     return this.currentClientId;
   }
   login(uid: string, callback) {
-    this.http.get(this.utilsService.getLoginUrl(uid)).subscribe(
+    return this.http.get(this.utilsService.getLoginUrl(uid)).subscribe(
       (el: any) => {
         if (el != null) {
           this.token = el.login.token;
@@ -176,7 +177,7 @@ export class GetServerDataService {
   initActiveList(callback) {
     //   if (this.gettingActiveList) return;
     //  this.gettingActiveList=true;
-    this.getActiveList((listId) => {
+    return this.getActiveList((listId) => {
       if (listId == null) {
         callback(false);
         // this.gettingActiveList = false;
@@ -206,7 +207,7 @@ export class GetServerDataService {
     });
   }
   initAllPublicationLists(callback) {
-    this.getAllPublicationList((data) => {
+    return this.getAllPublicationList((data) => {
       if (data != null) this.publicationService.setAllManagedLists(data);
       callback(data);
     });
@@ -221,7 +222,7 @@ export class GetServerDataService {
     } else callback(null);
   }
   searchForLists(query: string, filter: SEARCH_FILTER, sort: string, callback) {
-    this.http
+    return this.http
       .post(
         this.utilsService.publicationSearch(),
         {
@@ -248,6 +249,7 @@ export class GetServerDataService {
         }
       );
   }
+
   // searchForLists(
   //   query: string,
   //   filter: SEARCH_FILTER,
@@ -274,12 +276,12 @@ export class GetServerDataService {
   //     );
   // }
   createNewList(data: any, callback) {
-    this.http.post(this.utilsService.createNewPublicationList(), {});
+    return this.http.post(this.utilsService.createNewPublicationList(), {});
   }
 
   getLoginUrl(uid: string) {}
   updateActiveList(id: string, callback) {
-    this.http
+    return this.http
       .put(
         this.utilsService.updateActiveList(),
         { list_id: id },
@@ -299,7 +301,7 @@ export class GetServerDataService {
       );
   }
   getActiveList(callback) {
-    this.http
+    return this.http
       .get(this.utilsService.getActiveList(), {
         headers: this.getHttpHeaders(),
       })
@@ -320,7 +322,7 @@ export class GetServerDataService {
     publicationView: 'publication_list_item' | 'publication_detail',
     callback
   ) {
-    this.http
+    return this.http
       .get(this.utilsService.getPublication(id, publicationView), {
         headers: this.getHttpHeaders(),
       })
@@ -335,7 +337,7 @@ export class GetServerDataService {
       );
   }
   getPublicationListById(id: string, callback) {
-    this.http
+    return this.http
       .get(this.utilsService.getPublicationListById(id), {
         headers: this.getHttpHeaders(),
       })
@@ -352,7 +354,7 @@ export class GetServerDataService {
       );
   }
   createNewPublicationList(data: PUBLICATION_LIST, callback) {
-    this.http
+    return this.http
       .post(this.utilsService.createNewPublicationList(), data, {
         headers: this.getHttpHeaders(),
       })
@@ -367,7 +369,7 @@ export class GetServerDataService {
       );
   }
   getAllPublicationList(callback) {
-    this.http
+    return this.http
       .get(this.utilsService.getAllPublicationList(), {
         headers: this.getHttpHeaders(),
       })
@@ -384,7 +386,7 @@ export class GetServerDataService {
       );
   }
   deletePublicationList(id: string, callback) {
-    this.http
+    return this.http
       .delete(this.utilsService.deletePublicationList(id), {
         headers: this.getHttpHeaders(),
       })
@@ -399,7 +401,7 @@ export class GetServerDataService {
       );
   }
   updateExistingList(listId: string, payload: PUBLICATION_LIST, callback) {
-    this.http
+    return this.http
       .put(this.utilsService.updateExistingList(listId), payload, {
         headers: this.getHttpHeaders(),
       })
@@ -417,7 +419,7 @@ export class GetServerDataService {
     if (this.token == null) {
       return;
     }
-    this.http
+    return this.http
       .post(
         this.utilsService.getDiscoveryLists(),
         {
@@ -445,7 +447,7 @@ export class GetServerDataService {
     publicationView: 'publication_list_item' | 'publication_detail',
     callback
   ) {
-    this.http
+    return this.http
       .post(
         this.utilsService.getMultiplePublicationsByIds(),
         {
@@ -467,7 +469,7 @@ export class GetServerDataService {
       );
   }
   setUserResponse(userResponse: USER_RESPONSE, callback) {
-    this.http
+    return this.http
       .post(this.utilsService.setUserResponse(), userResponse, {
         headers: this.getHttpHeaders(),
       })
@@ -487,7 +489,7 @@ export class GetServerDataService {
     reaction: string,
     callback
   ) {
-    this.http
+    return this.http
       .put(
         this.utilsService.getReactions(listId, publicationId),
         { reaction: reaction },
@@ -509,7 +511,7 @@ export class GetServerDataService {
 
     callback
   ) {
-    this.http
+    return this.http
       .delete(this.utilsService.getReactions(listId, publicationId), {
         headers: this.getHttpHeaders(),
       })
@@ -529,7 +531,7 @@ export class GetServerDataService {
 
     callback
   ) {
-    this.http
+    return this.http
       .put(
         this.utilsService.getTelemetry(),
         { ...data },

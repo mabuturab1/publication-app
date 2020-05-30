@@ -16,7 +16,7 @@
   <div style="flex: 1;"></div>
   <div class="contact-us" *ngIf="!messageSent && !errorOccurred">
     <h6 class="page-title">Contact Us</h6>
-    <div class="contact-type">
+    <div class="contact-type" *ngIf="!showSpinner">
       <p class="subtitle">Subject:</p>
       <div class="selection">
         <app-dropdown-button
@@ -30,9 +30,9 @@
       </div>
     </div>
     <div class="message-area">
-      <p class="subtitle">Your message</p>
+      <p [class.no-opacity]="showSpinner" class="subtitle">Your message</p>
       <textarea
-        *ngIf="!showSpinner"
+        [class.no-opacity]="showSpinner"
         class="message-textarea"
         [(ngModel)]="message"
         appLogEvent
@@ -47,6 +47,7 @@
     <div class="button-group">
       <button
         mat-button
+        [disabled]="showSpinner"
         class="mat-button-style white-text contact-button"
         (click)="closeClicked()"
         appLogEvent
@@ -58,7 +59,7 @@
         <a class="button-text">Cancel</a>
       </button>
       <button
-        [disabled]="message == null || message == ''"
+        [disabled]="message == null || message == '' || showSpinner"
         mat-button
         class="mat-button-style white-text contact-button"
         (click)="sendMessage()"

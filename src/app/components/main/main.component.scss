@@ -3,12 +3,16 @@
   width: 100%;
   display: flex;
   flex-flow: column;
+  overflow-y: hidden;
+  overflow-x: auto;
 }
 .publication-wrapper {
-  overflow: auto;
+  overflow-y: auto;
+  overflow-x: hidden;
   flex: 1;
   width: 100%;
   position: relative;
+  min-width: 60rem;
   .spinner {
     position: absolute;
     margin-top: 10rem;
@@ -29,6 +33,7 @@
 
   width: 100%;
   z-index: 1000;
+  min-width: 60rem;
 }
 .main-list-wrapper {
   min-width: 40rem;

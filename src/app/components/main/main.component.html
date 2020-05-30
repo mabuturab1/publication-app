@@ -1,4 +1,4 @@
-<div class="wrapper">
+<div class="wrapper custom-scrollbar" #wrapper>
   <div class="main-options-wrapper">
     <app-main-options
       (showDetailedLook)="viewTypeChanged($event)"
@@ -11,9 +11,11 @@
       [highlightAdd]="addSidebarOpened"
       [highlightMyList]="myListSidebarOpened"
       [histogram]="histogram"
+      (logoClicked)="logoClicked()"
     ></app-main-options>
   </div>
   <div
+    #publicationWrapper
     class="publication-wrapper custom-scrollbar"
     [class.overflow-hidden]="showSpinner"
     infiniteScroll

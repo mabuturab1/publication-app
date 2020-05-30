@@ -1,11 +1,14 @@
 <div class="wrapper" #wrapper>
   <div class="title-wrapper fixed-top">
-    <h6 class="title">Locate a publication</h6>
+    <h6 class="title">
+      {{ isNewList ? "Seed new list" : "Locate a publication" }}
+    </h6>
   </div>
   <div class="content-wrapper">
     <div class="input-wrapper">
       <input
         class="text-input"
+        [disabled]="isNewList"
         [(ngModel)]="locatePublication"
         (change)="locateInputChanged($event)"
         (keydown)="listenForEnter($event)"
@@ -17,7 +20,9 @@
     </div>
     <div class="search-button-wrapper">
       <button
-        [disabled]="locatePublication == null || locatePublication == ''"
+        [disabled]="
+          locatePublication == null || locatePublication == '' || isNewList
+        "
         mat-button
         class="mat-button-style white-text search-button"
         (click)="onSearchClicked()"
@@ -30,7 +35,7 @@
         <a class="button-text">Search</a>
       </button>
     </div>
-    <div class="result-wrapper">
+    <div class="result-wrapper" *ngIf="!isNewList">
       <div class="result-header">
         <h4 class="title">Results</h4>
         <div class="button-group">
@@ -76,7 +81,7 @@
             (hideClicked)="hideClicked(item)"
             (needClicked)="needButtonClicked(item)"
             [componentName]="'Locate Publication'"
-            [windowWidth]="getWindowWidth()"
+            [animateAdd]="activeListEmpty"
           ></app-single-list-component>
         </div>
         <div class="tempDataWrapper" *ngIf="fetchingData">
@@ -88,6 +93,12 @@
           </div>
         </div>
       </div>
+    </div>
+    <div *ngIf="isNewList" class="list-wrapper">
+      <app-new-list
+        [(name)]="newListName"
+        (listData)="listDataChanged($event)"
+      ></app-new-list>
     </div>
     <div *ngIf="noData && !showSpinner" class="empty-message">
       <h4 style="color: white;">

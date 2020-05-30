@@ -3,7 +3,7 @@
     #listDrawer
     [disableClose]="true"
     class="side-nav-style"
-    [position]="!showPublicationList?'end':'start'"
+    [position]="!showPublicationList ? 'end' : 'start'"
     [class.full-width]="showFullSize"
     mode="side"
   >
@@ -23,14 +23,12 @@
         [showFullScreenToggle]="showFullScreenToggle"
         [showCurrentPublication]="listDrawer.opened"
       ></app-publication-list>
-   
-     
     </div>
   </mat-drawer>
   <mat-drawer
     #locateDrawer
     [disableClose]="true"
-    [position]="!showPublicationList?'start':'end'"
+    [position]="!showPublicationList ? 'start' : 'end'"
     class="side-nav-style"
     [class.full-width]="showFullSize"
     mode="side"
@@ -47,8 +45,6 @@
       (scrolled)="onLocateScroll($event)"
     >
       <app-publication-list
-     
-     
         (closeDrawerClicked)="closeLocateDrawer()"
         (toggleDrawerClicked)="toggleDrawerWindow($event)"
         [showFullScreenToggle]="showFullScreenToggle"
@@ -57,12 +53,15 @@
       ></app-publication-list>
     </div>
   </mat-drawer>
-  <mat-drawer-content style="width: 100%; overflow: hidden; height: auto;" [class.remove-transition]="removeTransition">
+  <mat-drawer-content
+    style="width: 100%; overflow: hidden; height: auto;"
+    [class.remove-transition]="removeTransition"
+  >
     <div
       class="content-wrapper custom-scrollbar"
       [class.remove-margin]="showPublicationList"
     >
-      <div class="main-wrapper" [class.dark-theme]="showPublicationList" >
+      <div class="main-wrapper" [class.dark-theme]="showPublicationList">
         <app-main
           *ngIf="!showPublicationList"
           [showToolbar]="isAuthenticated"
@@ -73,7 +72,6 @@
           [themedList]="showPublicationList"
           [fixedHeader]="true"
         ></app-publication-list>
-        
       </div>
     </div>
   </mat-drawer-content>

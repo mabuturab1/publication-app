@@ -55,7 +55,7 @@ export class SingleListComponentComponent implements OnInit {
   @Input() userReaction: string = null;
   @Input() contractPublication = false;
   @Input() viewMode = false;
-  @Input() windowWidth: number;
+  @Input() animateAdd = false;
   @Output() addClicked = new EventEmitter<boolean>();
   @Output() removeClicked = new EventEmitter<boolean>();
   @Output() viewClicked = new EventEmitter<boolean>();
@@ -148,6 +148,19 @@ export class SingleListComponentComponent implements OnInit {
     if (publicationData.user_data.reaction == 'thumbs down')
       return faThumbsDown;
     if (publicationData.user_data.reaction == 'shrug') return faMehRollingEyes;
+  }
+  getSelectedReactionTooltip(publicationData: PUBLICATION_RECORD) {
+    if (
+      publicationData.user_data == null ||
+      publicationData.user_data.reaction == null
+    )
+      return null;
+    if (publicationData.user_data.reaction == 'thumbs up')
+      return 'You reacted "Best match"';
+    if (publicationData.user_data.reaction == 'thumbs down')
+      return 'You reacted "Bad match"';
+    if (publicationData.user_data.reaction == 'shrug')
+      return 'You reacted "Shrug"';
   }
   isThumbsDown(publicationData: PUBLICATION_RECORD) {
     return this.getIconForContractPublication(publicationData) == faThumbsDown;

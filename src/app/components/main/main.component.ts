@@ -21,6 +21,8 @@ import {
   Input,
   OnDestroy,
   AfterViewInit,
+  ElementRef,
+  ViewChild,
 } from '@angular/core';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { Router } from '@angular/router';
@@ -53,7 +55,12 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy {
   addSidebarOpened = false;
   myListSidebarOpened = false;
   histogram: HISTOGRAM_DATA;
+  innerWidth: number;
   noDataText = 'No results found. Kindly add new items to your active list';
+  @ViewChild('publicationWrapper', { static: false })
+  publicationWrapper: ElementRef;
+  @ViewChild('wrapper', { static: false })
+  wrapper: ElementRef;
   constructor(
     private dataProviderService: DataProviderService,
     private publicationService: PublicationDataService,
@@ -88,14 +95,17 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy {
     this.subscriptionArr.push(
       this.publicationService.updateLeftSidebar.subscribe((el) => {
         this.addSidebarOpened = el;
+        setTimeout(() => {}, 1000);
       })
     );
     this.subscriptionArr.push(
       this.publicationService.updateRightSidebar.subscribe((el) => {
         this.myListSidebarOpened = el;
+        setTimeout(() => {}, 1000);
       })
     );
   }
+
   getDiscoveryData() {
     var data = this.publicationService.getDiscoveryFeedData();
 
@@ -281,6 +291,9 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy {
         this.currIndex += objectKeys.length;
       }
     );
+  }
+  logoClicked() {
+    this.router.navigate(['']);
   }
   thumbsUpClicked(event: boolean, item: PUBLICATION_RECORD) {
     this.setUserReaction('thumbs up', item.id, (data) => {

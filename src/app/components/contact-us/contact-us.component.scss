@@ -71,7 +71,12 @@ $icon-color: #ffffff;
     max-width: 35rem;
   }
   .loader-wrapper {
-    margin: 0 auto;
+    margin: auto;
+
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
   }
   .contact-type {
     display: flex;
@@ -100,6 +105,12 @@ $icon-color: #ffffff;
     width: 80%;
     display: flex;
     align-items: center;
+  }
+  .message-area {
+    position: relative;
+  }
+  .no-opacity {
+    opacity: 0;
   }
   .message-textarea {
     width: 100%;

@@ -33,7 +33,7 @@ export class MainOptionsComponent implements OnInit {
   @Input() highlightAdd = false;
   @Input() highlightMyList = false;
   @Input() histogram: HISTOGRAM_DATA;
-
+  @Output() logoClicked = new EventEmitter<boolean>();
   faAngleDown = faAngleDown;
   @Output() showDetailedLook = new EventEmitter<boolean>();
   addClicked() {
@@ -62,6 +62,9 @@ export class MainOptionsComponent implements OnInit {
   ngOnInit(): void {}
   contactUs() {
     this.router.navigate(['contact-us']);
+  }
+  myLogoClicked() {
+    this.logoClicked.emit(true);
   }
   filterResultsChanged(event: any) {
     this.filterResults.emit(event);

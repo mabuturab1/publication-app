@@ -216,3 +216,25 @@ $button-background-color: #039be5;
 ::ng-deep .mat-form-field-infix {
   border-top: 0.35rem solid transparent;
 }
+.apply-shine {
+  animation: shadow-pulse 1s infinite;
+}
+@keyframes shadow-pulse {
+  0% {
+    box-shadow: 0 0 0 0px rgba($color: $button-background-color, $alpha: 0.2);
+  }
+  100% {
+    box-shadow: 0 0 0 35px rgba($color: $button-background-color, $alpha: 0);
+  }
+}
+
+/* animation */
+
+@keyframes slide {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}

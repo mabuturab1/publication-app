@@ -48,9 +48,25 @@ export class FilterDialogComponent implements OnInit, OnChanges {
   ngOnInit(): void {
     this.initFilterValues();
     if (this.histogram != null) this.updateHistogramData();
+    else this.initData();
+  }
+  initData() {
+    this.dates = [];
+    this.selectedFromDate = '1940';
+    this.selectedToDate = '2018';
+
+    for (let i = 1940; i <= 2018; i++) {
+      this.dates.push({
+        label: i.toString(),
+        value: i.toString(),
+      });
+    }
   }
   updateHistogramData() {
-    if (this.histogram == null) return;
+    if (!this.histogram || !this.histogram.year) {
+      this.initData();
+      return;
+    }
     this.dates = [];
     this.xAxisData = [];
     this.yAxisData = [];

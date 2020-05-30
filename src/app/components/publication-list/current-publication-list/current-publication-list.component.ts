@@ -18,6 +18,7 @@ import {
   SimpleChanges,
   ViewChild,
   ElementRef,
+  AfterViewInit,
 } from '@angular/core';
 
 import { Router } from '@angular/router';
@@ -28,7 +29,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./current-publication-list.component.scss'],
 })
 export class CurrentPublicationListComponent
-  implements OnInit, OnChanges, OnDestroy {
+  implements OnInit, AfterViewInit, OnChanges, OnDestroy {
   @Input() themedComponent = true;
   @Input() isDetailed = false;
   @Input() isMultipleSelection = false;
@@ -124,7 +125,7 @@ export class CurrentPublicationListComponent
       }
     );
   }
-
+  ngAfterViewInit() {}
   resetData() {
     this.publicationRecords = [];
     this.allIds = [];
@@ -145,12 +146,13 @@ export class CurrentPublicationListComponent
     }
     this.prevActiveListId = this.publicationService.getCurrentActiveListId();
 
-    if (compareData)
-      this.allIds = this.changeIndexOfNewItem(
-        this.allIds,
-        list.publication_ids
-      );
-    else this.allIds = [...new Set(list.publication_ids)];
+    // if (compareData)
+    //   this.allIds = this.changeIndexOfNewItem(
+    //     this.allIds,
+    //     list.publication_ids
+    //   );
+    // else
+    this.allIds = [...new Set(list.publication_ids)];
     this.publicationRecords = this.publicationRecords.filter((el) =>
       this.allIds.includes(el.id)
     );
@@ -291,18 +293,8 @@ export class CurrentPublicationListComponent
     this.publicationService.setNewActiveList(
       this.publicationService.getCurrentActiveListId()
     );
-    // this.getServerDataService.initActiveList((data) => {
-    //   this.showSpinner = false;
-    //   this.publicationService.setNewActiveList(
-    //     this.publicationService.getCurrentActiveListId()
-    //   );
-    // });
   }
-  getWindowWidth() {
-    let size = this.wrapper.nativeElement.getBoundingClientRect();
-    if (size && size.width) return size.width;
-    return window.innerWidth;
-  }
+
   storeDataLocally() {
     this.publicationService.setCurrentPublications({
       currentIndex: this.loadedItems,

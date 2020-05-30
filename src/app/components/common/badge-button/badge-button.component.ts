@@ -27,7 +27,7 @@ export class BadgeButtonComponent implements OnInit {
   @Input() buttonAfterText: string = '';
   @Input() tooltipText: string;
   @Input() type: string;
-  @Input() windowWidth: number;
+
   innerWidth = 0;
   constructor() {
     this.innerWidth = window.innerWidth;
@@ -47,15 +47,5 @@ export class BadgeButtonComponent implements OnInit {
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     this.innerWidth = window.innerWidth;
-  }
-  getWidth(element: HTMLButtonElement) {
-    let pos = this.tooltipButton.nativeElement.getBoundingClientRect().x;
-    if (!pos) return '300px';
-    let widthToConsider = this.innerWidth;
-    if (this.windowWidth) widthToConsider = this.windowWidth;
-
-    let returnWidth = Math.min(300, widthToConsider - pos);
-    console.log(pos, widthToConsider, widthToConsider - pos);
-    return returnWidth.toString() + 'px';
   }
 }
