@@ -19,6 +19,7 @@ import {
   ViewChild,
   ElementRef,
   AfterViewInit,
+  HostListener,
 } from '@angular/core';
 
 import { Router } from '@angular/router';
@@ -43,6 +44,7 @@ export class CurrentPublicationListComponent
   loadedItems = 0;
   itemsList: string[] = [];
   currentActiveListId = '';
+  widnowWidthPx = 560;
   multiSelectionArray: string[] = [];
 
   subscriptionArr: Subscription[] = [];
@@ -125,7 +127,16 @@ export class CurrentPublicationListComponent
       }
     );
   }
-  ngAfterViewInit() {}
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.updateWidth();
+  }
+  ngAfterViewInit() {
+    this.updateWidth();
+  }
+  updateWidth() {
+    if (this.wrapper) this.widnowWidthPx = window.innerWidth;
+  }
   resetData() {
     this.publicationRecords = [];
     this.allIds = [];
@@ -203,7 +214,7 @@ export class CurrentPublicationListComponent
     this.itemsList = [];
     let currIndex = this.publicationRecords.length;
     this.loadedItems = this.loadedItems + this.preLoadItems;
-    console.log('items loading in current list', this.loadedItems);
+
     if (this.loadedItems > this.allIds.length)
       this.loadedItems = this.allIds.length;
     for (let i = currIndex; i < this.loadedItems; i++) {

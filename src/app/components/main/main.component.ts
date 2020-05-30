@@ -59,8 +59,11 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy {
   noDataText = 'No results found. Kindly add new items to your active list';
   @ViewChild('publicationWrapper', { static: false })
   publicationWrapper: ElementRef;
+  @ViewChild('mainListWrapper', { static: false })
+  mainListWrapper: ElementRef;
   @ViewChild('wrapper', { static: false })
   wrapper: ElementRef;
+  wideTooltip = true; //no effect of widetooltip on app right now
   constructor(
     private dataProviderService: DataProviderService,
     private publicationService: PublicationDataService,
@@ -95,13 +98,25 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy {
     this.subscriptionArr.push(
       this.publicationService.updateLeftSidebar.subscribe((el) => {
         this.addSidebarOpened = el;
-        setTimeout(() => {}, 1000);
+        setTimeout(() => {
+          if (
+            this.mainListWrapper.nativeElement.offsetWidth + 300 <
+            this.publicationWrapper.nativeElement.offsetWidth
+          )
+            this.wideTooltip = false;
+        }, 1000);
       })
     );
     this.subscriptionArr.push(
       this.publicationService.updateRightSidebar.subscribe((el) => {
         this.myListSidebarOpened = el;
-        setTimeout(() => {}, 1000);
+        setTimeout(() => {
+          if (
+            this.mainListWrapper.nativeElement.offsetWidth + 300 <
+            this.publicationWrapper.nativeElement.offsetWidth
+          )
+            this.wideTooltip = false;
+        }, 1000);
       })
     );
   }

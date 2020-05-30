@@ -25,6 +25,10 @@
 <div class="button-badge-wrapper" #badgeWrapper></div>
 <p-overlayPanel [appendTo]="badgeWrapper" [showCloseIcon]="true" #panel>
   <ng-template pTemplate>
-    <div class="content" [innerHTML]="tooltipText"></div>
+    <div
+      [style.width]="overlayPanelWidth + 'px'"
+      class="content"
+      [innerHTML]="tooltipText"
+    ></div>
   </ng-template>
 </p-overlayPanel>

@@ -7,6 +7,7 @@ import {
   ElementRef,
   ViewChild,
   HostListener,
+  AfterViewInit,
 } from '@angular/core';
 import { OverlayPanel } from 'primeng/overlaypanel/public_api';
 
@@ -15,7 +16,7 @@ import { OverlayPanel } from 'primeng/overlaypanel/public_api';
   templateUrl: './badge-button.component.html',
   styleUrls: ['./badge-button.component.scss'],
 })
-export class BadgeButtonComponent implements OnInit {
+export class BadgeButtonComponent implements OnInit, AfterViewInit {
   @ViewChild('panel', { static: false }) overlayPanel: OverlayPanel;
   @ViewChild('tooltipButton', { static: false })
   tooltipButton: ElementRef;
@@ -27,6 +28,8 @@ export class BadgeButtonComponent implements OnInit {
   @Input() buttonAfterText: string = '';
   @Input() tooltipText: string;
   @Input() type: string;
+  @Input() windowWidthpx: number;
+  overlayPanelWidth = 300;
 
   innerWidth = 0;
   constructor() {
@@ -34,6 +37,20 @@ export class BadgeButtonComponent implements OnInit {
   }
 
   ngOnInit(): void {}
+  ngAfterViewInit() {
+    if (this.windowWidthpx) this.updateWidth();
+  }
+  updateWidth() {
+    let pos = this.tooltipButton.nativeElement.getBoundingClientRect();
+
+    if (pos) {
+      let x = pos.x;
+
+      if (x + this.overlayPanelWidth + 60 > this.windowWidthpx) {
+        this.overlayPanelWidth = this.windowWidthpx - x - 60;
+      }
+    }
+  }
   onButtonClicked(event: Event) {
     this.buttonClicked.emit(true);
 

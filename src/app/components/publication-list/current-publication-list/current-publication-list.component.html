@@ -28,6 +28,7 @@
         (removeClicked)="removeClicked(item)"
         (iAmSelected)="selectionStatusChanged($event, item)"
         [componentName]="'Current Publication'"
+        [windowWidthpx]="widnowWidthPx"
       ></app-single-list-component>
     </div>
     <div class="tempWrapper" *ngIf="fetchingData">

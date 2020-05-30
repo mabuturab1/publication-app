@@ -82,6 +82,7 @@
             (needClicked)="needButtonClicked(item)"
             [componentName]="'Locate Publication'"
             [animateAdd]="activeListEmpty"
+            [windowWidthpx]="windowWidthPx"
           ></app-single-list-component>
         </div>
         <div class="tempDataWrapper" *ngIf="fetchingData">

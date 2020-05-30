@@ -39,6 +39,7 @@ export class SingleListComponentComponent implements OnInit {
   @Input() componentName: string;
   @Input() isMultipleSelection = false;
   @Input() showSpinner = false;
+  @Input() wideTooltip = true;
   @Input() fetchingPublication = false;
   @Input() publicationData: PUBLICATION_RECORD = {};
   @Input() showAbstract = true;
@@ -56,6 +57,7 @@ export class SingleListComponentComponent implements OnInit {
   @Input() contractPublication = false;
   @Input() viewMode = false;
   @Input() animateAdd = false;
+  @Input() windowWidthpx: number;
   @Output() addClicked = new EventEmitter<boolean>();
   @Output() removeClicked = new EventEmitter<boolean>();
   @Output() viewClicked = new EventEmitter<boolean>();
